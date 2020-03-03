@@ -6,7 +6,8 @@ const { Footer } = Layout;
 const FooterView = () => (
   <Footer style={{ padding: 0 }}>
     <GlobalFooter
-      links={[
+      links={
+        [] /*[
         {
           key: 'Pro 首页',
           title: 'Pro 首页',
@@ -25,10 +26,11 @@ const FooterView = () => (
           href: 'https://ant.design',
           blankTarget: true,
         },
-      ]}
+      ]*/
+      }
       copyright={
         <Fragment>
-          Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
+          Copyright <Icon type="copyright" /> 2020 魅蓝科技有限公司
         </Fragment>
       }
     />

@@ -1,7 +1,7 @@
 // Demo自带的
 const testRoutes = [
   // dashboard
-  {path: '/', redirect: '/dashboard/analysis'},
+  { path: '/', redirect: '/dashboard/analysis' },
   {
     path: '/dashboard',
     name: 'dashboard',
@@ -150,7 +150,7 @@ const testRoutes = [
         name: 'success',
         component: './Result/Success',
       },
-      {path: '/result/fail', name: 'fail', component: './Result/Error'},
+      { path: '/result/fail', name: 'fail', component: './Result/Error' },
     ],
   },
   {
@@ -243,6 +243,11 @@ const testRoutes = [
 
 // 智慧校园的路由
 const appRoutes = [
+  { path: '/', redirect: '/workplace' },
+  {
+    path: '/workplace',
+    component: './Portal/Workplace',
+  },
   // 系统设置
   {
     path: '/sys-manage',
@@ -257,13 +262,13 @@ const appRoutes = [
           {
             path: '/sys-manage/tenant-manage/region',
             name: 'region',
-            component: './Dashboard/Analysis',
+            component: './SystemManage/Region',
           },
           {
             path: '/sys-manage/tenant-manage/school',
             name: 'school',
-            component: './Dashboard/Monitor',
-          }
+            component: './SystemManage/School',
+          },
         ],
       },
       // 权限管理
@@ -274,21 +279,21 @@ const appRoutes = [
           {
             path: '/sys-manage/authority-manage/pc-menu',
             name: 'pc-menu',
-            component: './Dashboard/Analysis',
+            component: './SystemManage/PcMenu',
           },
           {
             path: '/sys-manage/authority-manage/app-menu',
             name: 'app-menu',
-            component: './Dashboard/Monitor',
+            component: './SystemManage/AppMenu',
           },
           {
             path: '/sys-manage/authority-manage/authority-group',
             name: 'authority-group',
             component: './Dashboard/Monitor',
-          }
+          },
         ],
       },
-    ]
+    ],
   },
   // 人员管理
   {
@@ -309,7 +314,7 @@ const appRoutes = [
             path: '/personnel-manage/staff-manage/staff-user',
             name: 'staff-user',
             component: './Dashboard/Monitor',
-          }
+          },
         ],
       },
       // 学生管理
@@ -326,10 +331,10 @@ const appRoutes = [
             path: '/personnel-manage/student-manage/student',
             name: 'student',
             component: './Dashboard/Monitor',
-          }
+          },
         ],
       },
-    ]
+    ],
   },
   //门禁管理
   {
@@ -355,7 +360,7 @@ const appRoutes = [
             path: '/access-control/access-authority/examine',
             name: 'examine',
             component: './Dashboard/Monitor',
-          }
+          },
         ],
       },
       // 出入记录
@@ -377,10 +382,10 @@ const appRoutes = [
             path: '/access-control/access-record/statistics',
             name: 'statistics',
             component: './Dashboard/Monitor',
-          }
+          },
         ],
       },
-    ]
+    ],
   },
   // 信息录入
   {
@@ -401,10 +406,10 @@ const appRoutes = [
             path: '/info-entry/personnel-feature/face',
             name: 'face',
             component: './Dashboard/Monitor',
-          }
+          },
         ],
       },
-    ]
+    ],
   },
   // 智能设备
   {
@@ -425,11 +430,11 @@ const appRoutes = [
             path: '/device-manage/access-device/car-gate',
             name: 'car-gate',
             component: './Dashboard/Monitor',
-          }
+          },
         ],
       },
-    ]
-  }
+    ],
+  },
 ];
 
 export default [
@@ -438,10 +443,10 @@ export default [
     path: '/user',
     component: '../layouts/UserLayout',
     routes: [
-      {path: '/user', redirect: '/user/login'},
-      {path: '/user/login', component: './User/Login'},
-      {path: '/user/register', component: './User/Register'},
-      {path: '/user/register-result', component: './User/RegisterResult'},
+      { path: '/user', redirect: '/user/login' },
+      { path: '/user/login', component: './User/Login' },
+      { path: '/user/register', component: './User/Register' },
+      { path: '/user/register-result', component: './User/RegisterResult' },
     ],
   },
   // app
