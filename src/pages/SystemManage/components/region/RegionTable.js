@@ -1,4 +1,4 @@
-import React, { Fragment, PureComponent } from 'react';
+import React, {Fragment, PureComponent} from 'react';
 import DataTable from '@/components/SmartCampus/Table/DataTable';
 import PropTypes from 'prop-types';
 
@@ -9,18 +9,21 @@ import PropTypes from 'prop-types';
 const tableColumns = onShowView => [
   {
     title: '区域名称',
-    dataIndex: 'name',
+    dataIndex: 'regionName',
+    width: '15%',
   },
   {
     title: '教育局',
-    dataIndex: 'jx_name',
+    dataIndex: 'educationName',
+    width: '15%',
   },
   {
     title: '描述',
-    dataIndex: 'desc',
+    dataIndex: 'description',
   },
   {
     title: '操作',
+    width: '10%',
     render: (text, record) => (
       <Fragment>
         <a onClick={() => onShowView(record)}>查看详情</a>
@@ -65,8 +68,8 @@ class RegionTable extends PureComponent {
       current,
       pageSize,
       total,
-      onChange: onTablePageChange,
-      onShowSizeChange: onTablePageSizeChange,
+      onTablePageChange,
+      onTablePageSizeChange,
     };
 
     return <DataTable {...dataTableProps} />;

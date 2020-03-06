@@ -58,7 +58,7 @@ class OperatorButton extends PureComponent {
         return null;
       }
       return (
-        <Button icon={icon} key={operatorKey} type={type} onClick={type}>
+        <Button icon={icon} key={operatorKey} type={type} onClick={onClick}>
           {text}
         </Button>
       );

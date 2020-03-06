@@ -1,8 +1,8 @@
 import fetch from 'dva/fetch';
-import { notification } from 'antd';
+import {notification} from 'antd';
 import router from 'umi/router';
 import hash from 'hash.js';
-import { isAntdPro } from './utils';
+import {isAntdPro} from './utils';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -20,6 +20,24 @@ const codeMessage = {
   502: '网关错误。',
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
+};
+
+const urlParams = (url, params) => {
+  if (params) {
+    let paramsArray = [];
+    //拼接参数
+    Object.keys(params).forEach(key => {
+      if (params[key]) {
+        paramsArray.push(key + '=' + params[key])
+      }
+    });
+    if (url.search(/\?/) === -1) {
+      url += '?' + paramsArray.join('&')
+    } else {
+      url += '&' + paramsArray.join('&')
+    }
+  }
+  return url;
 };
 
 const checkStatus = response => {
@@ -68,6 +86,7 @@ export default function request(url, option) {
     expirys: isAntdPro(),
     ...option,
   };
+  url = urlParams(url, option.params);
   /**
    * Produce fingerprints based on url and parameters
    * Maybe url has the same parameters
@@ -81,7 +100,7 @@ export default function request(url, option) {
   const defaultOptions = {
     credentials: 'include',
   };
-  const newOptions = { ...defaultOptions, ...options };
+  const newOptions = {...defaultOptions, ...options};
   if (
     newOptions.method === 'POST' ||
     newOptions.method === 'PUT' ||
