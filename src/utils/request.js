@@ -101,6 +101,9 @@ export default function request(url, option) {
     credentials: 'include',
   };
   const newOptions = {...defaultOptions, ...options};
+  newOptions.headers={
+    Authentication: localStorage.getItem('antd-pro-authority'),
+  };
   if (
     newOptions.method === 'POST' ||
     newOptions.method === 'PUT' ||

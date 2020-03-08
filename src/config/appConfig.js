@@ -5,5 +5,8 @@ const PAGE_SIZE = 15;
 
 export default {
   API,
-  PAGE_SIZE
+  PAGE_SIZE,
+  serviceApi: {
+    login: `${API}/auth/user/login`,
+  }
 }

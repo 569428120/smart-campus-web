@@ -88,7 +88,7 @@ const check = (authority, target, Exception) =>
 // 自定义权限校验
 const myCheck = (authority, target, Exception) => {
   const {path} = target;
-  if(path&&path.includes("device-manage")){
+  if (path && path.includes("device-manage")) {
     return target
   }
   return target;

@@ -156,7 +156,7 @@ class Region extends PureComponent {
    * @param values
    */
   onRegionModalOk = (values, openType) => {
-    const {dispatch, region: {pageSize}} = this.props;
+    const {dispatch, region: {current, pageSize}} = this.props;
     const {regionModel} = this.state;
     if (['add', 'edit'].includes(openType)) {
       dispatch({
@@ -168,7 +168,7 @@ class Region extends PureComponent {
           }
         }
       }).then(() => {
-        this.onTablePageChange(1, pageSize);
+        this.onTablePageChange(openType === 'edit' ? current : 1, pageSize);
       });
     }
     // 关闭窗口

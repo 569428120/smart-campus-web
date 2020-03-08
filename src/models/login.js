@@ -1,9 +1,10 @@
-import { routerRedux } from 'dva/router';
-import { stringify } from 'qs';
-import { fakeAccountLogin, getFakeCaptcha } from '@/services/api';
-import { setAuthority } from '@/utils/authority';
-import { getPageQuery } from '@/utils/utils';
-import { reloadAuthorized } from '@/utils/Authorized';
+import {routerRedux} from 'dva/router';
+import {stringify} from 'qs';
+import {fakeAccountLogin, getFakeCaptcha} from '@/services/api';
+import * as loginService from '@/services/loginService'
+import {setAuthority} from '@/utils/authority';
+import {getPageQuery} from '@/utils/utils';
+import {reloadAuthorized} from '@/utils/Authorized';
 
 export default {
   namespace: 'login',
@@ -13,8 +14,8 @@ export default {
   },
 
   effects: {
-    *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
+    * login({payload}, {call, put}) {
+      const response = yield call(loginService.login, payload);
       yield put({
         type: 'changeLoginStatus',
         payload: response,
@@ -24,7 +25,7 @@ export default {
         reloadAuthorized();
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
-        let { redirect } = params;
+        let {redirect} = params;
         if (redirect) {
           const redirectUrlParams = new URL(redirect);
           if (redirectUrlParams.origin === urlParams.origin) {
@@ -41,11 +42,11 @@ export default {
       }
     },
 
-    *getCaptcha({ payload }, { call }) {
+    * getCaptcha({payload}, {call}) {
       yield call(getFakeCaptcha, payload);
     },
 
-    *logout(_, { put }) {
+    * logout(_, {put}) {
       yield put({
         type: 'changeLoginStatus',
         payload: {
@@ -66,7 +67,7 @@ export default {
   },
 
   reducers: {
-    changeLoginStatus(state, { payload }) {
+    changeLoginStatus(state, {payload}) {
       setAuthority(payload.currentAuthority);
       return {
         ...state,
