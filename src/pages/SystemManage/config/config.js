@@ -18,5 +18,11 @@ export default {
     deleteSchoolByIds: `${appConfig.API}/school/deletes/deletes-by-ids`,
     // 保存
     saveSchoolData: `${appConfig.API}/school/posts`,
+  },
+  // pc菜单管理
+  pcMenuApi: {
+    getMenuList: `${appConfig.API}/pc-menu/gets/all`,
+    deletePcMenuByIds: `${appConfig.API}/pc-menu/deletes/deletes-by-ids`,
+    savePcMenuData: `${appConfig.API}/pc-menu/posts`,
   }
 }

@@ -174,8 +174,6 @@ class School extends PureComponent {
   closeSchoolModal = () => {
     this.setState({
       schoolModalVisible: false,
-      selectedRowKeys: [],
-      selectedRows: [],
     });
   };
 
