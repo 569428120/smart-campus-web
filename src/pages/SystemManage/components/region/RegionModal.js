@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import {Form, Input, Modal} from "antd";
 import PropTypes from "prop-types";
+import enums from '@/pages/SystemManage/config/enums';
 
 const {TextArea} = Input;
 
@@ -50,7 +51,7 @@ class RegionModal extends PureComponent {
     const {regionName, educationName, description} = (dataSource || {});
 
     return <Modal
-      title={openType === 'edit' ? "修改" : "新增"}
+      title={enums.OperatorType[openType]}
       destroyOnClose={true}
       visible={visible}
       onOk={() => this.onSubmit(onOk)}
@@ -58,7 +59,7 @@ class RegionModal extends PureComponent {
       okText="确认"
       cancelText="取消"
     >
-      <Form {...formItemLayout} style={{textAlign: "center"}} onSubmit={this.handleSubmit}>
+      <Form {...formItemLayout} style={{textAlign: "center"}}>
         <Form.Item label="区域名称">
           {getFieldDecorator('regionName', {
             initialValue: regionName,
@@ -72,7 +73,7 @@ class RegionModal extends PureComponent {
                 message: '长度不能超过64',
               },
             ],
-          })(<Input/>)}
+          })(<Input disabled={openType === 'view'}/>)}
         </Form.Item>
         <Form.Item label="教育局名称">
           {getFieldDecorator('educationName', {
@@ -87,7 +88,7 @@ class RegionModal extends PureComponent {
                 message: '长度不能超过64',
               },
             ],
-          })(<Input/>)}
+          })(<Input disabled={openType === 'view'}/>)}
         </Form.Item>
         <Form.Item label="描述">
           {getFieldDecorator('description', {
@@ -95,10 +96,10 @@ class RegionModal extends PureComponent {
             rules: [
               {
                 max: 255,
-                message: '长度不能超过64',
+                message: '长度不能超过255',
               },
             ]
-          })(<TextArea rows={4}/>)}
+          })(<TextArea disabled={openType === 'view'} rows={4}/>)}
         </Form.Item>
       </Form>
     </Modal>;

@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {connect} from 'dva';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import {Card, message} from 'antd';
+import {Card, message, Modal} from 'antd';
 import styles from '@/pages/common.less';
 import SearchForm from '@/pages/SystemManage/components/region/SearchForm';
 import OperatorButton from '@/components/SmartCampus/AuthorityToolbar/OperatorButton';
@@ -136,19 +136,28 @@ class Region extends PureComponent {
       return
     }
     const {dispatch, region: {current, pageSize}} = this.props;
-    dispatch({
-      type: "region/deleteRegionByIds",
-      payload: {
-        regionIds: selectedRowKeys
-      }
-    }).then(() => {
-      this.setState({
-        selectedRowKeys: [],
-        selectedRows: [],
+    // 删除
+    const deleteRegion = () => {
+      dispatch({
+        type: "region/deleteRegionByIds",
+        payload: {
+          regionIds: selectedRowKeys
+        }
+      }).then(() => {
+        this.setState({
+          selectedRowKeys: [],
+          selectedRows: [],
+        });
+        this.onTablePageChange(current, pageSize);
       });
-      this.onTablePageChange(current, pageSize);
+    };
+    Modal.confirm({
+      title: '删除确认',
+      content: '是否删除选择的数据',
+      onOk: deleteRegion,
+      okText: '确认',
+      cancelText: '取消',
     });
-
   };
 
   /**

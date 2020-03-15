@@ -1,6 +1,7 @@
-import React, { Fragment, PureComponent } from 'react';
+import React, {Fragment, PureComponent} from 'react';
 import DataTable from '@/components/SmartCampus/Table/DataTable';
 import PropTypes from 'prop-types';
+import enums from '@/pages/SystemManage/config/enums';
 
 /**
  *  表格列
@@ -9,23 +10,32 @@ import PropTypes from 'prop-types';
 const tableColumns = onShowView => [
   {
     title: '所属教育局',
-    dataIndex: 'name',
+    dataIndex: 'regionName',
+    width: '15%',
   },
   {
     title: '学校名称',
-    dataIndex: 'jx_name',
+    dataIndex: 'schoolName',
+    width: '15%',
   },
   {
     title: '级别',
-    dataIndex: 'school_level',
+    dataIndex: 'schoolLevel',
+    width: '10%',
+    render: (text) => {
+      return (text || "").split("##").map(key => enums.SchoolLevel[key]).join(",");
+    }
   },
   {
     title: '学校类型',
-    dataIndex: 'school_type',
+    dataIndex: 'schoolType',
+    width: '10%',
+    render: (text) => enums.SchoolType[text]
   },
   {
     title: '描述',
-    dataIndex: 'desc',
+    dataIndex: 'description',
+    width: '35%',
   },
   {
     title: '操作',
