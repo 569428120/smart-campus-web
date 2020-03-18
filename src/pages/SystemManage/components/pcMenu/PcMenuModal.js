@@ -1,10 +1,9 @@
 import React, {PureComponent} from 'react';
 import {Form, Input, Modal} from "antd";
 import PropTypes from "prop-types";
-import enums from '@/pages/SystemManage/config/enums';
+import enums from "@/pages/SystemManage/config/enums";
+import {modalWidth} from '@/utils/utils';
 
-
-const {TextArea} = Input;
 
 const formItemLayout = {
   labelCol: {
@@ -16,6 +15,8 @@ const formItemLayout = {
     sm: {span: 16},
   },
 };
+
+const {TextArea} = Input;
 
 
 @Form.create()
@@ -51,8 +52,8 @@ class PcMenuModal extends PureComponent {
 
     const {menuName, route, description} = dataSource;
 
-    return <Form {...formItemLayout} style={{textAlign: "center"}}>
-      <Form.Item label="菜单名称">
+    return <Form style={{textAlign: "center"}}>
+      <Form.Item {...formItemLayout} label="菜单名称">
         {getFieldDecorator('menuName', {
           initialValue: menuName,
           rules: [
@@ -68,7 +69,7 @@ class PcMenuModal extends PureComponent {
         })(<Input disabled={openType === 'view'}/>)}
       </Form.Item>
 
-      <Form.Item label="路由">
+      <Form.Item {...formItemLayout} label="路由">
         {getFieldDecorator('route', {
           initialValue: route,
           rules: [
@@ -84,7 +85,7 @@ class PcMenuModal extends PureComponent {
         })(<Input disabled={openType === 'view'}/>)}
       </Form.Item>
 
-      <Form.Item label="描述">
+      <Form.Item {...formItemLayout} label="描述">
         {getFieldDecorator('description', {
           initialValue: description,
           rules: [
@@ -112,8 +113,8 @@ class PcMenuModal extends PureComponent {
 
     const {operateName, operateCode, description} = dataSource;
 
-    return <Form {...formItemLayout} style={{textAlign: "center"}}>
-      <Form.Item label="操作名称">
+    return <Form style={{textAlign: "center"}}>
+      <Form.Item {...formItemLayout} label="操作名称">
         {getFieldDecorator('operateName', {
           initialValue: operateName,
           rules: [
@@ -129,7 +130,7 @@ class PcMenuModal extends PureComponent {
         })(<Input disabled={openType === 'view'}/>)}
       </Form.Item>
 
-      <Form.Item label="操作编码">
+      <Form.Item {...formItemLayout} label="操作编码">
         {getFieldDecorator('operateCode', {
           initialValue: operateCode,
           rules: [
@@ -145,7 +146,7 @@ class PcMenuModal extends PureComponent {
         })(<Input disabled={openType === 'view'}/>)}
       </Form.Item>
 
-      <Form.Item label="描述">
+      <Form.Item {...formItemLayout} label="描述">
         {getFieldDecorator('description', {
           initialValue: description,
           rules: [
@@ -170,14 +171,14 @@ class PcMenuModal extends PureComponent {
 
     const {menuLevel} = (dataSource || {});
 
-    const form = menuLevel === 4 ? this.renderMenuForm() : this.renderOperateForm();
+    const form = menuLevel === 4 ? this.renderOperateForm() : this.renderMenuForm();
 
     return <Modal
       title={enums.OperatorType[openType]}
       destroyOnClose={true}
       visible={visible}
       onOk={() => this.onSubmit(onOk)}
-      width={window.innerWidth * 0.5}
+      width={modalWidth(500)}
       onCancel={onCancel}
       okText="确认"
       cancelText="取消"

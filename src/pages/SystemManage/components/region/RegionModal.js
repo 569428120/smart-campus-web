@@ -59,8 +59,8 @@ class RegionModal extends PureComponent {
       okText="确认"
       cancelText="取消"
     >
-      <Form {...formItemLayout} style={{textAlign: "center"}}>
-        <Form.Item label="区域名称">
+      <Form layout={"horizontal"}>
+        <Form.Item {...formItemLayout} label="区域名称">
           {getFieldDecorator('regionName', {
             initialValue: regionName,
             rules: [
@@ -75,7 +75,7 @@ class RegionModal extends PureComponent {
             ],
           })(<Input disabled={openType === 'view'}/>)}
         </Form.Item>
-        <Form.Item label="教育局名称">
+        <Form.Item {...formItemLayout} label="教育局名称">
           {getFieldDecorator('educationName', {
             initialValue: educationName,
             rules: [
@@ -90,7 +90,7 @@ class RegionModal extends PureComponent {
             ],
           })(<Input disabled={openType === 'view'}/>)}
         </Form.Item>
-        <Form.Item label="描述">
+        <Form.Item {...formItemLayout} label="描述">
           {getFieldDecorator('description', {
             initialValue: description,
             rules: [

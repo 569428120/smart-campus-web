@@ -1,5 +1,5 @@
 //后台服务路径
-const API = 'http://localhost:9999';
+const API = '/api/';
 // 默认的也容量
 const PAGE_SIZE = 15;
 
@@ -8,5 +8,5 @@ export default {
   PAGE_SIZE,
   serviceApi: {
     login: `${API}/auth/user/login`,
-  }
+  },
 }

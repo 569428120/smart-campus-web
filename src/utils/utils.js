@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React from 'react';
 import nzh from 'nzh/cn';
-import { parse, stringify } from 'qs';
+import {parse, stringify} from 'qs';
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
@@ -180,4 +180,18 @@ export function formatWan(val) {
 // 给官方演示站点用，用于关闭真实开发环境不需要使用的特性
 export function isAntdPro() {
   return window.location.hostname === 'preview.pro.ant.design';
+}
+
+/**
+ *   最小宽度
+ * @param minWidth
+ */
+export function modalWidth(minWidth) {
+  if (window.innerWidth <= minWidth) {
+    return window.innerWidth;
+  }
+  if (window.innerWidth * 0.5 <= minWidth) {
+    return minWidth;
+  }
+  return minWidth;
 }

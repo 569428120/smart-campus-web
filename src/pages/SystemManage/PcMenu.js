@@ -6,7 +6,6 @@ import styles from '@/pages/common.less';
 import SearchForm from '@/pages/SystemManage/components/pcMenu/SearchForm';
 import OperatorButton from '@/components/SmartCampus/AuthorityToolbar/OperatorButton';
 import PcMenuTable from '@/pages/SystemManage/components/pcMenu/PcMenuTable';
-import appConfig from "@/config/appConfig";
 import PcMenuModal from "@/pages/SystemManage/components/pcMenu/PcMenuModal";
 
 /**
@@ -157,7 +156,7 @@ class PcMenu extends PureComponent {
       icon: 'plus',
       type: 'primary',
       text: addText,
-      operatorKey: 'test-key',
+      operatorKey: 'pc-menu-add',
       onClick: () => this.openCreatePcMenuModal({}, 'add', (selectedRows || []).length === 1 ? selectedRows[0] : {}),
     });
     // 更新按钮，选择一个的时候显示
@@ -166,7 +165,7 @@ class PcMenu extends PureComponent {
         icon: '',
         type: '',
         text: '更新',
-        operatorKey: 'test-key1',
+        operatorKey: 'pc-menu-edit',
         onClick: () => this.openCreatePcMenuModal(selectedRows[0], 'edit'),
       });
     }
@@ -176,7 +175,7 @@ class PcMenu extends PureComponent {
     // 大于0 就显示
     if ((selectedRowKeys || []).length > 0) {
       dropdownList.push({
-        operatorKey: 'aaaaa',
+        operatorKey: 'pc-menu-delete',
         text: '删除',
         onClick: () => this.deletePcMenus(selectedRowKeys),
       });
@@ -222,7 +221,7 @@ class PcMenu extends PureComponent {
 
     return (
       <PageHeaderWrapper>
-        <Card bordered={false}>
+        <Card bordered={false} style={{minHeight: window.innerHeight * 0.72}}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>
               <SearchForm {...searchFormProps} />

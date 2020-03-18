@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {Form, Input, Modal, Checkbox, Radio, Select} from "antd";
 import PropTypes from "prop-types";
 import enums from '@/pages/SystemManage/config/enums';
-
+import {modalWidth} from '@/utils/utils';
 
 const {TextArea} = Input;
 
@@ -16,7 +16,6 @@ const formItemLayout = {
     sm: {span: 16},
   },
 };
-
 
 /**
  *  格式化数据
@@ -82,13 +81,13 @@ class SchoolModal extends PureComponent {
       destroyOnClose={true}
       visible={visible}
       onOk={() => this.onSubmit(onOk)}
-      width={window.innerWidth * 0.5}
       onCancel={onCancel}
+      width={modalWidth(650)}
       okText="确认"
       cancelText="取消"
     >
-      <Form {...formItemLayout} style={{textAlign: "center"}}>
-        <Form.Item label="所属教育局">
+      <Form style={{textAlign: "center"}}>
+        <Form.Item {...formItemLayout} label="所属教育局">
           {getFieldDecorator('regionId', {
             initialValue: regionId,
             rules: [
@@ -102,7 +101,7 @@ class SchoolModal extends PureComponent {
           </Select>)}
         </Form.Item>
 
-        <Form.Item label="学校名称">
+        <Form.Item {...formItemLayout} label="学校名称">
           {getFieldDecorator('schoolName', {
             initialValue: schoolName,
             rules: [
@@ -118,7 +117,7 @@ class SchoolModal extends PureComponent {
           })(<Input disabled={openType === 'view'}/>)}
         </Form.Item>
 
-        <Form.Item label="学校级别">
+        <Form.Item {...formItemLayout} label="学校级别">
           {getFieldDecorator('schoolLevel', {
             initialValue: schoolLevelArr,
             rules: [
@@ -132,7 +131,7 @@ class SchoolModal extends PureComponent {
           </Checkbox.Group>)}
         </Form.Item>
 
-        <Form.Item label="学校类型">
+        <Form.Item {...formItemLayout} label="学校类型">
           {getFieldDecorator('schoolType', {
             initialValue: schoolType,
             rules: [
@@ -146,7 +145,7 @@ class SchoolModal extends PureComponent {
           </Radio.Group>)}
         </Form.Item>
 
-        <Form.Item label="联系方式">
+        <Form.Item {...formItemLayout} label="联系方式">
           {getFieldDecorator('contact', {
             initialValue: contact,
             rules: [
@@ -158,7 +157,7 @@ class SchoolModal extends PureComponent {
           })(<Input disabled={openType === 'view'}/>)}
         </Form.Item>
 
-        <Form.Item label="地址">
+        <Form.Item {...formItemLayout} label="地址">
           {getFieldDecorator('address', {
             initialValue: address,
             rules: [
@@ -170,7 +169,7 @@ class SchoolModal extends PureComponent {
           })(<Input disabled={openType === 'view'}/>)}
         </Form.Item>
 
-        <Form.Item label="描述">
+        <Form.Item {...formItemLayout} label="描述">
           {getFieldDecorator('description', {
             initialValue: description,
             rules: [
