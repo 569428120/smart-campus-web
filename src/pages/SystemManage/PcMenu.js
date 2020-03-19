@@ -203,8 +203,8 @@ class PcMenu extends PureComponent {
 
     // 表格组件参数
     const pcMenuTableProps = {
-      dataSource: [{id: 1, name: ""}, {id: 2, name: 'dsadsa'}],
-      loading: false,
+      dataSource: menuList,
+      loading: loading.effects['pcMenu/getMenuList'],
       selectedRowKeys: this.state.selectedRowKeys,
       onTableSelectChange: this.onTableSelectChange,
       onShowView: (record) => this.openCreatePcMenuModal(record, 'view'),
@@ -221,7 +221,7 @@ class PcMenu extends PureComponent {
 
     return (
       <PageHeaderWrapper>
-        <Card bordered={false} style={{minHeight: window.innerHeight * 0.72}}>
+        <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>
               <SearchForm {...searchFormProps} />

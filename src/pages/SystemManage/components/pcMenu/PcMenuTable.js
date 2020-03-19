@@ -8,33 +8,26 @@ import PropTypes from 'prop-types';
  */
 const tableColumns = onShowView => [
   {
-    title: '菜单名称',
-    dataIndex: 'menu_name',
-    width: '20%',
+    title: '名称',
+    dataIndex: 'menuName',
+    width: '30%',
+    render: (text, record) => (record.menuName || record.operateName)
   },
   {
-    title: '菜单级别',
-    dataIndex: 'menu_level',
+    title: '级别',
+    dataIndex: 'menuLevel',
     width: '10%',
+    render: text => text === 4 ? '按钮操作' : `${text}级菜单`
   },
   {
-    title: '路由',
+    title: '路由或编码',
     dataIndex: 'route',
     width: '12%',
-  },
-  {
-    title: '操作名称',
-    dataIndex: 'operate_name',
-    width: '20%',
-  },
-  {
-    title: '操作编码',
-    dataIndex: 'operate_code',
-    width: '10%',
+    render: (text, record) => (record.route || record.operateCode)
   },
   {
     title: '描述',
-    dataIndex: 'desc',
+    dataIndex: 'description',
   },
   {
     title: '操作',

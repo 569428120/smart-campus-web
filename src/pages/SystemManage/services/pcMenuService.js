@@ -24,7 +24,6 @@ export async function savePcMenuData(values) {
 export async function deletePcMenuByIds(menuIds) {
   return request(config.pcMenuApi.deletePcMenuByIds, {
     method: 'GET',
-    body: {},
     params: {
       menuIds: (menuIds || []).join(",")
     }
@@ -40,7 +39,6 @@ export async function deletePcMenuByIds(menuIds) {
 export async function getMenuList(values) {
   return request(config.pcMenuApi.getMenuList, {
     method: 'GET',
-    body: {},
     params: {
       ...values
     }

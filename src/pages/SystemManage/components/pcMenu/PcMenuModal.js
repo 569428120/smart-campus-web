@@ -27,12 +27,15 @@ class PcMenuModal extends PureComponent {
    * @param onOk
    */
   onSubmit = (onOk) => {
-    const {form: {validateFields}, openType, pDataSource: {id}} = this.props;
+    const {form: {validateFields}, openType, dataSource, pDataSource} = this.props;
+    const {id: pid} = (pDataSource || {});
+    const {id} = (dataSource || {});
     validateFields((errors, values) => {
       if (errors === null) {
-        if (openType === 'add' && id) {
-          values.pid = id;
+        if (openType === 'add' && pid) {
+          values.pid = pid;
         }
+        values.id = id;
         onOk && onOk(values, openType);
       }
     });
@@ -165,13 +168,15 @@ class PcMenuModal extends PureComponent {
       visible,
       openType,
       dataSource,
+      pDataSource,
       onOk,
       onCancel
     } = this.props;
 
     const {menuLevel} = (dataSource || {});
+    const {menuLevel: pMenuLevel} = (pDataSource || {});
 
-    const form = menuLevel === 4 ? this.renderOperateForm() : this.renderMenuForm();
+    const form = (menuLevel === 4 || pMenuLevel === 3) ? this.renderOperateForm() : this.renderMenuForm();
 
     return <Modal
       title={enums.OperatorType[openType]}

@@ -25,7 +25,6 @@ export async function saveSchoolData(values) {
 export async function deleteSchoolByIds(schoolIds) {
   return request(config.schoolApi.deleteSchoolByIds, {
     method: 'GET',
-    body: {},
     params: {
       regionIds: (schoolIds || []).join(",")
     }
@@ -43,7 +42,6 @@ export async function deleteSchoolByIds(schoolIds) {
 export async function getSchoolList(searchValue, current, pageSize) {
   return request(config.schoolApi.getSchoolList, {
     method: 'GET',
-    body: {},
     params: {
       ...searchValue,
       current,

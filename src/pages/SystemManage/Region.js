@@ -59,7 +59,7 @@ class Region extends PureComponent {
 
   /**
    * 重置
-   * @param values
+   * @param searchValue
    */
   onSearchFormReset = searchValue => {
     this.onSearchFormSearch(searchValue)
@@ -85,7 +85,6 @@ class Region extends PureComponent {
   onTablePageChange = (current, pageSize) => {
     const {dispatch} = this.props;
     const {searchValue} = this.state;
-    debugger
     dispatch({
       type: "region/getRegionList",
       payload: {
@@ -163,6 +162,7 @@ class Region extends PureComponent {
   /**
    *  保存按钮
    * @param values
+   * @param openType
    */
   onRegionModalOk = (values, openType) => {
     const {dispatch, region: {current, pageSize}} = this.props;

@@ -140,12 +140,14 @@ export default function request(url, option) {
       sessionStorage.removeItem(`${hashcode}:timestamp`);
     }
   }
+  console.log(url);
   return fetch(url, newOptions)
     .then(checkStatus)
     .then(response => cachedSave(response, hashcode))
     .then(response => {
       // DELETE and 204 do not return data by default
       // using .json will report an error.
+      console.log(response);
       if (newOptions.method === 'DELETE' || response.status === 204) {
         return response.text();
       }

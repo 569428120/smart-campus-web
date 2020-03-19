@@ -25,7 +25,6 @@ export async function saveRegionData(values) {
 export async function deleteRegionByIds(regionIds) {
   return request(config.regionApi.deleteRegionByIds, {
     method: 'GET',
-    body: {},
     params: {
       regionIds: (regionIds || []).join(",")
     }
@@ -43,7 +42,6 @@ export async function deleteRegionByIds(regionIds) {
 export async function getRegionList(searchValue, current, pageSize) {
   return request(config.regionApi.getRegionList, {
     method: 'GET',
-    body: {},
     params: {
       ...searchValue,
       current,

@@ -22,7 +22,7 @@ class DataTable extends PureComponent {
     const tableProps = {
       className: styles.table,
       pagination: false,
-      scroll: {y: 10 * 38},
+      scroll: {y: window.innerHeight * 0.5},
       ...ret,
     };
 
