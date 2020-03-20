@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 class OperatorButton extends PureComponent {
   /**
    *  下拉操作按钮
-   * @param dropdown
+   * @param dropdownList
    * @param authorityMenus
    */
   renderDropdown(dropdownList, authorityMenus) {
