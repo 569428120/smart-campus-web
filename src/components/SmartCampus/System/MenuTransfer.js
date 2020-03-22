@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {Tree} from "antd";
+import {Tree, Transfer} from "antd";
 
 const {TreeNode} = Tree;
 
@@ -88,8 +88,18 @@ const treeData = [
  *   菜单分配穿梭控件
  */
 class MenuTransfer extends PureComponent {
+  state = {
+    targetKeys: [],
+  };
+
+  onChange = targetKeys => {
+    console.log('Target Keys:', targetKeys);
+    this.setState({targetKeys});
+  };
+
   render() {
-    return null;
+    const {targetKeys} = this.state;
+    return <TreeTransfer dataSource={treeData} targetKeys={targetKeys} onChange={this.onChange}/>;
   }
 }
 

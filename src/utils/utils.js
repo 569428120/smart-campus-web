@@ -190,8 +190,5 @@ export function modalWidth(minWidth) {
   if (window.innerWidth <= minWidth) {
     return window.innerWidth;
   }
-  if (window.innerWidth * 0.5 <= minWidth) {
-    return minWidth;
-  }
   return minWidth;
 }

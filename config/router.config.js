@@ -1,7 +1,7 @@
 // Demo自带的
 const testRoutes = [
   // dashboard
-  { path: '/', redirect: '/dashboard/analysis' },
+  {path: '/', redirect: '/dashboard/analysis'},
   {
     path: '/dashboard',
     name: 'dashboard',
@@ -150,7 +150,7 @@ const testRoutes = [
         name: 'success',
         component: './Result/Success',
       },
-      { path: '/result/fail', name: 'fail', component: './Result/Error' },
+      {path: '/result/fail', name: 'fail', component: './Result/Error'},
     ],
   },
   {
@@ -243,7 +243,7 @@ const testRoutes = [
 
 // 智慧校园的路由
 const appRoutes = [
-  { path: '/', redirect: '/workplace' },
+  {path: '/', redirect: '/workplace'},
   {
     path: '/workplace',
     component: './Portal/Workplace',
@@ -281,15 +281,17 @@ const appRoutes = [
             name: 'pc-menu',
             component: './SystemManage/PcMenu',
           },
+          /*
           {
             path: '/sys-manage/authority-manage/app-menu',
             name: 'app-menu',
             component: './SystemManage/AppMenu',
           },
+          */
           {
             path: '/sys-manage/authority-manage/authority-group',
             name: 'authority-group',
-            component: './Dashboard/Monitor',
+            component: './SystemManage/AuthorityGroup',
           },
         ],
       },
@@ -443,10 +445,10 @@ export default [
     path: '/user',
     component: '../layouts/UserLayout',
     routes: [
-      { path: '/user', redirect: '/user/login' },
-      { path: '/user/login', component: './User/Login' },
-      { path: '/user/register', component: './User/Register' },
-      { path: '/user/register-result', component: './User/RegisterResult' },
+      {path: '/user', redirect: '/user/login'},
+      {path: '/user/login', component: './User/Login'},
+      {path: '/user/register', component: './User/Register'},
+      {path: '/user/register-result', component: './User/RegisterResult'},
     ],
   },
   // app

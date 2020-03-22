@@ -43,15 +43,16 @@ const tableColumns = onShowView => [
 /**
  *  区域管理表格展示组件
  */
-class RegionTable extends PureComponent {
+class PcMenuTable extends PureComponent {
   render() {
-    const {dataSource, loading, selectedRowKeys, onTableSelectChange, onShowView} = this.props;
+    const {dataSource, loading, selectedRowKeys, onTableSelectChange, onTableSelect, onShowView} = this.props;
 
     const rowSelection = {
       columnTitle: '选择',
       columnWidth: 80,
       selectedRowKeys,
       onChange: onTableSelectChange,
+      onSelect: onTableSelect,
     };
 
     // 表格参数
@@ -68,13 +69,14 @@ class RegionTable extends PureComponent {
   }
 }
 
-RegionTable.propTypes = {
+PcMenuTable.propTypes = {
   dataSource: PropTypes.array,
   loading: PropTypes.bool,
   selectedRowKeys: PropTypes.array,
   onTableSelectChange: PropTypes.func,
+  onTableSelect: PropTypes.func,
   onShowView: PropTypes.func,
 };
-RegionTable.defaultProps = {};
+PcMenuTable.defaultProps = {};
 
-export default RegionTable;
+export default PcMenuTable;
