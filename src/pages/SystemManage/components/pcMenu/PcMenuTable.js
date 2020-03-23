@@ -10,19 +10,19 @@ const tableColumns = onShowView => [
   {
     title: '名称',
     dataIndex: 'menuName',
-    width: '30%',
+    width: '20%',
     render: (text, record) => (record.menuName || record.operateName)
   },
   {
     title: '级别',
     dataIndex: 'menuLevel',
-    width: '10%',
+    width: '15%',
     render: text => text === 4 ? '按钮操作' : `${text}级菜单`
   },
   {
     title: '路由或编码',
     dataIndex: 'route',
-    width: '12%',
+    width: '20%',
     render: (text, record) => (record.route || record.operateCode)
   },
   {
@@ -47,13 +47,14 @@ class PcMenuTable extends PureComponent {
   render() {
     const {dataSource, loading, selectedRowKeys, onTableSelectChange, onTableSelect, onShowView} = this.props;
 
-    const rowSelection = {
+    const rowSelection = (onTableSelectChange || onTableSelect) ? {
       columnTitle: '选择',
       columnWidth: 80,
       selectedRowKeys,
       onChange: onTableSelectChange,
       onSelect: onTableSelect,
-    };
+    } : undefined;
+
 
     // 表格参数
     const dataTableProps = {

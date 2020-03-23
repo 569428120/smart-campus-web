@@ -37,7 +37,7 @@ class OperatorButton extends PureComponent {
     return (
       <Dropdown overlay={menu}>
         <Button>
-          更多操作 <Icon type="down" />
+          批量操作 <Icon type="down" />
         </Button>
       </Dropdown>
     );

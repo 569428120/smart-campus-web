@@ -192,3 +192,86 @@ export function modalWidth(minWidth) {
   }
   return minWidth;
 }
+
+
+/**
+ *  将树结构的数据转换为map
+ * @param treeData
+ * @param idToModelMap
+ * @param pidToModelsMap
+ * @param pid
+ */
+export function treeDataToMap(treeData, idToModelMap, pidToModelsMap, pid = 'root') {
+  if ((treeData || []).length <= 0) {
+    return
+  }
+  pidToModelsMap.set(pid, treeData);
+  treeData.forEach(item => {
+    const {children, id} = item;
+    idToModelMap.set(id, item);
+    treeDataToMap(children, map, id);
+  });
+}
+
+/**
+ * 　　删除数组中的元素
+ * @param arr
+ * @param val
+ */
+export function arrRemove(arr, val) {
+  const index = arr.indexOf(val);
+  if (index > -1) {
+    this.splice(index, 1);
+  }
+}
+
+/**
+ *   树结构数据级联选择和取消选择的处理方法
+ *    一个元素选择，则父节点和子节点都要选择
+ *    一个元素取消，子节点都要取消，父节点在所有子节点取消后也取消
+ * @param idToTreeMap
+ * @param pidToTreesMap
+ * @param selectedRowKeys
+ * @param record
+ * @param selected
+ */
+export function treePidAndChildRecords(idToTreeMap, pidToTreesMap, selectedRowKeys, record, selected) {
+  // 递归退出条件
+  if (!record) {
+    return [];
+  }
+  const {id, pid} = record;
+  const rowKeys = [];
+  const records = [];
+
+  const pRecord = idToTreeMap.get(pid);
+  const children = pidToTreesMap.get(id, []);
+  const pChildren = pidToTreesMap.get(pid, []);
+  // 一个元素选择，则父节点和子节点都要选择
+  if (selected === true) {
+    // 父节点都选择
+    if (pRecord && !selectedRowKeys.includes(pid)) {
+      rowKeys.push(pRecord.id);
+      records.push(pRecord);
+    }
+    // 子节点都选择
+    if ((children || []).length > 0) {
+      const tmpChildren = children.filter(item => !selectedRowKeys.includes(item.id));
+      rowKeys.push(...tmpChildren.map(item => item.id));
+      records.push(...tmpChildren);
+    }
+  } else {
+    // 删除本身
+    arrRemove(selectedRowKeys, record.id);
+    // 父节点如果没有子节点了就取消
+    if (pChildren && (pChildren.length <= 0 || !pChildren.find(item => selectedRowKeys.includes(item.id)))) {
+      arrRemove(selectedRowKeys, pChildren.id);
+    }
+    // 子节点全部取消
+    children.forEach(item => arrRemove(selectedRowKeys, item.id));
+  }
+  if (records.length > 0) {
+    records.forEach(item => treePidAndChildRecords(idToTreeMap, pidToTreesMap, selectedRowKeys, item, selected))
+  }
+}
+

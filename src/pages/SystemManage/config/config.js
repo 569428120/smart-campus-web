@@ -24,5 +24,16 @@ export default {
     getMenuList: `${appConfig.API}/pc-menu/gets/all`,
     deletePcMenuByIds: `${appConfig.API}/pc-menu/deletes/deletes-by-ids`,
     savePcMenuData: `${appConfig.API}/pc-menu/posts`,
+  },
+  // 权限组管理
+  authorityGroupApi: {
+    // 查询权限组
+    getAuthorityGroupList: `${appConfig.API}/authority-group/gets/page`,
+    // 查询组下的菜单列表
+    getMenuListByGroupId: `${appConfig.API}/authority-to-menu/gets/gets-by-groupid`,
+    // 保存权限组
+    saveAuthorityGroup: `${appConfig.API}/authority-group/posts`,
+    // 保存权限组管理的菜单
+    saveGroupIdToMenuList: `${appConfig.API}/authority-to-menu/posts/post-by-groupid`,
   }
 }

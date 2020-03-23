@@ -9,61 +9,7 @@ import SearchForm from "@/pages/SystemManage/components/authorityGroup/SearchFor
 import AuthorityGroupTable from "@/pages/SystemManage/components/authorityGroup/AuthorityGroupTable";
 import AuthorityGroupModal from "@/pages/SystemManage/components/authorityGroup/AuthorityGroupModal";
 import MenuDistributeModal from "@/pages/SystemManage/components/authorityGroup/MenuDistributeModal";
-
-
-/**
- *  将树结构的数据转换为map
- * @param treeData
- * @param map
- * @param pid
- */
-const treeDataToMap = (treeData, map, pid = 'root') => {
-  if ((treeData || []).length <= 0) {
-    return
-  }
-  map.set(pid, treeData);
-  treeData.forEach(({children, id}) => {
-    treeDataToMap(children, map, id);
-  });
-};
-
-/**
- *   树结构数据级联选择和取消选择的处理方法
- *    一个元素选择，则父节点和子节点都要选择
- *    一个元素取消，子节点都要取消，父节点在所有子节点取消后也取消
- * @param treeMap
- * @param selectedRowKeys
- * @param record
- * @param selected
- */
-const getTreePidAndChildRecords = (idToTreeMap, pidToTreesMap, selectedRowKeys, record, selected) => {
-  // 递归退出条件
-  if (!record) {
-    return [];
-  }
-  const {id, pid} = record;
-  const rowKeys = [];
-  const records = [];
-  // 一个元素选择，则父节点和子节点都要选择
-  if (selected === true) {
-    // 父节点都选择
-    const pRecord = idToTreeMap.get(pid);
-    if (pRecord && !selectedRowKeys.includes(pid)) {
-      rowKeys.push(pRecord.id);
-      records.push(pRecord);
-    }
-    // 子节点都选择
-    const children = pidToTreesMap.get(id);
-    if ((children || []).length > 0) {
-      const tmpChildren = children.filter(item => !selectedRowKeys.includes(item.id));
-      rowKeys.push(...tmpChildren.map(item => item.id));
-      records.push(...tmpChildren);
-    }
-  } else {
-
-
-  }
-};
+import {treePidAndChildRecords} from '@/utils/utils';
 
 @connect(({loading, authorityGroup}) => ({
   loading,
@@ -79,10 +25,7 @@ class AuthorityGroup extends PureComponent {
     openType: '',// 操作类型
     authorityGroupModel: {}, // 弹窗数据
     menuDistributeModalVisible: false,// 菜单分配
-    menuSelectedRowKeys: [],// 菜单选择
-    allMenuModalVisible: false,// 所有的菜单弹窗
-    allMenuSelectedRowKeys: [],// 所有的菜单选择
-    deleteGroupToMenuIds: [], // 删除的菜单
+    menuDistributeOpenType: "",// 操作类型
   };
 
   componentDidMount() {
@@ -160,56 +103,48 @@ class AuthorityGroup extends PureComponent {
       }
     });
     this.setState({
-      menuDistributeModalVisible: true
+      menuDistributeModalVisible: true,
+      authorityGroupModel: record,
+      menuDistributeOpenType: "view",
     })
   };
 
   /**
-   *  打开所有菜单弹窗
+   *  编辑
    */
-  openAllMenuModal = () => {
+  onPcMenuDistributeEdit = (menuDistributeOpenType) => {
+    // 查询全部的菜单列表
     const {dispatch} = this.props;
-    dispatch({
-      type: "authorityGroup/getAllMenuList",
-      payload: {}
-    });
+    const {authorityGroupModel: {id: groupId}} = this.state;
+    if (menuDistributeOpenType === 'edit') {
+      dispatch({
+        type: "authorityGroup/getAllMenuAndGroupToMenuIdList",
+        payload: {
+          groupId
+        }
+      });
+    } else {
+      dispatch({
+        type: "authorityGroup/getMenuListByGroupId",
+        payload: {
+          groupId
+        }
+      });
+    }
     this.setState({
-      allMenuModalVisible: true
+      menuDistributeOpenType,
     })
   };
 
-  /**
-   *  删除操作
-   */
-  onPcMenuDistributeDelete = () => {
-    const {menuSelectedRowKeys} = this.state;
-    if ((menuSelectedRowKeys || []).length <= 0) {
-      message.info("请选择需要删除的数据");
-      return;
-    }
-    const {dispatch, authorityGroup: {groupToMenuList}} = this.props;
-    const newGroupToMenuList = (groupToMenuList || []).filter(item => !menuSelectedRowKeys.includes(item.id));
-    dispatch({
-      type: "authorityGroup/setState",
-      payload: {
-        groupToMenuList: newGroupToMenuList,
-      }
-    });
-    this.setState({
-      menuSelectedRowKeys: [],
-      deleteGroupToMenuIds: menuSelectedRowKeys,
-    })
-  };
 
   /**
    *   菜单选择
    */
   onPcMenuDistributeSelect = (record, selected) => {
-    const {authorityGroup: groupToMenuList} = this.props;
-    const {menuSelectedRowKeys} = this.state;
-    const records = getTreePidAndChildRecords(groupToMenuList, menuSelectedRowKeys, record, selected);
+    const {authorityGroup: {groupToMenuIdList, menuIdToModelMap, pidToModelsMap}} = this.props;
+    treePidAndChildRecords(menuIdToModelMap, pidToModelsMap, groupToMenuIdList, record, selected);
     this.setState({
-      menuSelectedRowKeys: records.map(item => item.id),
+      groupToMenuIdList,
     });
   };
 
@@ -225,7 +160,7 @@ class AuthorityGroup extends PureComponent {
         values
       }
     }).then(() => {
-      this.onRefreshAuthorityGroupPage(searchValue, openType === 'edit' ? current : 1, pageSize)
+      this.onRefreshAuthorityGroupPage(searchValue, openType === 'edit' ? current : 1, pageSize);
       this.closeAuthorityGroupModal();
     });
   };
@@ -233,8 +168,29 @@ class AuthorityGroup extends PureComponent {
   /**
    *   菜单分配确认
    */
-  onMenuDistributeOk = () => {
-
+  onMenuDistributeOk = (openType) => {
+    const {dispatch, authorityGroup: {groupToMenuIdList}} = this.props;
+    const {authorityGroupModel: {id: groupId}} = this.state;
+    if (openType === 'edit') {
+      dispatch({
+        type: "authorityGroup/saveGroupIdToMenuList",
+        payload: {
+          groupId,
+          menuIds: groupToMenuIdList,
+        }
+      }).then(() => {
+        dispatch({
+          type: "authorityGroup/getMenuListByGroupId",
+          payload: {
+            groupId
+          }
+        });
+        this.setState({menuDistributeOpenType: "view"});
+        message.info("保存成功")
+      });
+    } else {
+      this.setState({menuDistributeModalVisible: false})
+    }
   };
 
   /**
@@ -293,7 +249,7 @@ class AuthorityGroup extends PureComponent {
         current,
         pageSize,
         menuList,
-        groupToMenuList
+        groupToMenuIdList,
       }
     } = this.props;
 
@@ -327,10 +283,10 @@ class AuthorityGroup extends PureComponent {
     const menuDistributeModal = {
       visible: this.state.menuDistributeModalVisible,
       loading: loading.effects['authorityGroup/getMenuListByGroupId'],
-      selectedRowKeys: this.state.menuSelectedRowKeys,
-      groupToMenuList,
-      onPcMenuAdd: this.openAllMenuModal,
-      onPcMenuDelete: this.onPcMenuDistributeDelete,
+      selectedRowKeys: groupToMenuIdList,
+      openType: this.state.menuDistributeOpenType,
+      menuList,
+      onPcMenuEdit: this.onPcMenuDistributeEdit,
       onMenuSelect: this.onPcMenuDistributeSelect,
       onOk: this.onMenuDistributeOk,
       onCancel: () => this.setState({menuDistributeModalVisible: false})

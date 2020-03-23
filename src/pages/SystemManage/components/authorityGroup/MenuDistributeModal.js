@@ -17,9 +17,9 @@ class MenuDistributeModal extends PureComponent {
       visible,
       openType,
       loading,
-      groupToMenuList,
+      menuList,
       selectedRowKeys,
-      onPcMenuAdd,
+      onPcMenuEdit,
       onPcMenuDelete,
       onMenuSelect,
       onOk,
@@ -27,24 +27,37 @@ class MenuDistributeModal extends PureComponent {
     } = this.props;
 
     const buttonList = [];
-    if (onPcMenuAdd) {
+    // 编辑
+    if (onPcMenuEdit && openType === 'view') {
       buttonList.push({
-        icon: 'plus',
+        icon: '',
         type: 'primary',
-        text: '新增',
-        operatorKey: 'authority-to-menu-add',
-        onClick: onPcMenuAdd,
+        text: '编辑',
+        operatorKey: 'authority-to-menu-edit',
+        onClick: () => onPcMenuEdit("edit"),
       });
     }
-    if ((selectedRowKeys || []).length > 0 && onPcMenuDelete) {
+    // 撤回
+    if (onPcMenuEdit && openType === 'edit') {
       buttonList.push({
         icon: '',
         type: '',
-        text: '删除',
-        operatorKey: 'authority-to-menu-delete',
-        onClick: onPcMenuDelete,
+        text: '撤回',
+        operatorKey: 'authority-to-menu-edit',
+        onClick: () => {
+          Modal.confirm({
+            title: '确认是否撤回',
+            content: '撤回后编辑的数据将不生效，请确认是否撤回.',
+            okText: '确认',
+            cancelText: '取消',
+            onOk: () => onPcMenuEdit("view"),
+            onCancel: () => {
+            }
+          });
+        },
       });
     }
+
     // 操作按钮
     const operatorButtonProps = {
       buttonList
@@ -52,10 +65,10 @@ class MenuDistributeModal extends PureComponent {
 
     // 表格组件参数
     const pcMenuTableProps = {
-      dataSource: groupToMenuList,
+      dataSource: menuList,
       loading,
       selectedRowKeys,
-      onTableSelect: onMenuSelect
+      onTableSelect: openType === 'edit' ? onMenuSelect : undefined
     };
 
     return <Modal
@@ -63,13 +76,14 @@ class MenuDistributeModal extends PureComponent {
       destroyOnClose={true}
       visible={visible}
       onOk={onOk}
+      bodyStyle={{height: window.innerHeight * 0.7}}
       width={modalWidth(window.innerWidth * 0.5)}
       onCancel={onCancel}
-      okText="确认"
+      okText="保存"
       cancelText="取消"
     >
       <Tabs defaultActiveKey="1">
-        <TabPane tab="Tab 1" key="1">
+        <TabPane tab="PC端菜单" key="1">
           <OperatorButton {...operatorButtonProps} />
           <PcMenuTable {...pcMenuTableProps}/>
         </TabPane>
@@ -81,16 +95,16 @@ class MenuDistributeModal extends PureComponent {
 MenuDistributeModal.propTypes = {
   // 是否显示
   visible: PropTypes.bool.isRequired,
+  // 操作类型
+  openType: PropTypes.string,
   // 加载状态
   loading: PropTypes.bool,
   // 选择
   selectedRowKeys: PropTypes.string,
   // 已经分配的
-  groupToMenuList: PropTypes.array,
-  // 新增菜单
-  onPcMenuAdd: PropTypes.func,
-  // 删除菜单
-  onPcMenuDelete: PropTypes.func,
+  menuList: PropTypes.array,
+  // 编辑菜单
+  onPcMenuEdit: PropTypes.func,
   // 菜单选择
   onMenuSelect: PropTypes.func,
   // 确认方法
