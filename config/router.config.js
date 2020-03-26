@@ -243,7 +243,8 @@ const testRoutes = [
 
 // 系统设置
 const sysManageRoutes = require('../src/pages/SystemManage/config/routes');
-
+// 人员管理
+const humanManageRoutes = require('../src/pages/HumanManage/config/routes');
 // 智慧校园的路由
 const appRoutes = [
   {path: '/', redirect: '/workplace'},
@@ -252,47 +253,7 @@ const appRoutes = [
     component: './Portal/Workplace',
   },
   sysManageRoutes,
-  // 人员管理
-  {
-    path: '/personnel-manage',
-    name: 'personnel-manage',
-    routes: [
-      // 职工管理
-      {
-        path: '/personnel-manage/staff-manage',
-        name: 'staff-manage',
-        routes: [
-          {
-            path: '/personnel-manage/staff-manage/staff-group',
-            name: 'staff-group',
-            component: './Dashboard/Analysis',
-          },
-          {
-            path: '/personnel-manage/staff-manage/staff-user',
-            name: 'staff-user',
-            component: './Dashboard/Monitor',
-          },
-        ],
-      },
-      // 学生管理
-      {
-        path: '/personnel-manage/student-manage',
-        name: 'student-manage',
-        routes: [
-          {
-            path: '/personnel-manage/student-manage/student-group',
-            name: 'student-group',
-            component: './Dashboard/Analysis',
-          },
-          {
-            path: '/personnel-manage/student-manage/student',
-            name: 'student',
-            component: './Dashboard/Monitor',
-          },
-        ],
-      },
-    ],
-  },
+  humanManageRoutes,
   //门禁管理
   {
     path: '/access-control',
