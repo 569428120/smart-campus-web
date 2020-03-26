@@ -25,7 +25,7 @@ export async function getAuthorityGroupList(searchValue, current, pageSize) {
  * @returns {Promise<void>}
  */
 export async function deleteAuthorityGroupByIds(groupIds) {
-  return request(config.authorityGroupApi.getAuthorityGroupList, {
+  return request(config.authorityGroupApi.deleteAuthorityGroupByIds, {
     method: 'GET',
     params: {
       groupIds: (groupIds || []).join(",")

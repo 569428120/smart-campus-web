@@ -9,15 +9,13 @@ import PropTypes from 'prop-types';
 const tableColumns = onOperator => [
   {
     title: '权限组名称',
-    dataIndex: 'menuName',
+    dataIndex: 'authorityName',
     width: '25%',
-    render: (text, record) => (record.menuName || record.operateName)
   },
   {
     title: '权限组编码',
-    dataIndex: 'menuLevel',
+    dataIndex: 'authorityCode',
     width: '25%',
-    render: text => text === 4 ? '按钮操作' : `${text}级菜单`
   },
   {
     title: '描述',
@@ -28,7 +26,7 @@ const tableColumns = onOperator => [
     width: '10%',
     render: (text, record) => (
       <Fragment>
-        <a onClick={() => onOperator(record)}>分配权限</a>
+        <a onClick={() => onOperator(record)}>权限</a>
       </Fragment>
     ),
   },

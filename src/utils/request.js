@@ -147,7 +147,6 @@ export default function request(url, option) {
     .then(response => {
       // DELETE and 204 do not return data by default
       // using .json will report an error.
-      console.log(response);
       if (newOptions.method === 'DELETE' || response.status === 204) {
         return response.text();
       }

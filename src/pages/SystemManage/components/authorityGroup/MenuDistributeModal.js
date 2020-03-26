@@ -17,6 +17,7 @@ class MenuDistributeModal extends PureComponent {
       visible,
       openType,
       loading,
+      okLoading,
       menuList,
       selectedRowKeys,
       onPcMenuEdit,
@@ -41,7 +42,6 @@ class MenuDistributeModal extends PureComponent {
     if (onPcMenuEdit && openType === 'edit') {
       buttonList.push({
         icon: '',
-        type: '',
         text: '撤回',
         operatorKey: 'authority-to-menu-edit',
         onClick: () => {
@@ -68,17 +68,23 @@ class MenuDistributeModal extends PureComponent {
       dataSource: menuList,
       loading,
       selectedRowKeys,
+      height: window.innerHeight * 0.5,
       onTableSelect: openType === 'edit' ? onMenuSelect : undefined
+    };
+
+    const okButtonProps = {
+      disabled: openType === 'view',
+      loading: okLoading
     };
 
     return <Modal
       title={"权限菜单"}
       destroyOnClose={true}
       visible={visible}
-      onOk={onOk}
-      bodyStyle={{height: window.innerHeight * 0.7}}
+      onOk={() => onOk(openType)}
       width={modalWidth(window.innerWidth * 0.5)}
       onCancel={onCancel}
+      okButtonProps={okButtonProps}
       okText="保存"
       cancelText="取消"
     >
@@ -99,8 +105,10 @@ MenuDistributeModal.propTypes = {
   openType: PropTypes.string,
   // 加载状态
   loading: PropTypes.bool,
+  // 确认按钮家长状态
+  okLoading: PropTypes.bool,
   // 选择
-  selectedRowKeys: PropTypes.string,
+  selectedRowKeys: PropTypes.array,
   // 已经分配的
   menuList: PropTypes.array,
   // 编辑菜单

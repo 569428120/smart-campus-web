@@ -31,6 +31,8 @@ export default {
     getAuthorityGroupList: `${appConfig.API}/authority-group/gets/page`,
     // 查询组下的菜单列表
     getMenuListByGroupId: `${appConfig.API}/authority-to-menu/gets/gets-by-groupid`,
+    // 删除权限组
+    deleteAuthorityGroupByIds: `${appConfig.API}/authority-group/deletes/deletes-by-ids`,
     // 保存权限组
     saveAuthorityGroup: `${appConfig.API}/authority-group/posts`,
     // 保存权限组管理的菜单

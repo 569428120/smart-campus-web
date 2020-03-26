@@ -1,6 +1,6 @@
 import appConfig from "@/config/appConfig";
 import * as authorityGroupService from '@/pages/SystemManage/services/authorityGroupService'
-import {treeDataToMap} from '@/utils/utils';
+import {treeDataToMap, getTreeKeys} from '@/utils/utils';
 
 export default {
   namespace: 'authorityGroup',
@@ -59,7 +59,7 @@ export default {
       treeDataToMap((menuList || []), menuIdToModelMap, pidToModelsMap);
       // 查询本组挂了的菜单列表
       const groupToMenuList = yield call(authorityGroupService.getMenuListByGroupId, groupId);
-      const groupToMenuIdList = (groupToMenuList || []).map(item => item.menuId);
+      const groupToMenuIdList = getTreeKeys(groupToMenuList, "id");
       yield put({
         type: "setState",
         payload: {

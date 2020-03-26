@@ -10,6 +10,7 @@ import AuthorityGroupTable from "@/pages/SystemManage/components/authorityGroup/
 import AuthorityGroupModal from "@/pages/SystemManage/components/authorityGroup/AuthorityGroupModal";
 import MenuDistributeModal from "@/pages/SystemManage/components/authorityGroup/MenuDistributeModal";
 import {treePidAndChildRecords} from '@/utils/utils';
+import {Modal} from "antd/lib/index";
 
 @connect(({loading, authorityGroup}) => ({
   loading,
@@ -61,18 +62,27 @@ class AuthorityGroup extends PureComponent {
   onDeleteAuthorityGroup = (groupIds) => {
     const {dispatch, authorityGroup: {pageSize}} = this.props;
     const {searchValue} = this.state;
-    dispatch({
-      type: "authorityGroup/deleteAuthorityGroupByIds",
-      payload: {
-        groupIds
-      }
-    }).then(() => {
-      // 刷新页面并把选择质控
-      this.onRefreshAuthorityGroupPage(searchValue, 1, pageSize);
-      this.setState({
-        selectedRowKeys: [],
-        selectedRows: [],
-      })
+    const deleteFunc = () => {
+      dispatch({
+        type: "authorityGroup/deleteAuthorityGroupByIds",
+        payload: {
+          groupIds
+        }
+      }).then(() => {
+        // 刷新页面并把选择质控
+        this.onRefreshAuthorityGroupPage(searchValue, 1, pageSize);
+        this.setState({
+          selectedRowKeys: [],
+          selectedRows: [],
+        })
+      });
+    };
+    Modal.confirm({
+      title: '删除确认',
+      content: '是否删除选择的数据',
+      onOk: deleteFunc,
+      okText: '确认',
+      cancelText: '取消',
     });
   };
 
@@ -141,10 +151,14 @@ class AuthorityGroup extends PureComponent {
    *   菜单选择
    */
   onPcMenuDistributeSelect = (record, selected) => {
-    const {authorityGroup: {groupToMenuIdList, menuIdToModelMap, pidToModelsMap}} = this.props;
-    treePidAndChildRecords(menuIdToModelMap, pidToModelsMap, groupToMenuIdList, record, selected);
-    this.setState({
-      groupToMenuIdList,
+    const {authorityGroup: {groupToMenuIdList, menuIdToModelMap, pidToModelsMap}, dispatch} = this.props;
+    const newGroupToMenuIdList = [...(groupToMenuIdList || [])];
+    treePidAndChildRecords(menuIdToModelMap, pidToModelsMap, newGroupToMenuIdList, record, selected);
+    dispatch({
+      type: "authorityGroup/setState",
+      payload: {
+        groupToMenuIdList: newGroupToMenuIdList
+      }
     });
   };
 
@@ -162,6 +176,10 @@ class AuthorityGroup extends PureComponent {
     }).then(() => {
       this.onRefreshAuthorityGroupPage(searchValue, openType === 'edit' ? current : 1, pageSize);
       this.closeAuthorityGroupModal();
+      this.setState({
+        selectedRowKeys: [],
+        selectedRows: [],
+      })
     });
   };
 
@@ -185,12 +203,11 @@ class AuthorityGroup extends PureComponent {
             groupId
           }
         });
-        this.setState({menuDistributeOpenType: "view"});
-        message.info("保存成功")
+        message.info("保存成功");
+        this.setState({menuDistributeOpenType: 'view'})
       });
-    } else {
-      this.setState({menuDistributeModalVisible: false})
     }
+
   };
 
   /**
@@ -234,7 +251,7 @@ class AuthorityGroup extends PureComponent {
       dropdownList.push({
         operatorKey: 'authority-group-delete',
         text: '删除',
-        onClick: this.onDeleteAuthorityGroup,
+        onClick: () => this.onDeleteAuthorityGroup(selectedRowKeys),
       });
     }
     return {buttonList, dropdownList};
@@ -255,7 +272,7 @@ class AuthorityGroup extends PureComponent {
 
     // 搜索参数
     const searchFormProps = {
-      onSearch: (searchValue) => this.this.onRefreshAuthorityGroupPage(searchValue, 1, pageSize),
+      onSearch: (searchValue) => this.onRefreshAuthorityGroupPage(searchValue, 1, pageSize),
       onFormReset: (searchValue) => this.onRefreshAuthorityGroupPage(searchValue, 1, pageSize),
     };
     // 操作按钮参数
@@ -263,7 +280,7 @@ class AuthorityGroup extends PureComponent {
 
     // 表格参数
     const authorityGroupTableProps = {
-      dataSource: [{id: 1, name: ""},],
+      dataSource: authorityGroupList,
       loading: loading.effects['authorityGroup/getAuthorityGroupList'],
       selectedRowKeys: this.state.selectedRowKeys,
       onTableSelectChange: (selectedRowKeys, selectedRows) => this.setState({selectedRowKeys, selectedRows}),
@@ -282,7 +299,8 @@ class AuthorityGroup extends PureComponent {
     // 分配菜单
     const menuDistributeModal = {
       visible: this.state.menuDistributeModalVisible,
-      loading: loading.effects['authorityGroup/getMenuListByGroupId'],
+      loading: loading.effects['authorityGroup/getMenuListByGroupId'] || loading.effects['authorityGroup/getAllMenuAndGroupToMenuIdList'],
+      okLoading: loading.effects['authorityGroup/saveGroupIdToMenuList'],
       selectedRowKeys: groupToMenuIdList,
       openType: this.state.menuDistributeOpenType,
       menuList,

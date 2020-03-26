@@ -209,7 +209,7 @@ export function treeDataToMap(treeData, idToModelMap, pidToModelsMap, pid = 'roo
   treeData.forEach(item => {
     const {children, id} = item;
     idToModelMap.set(id, item);
-    treeDataToMap(children, map, id);
+    treeDataToMap(children, idToModelMap, pidToModelsMap, id);
   });
 }
 
@@ -221,8 +221,61 @@ export function treeDataToMap(treeData, idToModelMap, pidToModelsMap, pid = 'roo
 export function arrRemove(arr, val) {
   const index = arr.indexOf(val);
   if (index > -1) {
-    this.splice(index, 1);
+    arr.splice(index, 1);
   }
+}
+
+/**
+ *  获取当前节点的所有父节点
+ * @param idToTreeMap
+ * @param pidToTreesMap
+ * @param record
+ */
+export function getTreePids(idToTreeMap, pidToTreesMap, record) {
+  if (!record) {
+    return [];
+  }
+  const pids = [];
+  let pRecord = record;
+  do {
+    pRecord = idToTreeMap.get(pRecord.pid, undefined);
+    if (pRecord) {
+      pids.push(pRecord.id);
+    }
+  } while (pRecord !== undefined);
+  return pids;
+}
+
+/**
+ *  所有子节点
+ * @param idToTreeMap
+ * @param pidToTreesMap
+ * @param record
+ */
+export function getTreeChildrenIds(idToTreeMap, pidToTreesMap, record) {
+  if (!record) {
+    return [];
+  }
+
+  const getChildren = (children) => {
+    if ((children || []).length <= 0) {
+      return [];
+    }
+    const nChildren = [];
+    children.forEach(item => {
+      nChildren.push(...(pidToTreesMap.get(item.id) || []));
+    });
+    return nChildren;
+  };
+
+  const childrenIds = [];
+  let children = (pidToTreesMap.get(record.id) || []);
+  do {
+    childrenIds.push(...children.map(item => item.id));
+    children = getChildren(children);
+  } while ((children || []).length > 0);
+
+  return childrenIds;
 }
 
 /**
@@ -240,38 +293,54 @@ export function treePidAndChildRecords(idToTreeMap, pidToTreesMap, selectedRowKe
   if (!record) {
     return [];
   }
-  const {id, pid} = record;
-  const rowKeys = [];
-  const records = [];
 
-  const pRecord = idToTreeMap.get(pid);
-  const children = pidToTreesMap.get(id, []);
-  const pChildren = pidToTreesMap.get(pid, []);
-  // 一个元素选择，则父节点和子节点都要选择
+  const allPids = getTreePids(idToTreeMap, pidToTreesMap, record);
+  const allChildrenIds = getTreeChildrenIds(idToTreeMap, pidToTreesMap, record);
+
   if (selected === true) {
-    // 父节点都选择
-    if (pRecord && !selectedRowKeys.includes(pid)) {
-      rowKeys.push(pRecord.id);
-      records.push(pRecord);
+    if (!selectedRowKeys.includes(record.id)) {
+      selectedRowKeys.push(record.id);
     }
-    // 子节点都选择
-    if ((children || []).length > 0) {
-      const tmpChildren = children.filter(item => !selectedRowKeys.includes(item.id));
-      rowKeys.push(...tmpChildren.map(item => item.id));
-      records.push(...tmpChildren);
-    }
+    allPids.forEach(id => {
+      if (!selectedRowKeys.includes(id)) {
+        selectedRowKeys.push(id)
+      }
+    });
+    allChildrenIds.forEach(id => {
+      if (!selectedRowKeys.includes(id)) {
+        selectedRowKeys.push(id)
+      }
+    })
   } else {
     // 删除本身
     arrRemove(selectedRowKeys, record.id);
-    // 父节点如果没有子节点了就取消
-    if (pChildren && (pChildren.length <= 0 || !pChildren.find(item => selectedRowKeys.includes(item.id)))) {
-      arrRemove(selectedRowKeys, pChildren.id);
-    }
     // 子节点全部取消
-    children.forEach(item => arrRemove(selectedRowKeys, item.id));
-  }
-  if (records.length > 0) {
-    records.forEach(item => treePidAndChildRecords(idToTreeMap, pidToTreesMap, selectedRowKeys, item, selected))
+    allChildrenIds.forEach(id => arrRemove(selectedRowKeys, id));
+    // 父节点如果没有子节点了就取消
+    allPids.forEach(id => {
+      const pChildren = pidToTreesMap.get(id, []);
+      if (!pChildren.find(item => selectedRowKeys.includes(item.id))) {
+        arrRemove(selectedRowKeys, id);
+      }
+    })
   }
 }
+
+/**
+ *   获取树节点的key
+ * @param treeData
+ * @param key
+ */
+export function getTreeKeys(treeData, key) {
+  if ((treeData || []).length <= 0) {
+    return [];
+  }
+  const keys = [];
+  treeData.forEach(item => {
+    keys.push(item[key]);
+    keys.push(...getTreeKeys(item.children, key))
+  });
+  return keys;
+}
+
 
