@@ -30,7 +30,7 @@ const FooterView = () => (
       }
       copyright={
         <Fragment>
-          Copyright <Icon type="copyright" /> 2020 魅蓝科技有限公司
+          Copyright <Icon type="copyright" /> 2020 XXXXXXXXXXX
         </Fragment>
       }
     />

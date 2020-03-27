@@ -18,7 +18,7 @@ const formItemLayout = {
 };
 
 @Form.create()
-class StaffGroupModal extends PureComponent {
+class StaffUserModal extends PureComponent {
 
   /**
    *  提交数据
@@ -109,7 +109,7 @@ class StaffGroupModal extends PureComponent {
 }
 
 
-StaffGroupModal.propTypes = {
+StaffUserModal.propTypes = {
   // 是否显示
   visible: PropTypes.bool.isRequired,
   // 操作类型 edit  add
@@ -124,8 +124,8 @@ StaffGroupModal.propTypes = {
   onCancel: PropTypes.func,
 };
 
-StaffGroupModal.defaultProps = {};
+StaffUserModal.defaultProps = {};
 
-export default StaffGroupModal;
+export default StaffUserModal;
 
 

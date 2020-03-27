@@ -40,7 +40,7 @@ const tableColumns = onOperator => {
 /**
  *  权限表格
  */
-class StaffGroupTable extends PureComponent {
+class StaffUserTable extends PureComponent {
   render() {
     const {dataSource, loading, selectedRowKeys, onTableSelectChange, onOperator} = this.props;
 
@@ -65,13 +65,13 @@ class StaffGroupTable extends PureComponent {
   }
 }
 
-StaffGroupTable.propTypes = {
+StaffUserTable.propTypes = {
   dataSource: PropTypes.array,
   loading: PropTypes.bool,
   selectedRowKeys: PropTypes.array,
   onTableSelectChange: PropTypes.func,
   onOperator: PropTypes.func,
 };
-StaffGroupTable.defaultProps = {};
+StaffUserTable.defaultProps = {};
 
-export default StaffGroupTable;
+export default StaffUserTable;

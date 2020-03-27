@@ -7,6 +7,7 @@ import SearchForm from '@/pages/HumanManage/components/staffGroup/SearchForm';
 import OperatorButton from '@/components/SmartCampus/AuthorityToolbar/OperatorButton';
 import StaffGroupTable from '@/pages/HumanManage/components/staffGroup/StaffGroupTable';
 import StaffGroupModal from "@/pages/HumanManage/components/staffGroup/StaffGroupModal";
+import {Modal} from "antd/lib/index";
 
 /**
  *  区域管理页面
@@ -67,13 +68,23 @@ class StaffGroup extends PureComponent {
   deleteStaffGroups = (groupIds) => {
     const {dispatch} = this.props;
     const {searchValue} = this.state;
-    dispatch({
-      type: "staffGroup/deleteStaffGroupByIds",
-      payload: {
-        groupIds,
-      }
-    }).then(() => {
-      this.onRefreshStaffGroupList(searchValue);
+    const deleteFunc = () => {
+      dispatch({
+        type: "staffGroup/deleteStaffGroupByIds",
+        payload: {
+          groupIds,
+        }
+      }).then(() => {
+        this.onRefreshStaffGroupList(searchValue);
+      });
+    };
+
+    Modal.confirm({
+      title: '删除确认',
+      content: '是否删除选择的数据',
+      onOk: deleteFunc,
+      okText: '确认',
+      cancelText: '取消',
     });
   };
 
@@ -174,9 +185,10 @@ class StaffGroup extends PureComponent {
       loading: loading.effects['staffGroup/getStaffGroupList'],
       selectedRowKeys: this.state.selectedRowKeys,
       onTableSelectChange: (selectedRowKeys, selectedRows) => this.setState({selectedRowKeys, selectedRows}),
-      onShowView: (record) => this.openStaffGroupModal(record, 'view'),
+      //onShowView: (record) => this.openStaffGroupModal(record, 'view'),
     };
 
+    // 弹窗参数
     const staffGroupModalProps = {
       visible: this.state.staffGroupModalVisible,
       openType: this.state.openType,

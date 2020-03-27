@@ -4,17 +4,13 @@ import config from "@/pages/HumanManage/config/config";
 /**
  *  搜索查询
  * @param searchValue
- * @param current
- * @param pageSize
  * @returns {Promise<void>}
  */
-export async function getAuthorityGroupList(searchValue, current, pageSize) {
-  return request(config.authorityGroupApi.getAuthorityGroupList, {
+export async function getStaffGroupList(searchValue) {
+  return request(config.staffGroupApi.getStaffGroupList, {
     method: 'GET',
     params: {
-      ...searchValue,
-      current,
-      pageSize
+      ...searchValue
     }
   });
 }
@@ -24,8 +20,8 @@ export async function getAuthorityGroupList(searchValue, current, pageSize) {
  * @param groupIds
  * @returns {Promise<void>}
  */
-export async function deleteAuthorityGroupByIds(groupIds) {
-  return request(config.authorityGroupApi.deleteAuthorityGroupByIds, {
+export async function deleteStaffGroupByIds(groupIds) {
+  return request(config.staffGroupApi.deleteStaffGroupByIds, {
     method: 'GET',
     params: {
       groupIds: (groupIds || []).join(",")
@@ -35,23 +31,12 @@ export async function deleteAuthorityGroupByIds(groupIds) {
 
 
 /**
- *  查询菜单列表
- * @returns {Promise<void>}
- */
-export async function getAllMenuList() {
-  return request(config.pcMenuApi.getMenuList, {
-    method: 'GET',
-    params: {}
-  });
-}
-
-/**
  *  查询组下的权限列表
  * @param groupId
  * @returns {Promise<void>}
  */
 export async function getMenuListByGroupId(groupId) {
-  return request(config.authorityGroupApi.getMenuListByGroupId, {
+  return request(config.staffGroupApi.getMenuListByGroupId, {
     method: 'GET',
     params: {
       groupId
@@ -60,31 +45,15 @@ export async function getMenuListByGroupId(groupId) {
 }
 
 /**
- *  保存权限组
+ *  保存
  * @param values
  * @returns {Promise<void>}
  */
-export async function saveAuthorityGroup(values) {
-  return request(config.authorityGroupApi.saveAuthorityGroup, {
+export async function saveStaffGroupData(values) {
+  return request(config.staffGroupApi.saveStaffGroupData, {
     method: 'POST',
     body: {
       ...values
-    }
-  });
-}
-
-/**
- *   保存关联的菜单
- * @param groupId
- * @param menuIds
- * @returns {Promise<void>}
- */
-export async function saveGroupIdToMenuList(groupId, menuIds) {
-  return request(config.authorityGroupApi.saveGroupIdToMenuList, {
-    method: 'POST',
-    params: {
-      groupId,
-      menuIds
     }
   });
 }
