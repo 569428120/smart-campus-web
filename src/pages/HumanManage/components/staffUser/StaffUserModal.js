@@ -1,10 +1,11 @@
 import React, {PureComponent} from 'react';
-import {Form, Input, Modal} from "antd";
+import {Radio, Form, Input, Modal, TreeSelect} from "antd";
 import PropTypes from "prop-types";
 import enums from "@/pages/HumanManage/config/enums";
 import {modalWidth} from '@/utils/utils';
 
 const {TextArea} = Input;
+const {TreeNode} = TreeSelect;
 
 const formItemLayout = {
   labelCol: {
@@ -17,6 +18,21 @@ const formItemLayout = {
   },
 };
 
+/**
+ *  获取树节点
+ * @param treeData
+ * @returns {Array}
+ */
+const getTreeNode = (treeData) => {
+  if ((treeData || []).length <= 0) {
+    return [];
+  }
+  return treeData.map(({id, groupName, children}) =>
+    <TreeNode value={id} title={groupName} key={id}>
+      {getTreeNode(children)}
+    </TreeNode>)
+};
+
 @Form.create()
 class StaffUserModal extends PureComponent {
 
@@ -25,14 +41,15 @@ class StaffUserModal extends PureComponent {
    * @param onOk
    */
   onSubmit = (onOk) => {
-    const {form: {validateFields}, openType, dataSource, pDataSource} = this.props;
+    const {form: {validateFields}, openType, dataSource} = this.props;
     const {id} = (dataSource || {});
-    const {pid} = (pDataSource || {});
+    const formatValues = (values) => {
+      values.id = id;
+      values.groupIds = (values.groupIds || []).join(",")
+    };
     validateFields((errors, values) => {
       if (errors === null) {
-        values.id = id;
-        values.pid = pid;
-        onOk && onOk(values, openType);
+        onOk && onOk(formatValues(values), openType);
       }
     });
   };
@@ -42,6 +59,7 @@ class StaffUserModal extends PureComponent {
       visible,
       openType,
       dataSource,
+      staffGroupList,
       onOk,
       onCancel,
       form: {
@@ -49,7 +67,10 @@ class StaffUserModal extends PureComponent {
       }
     } = this.props;
 
-    const {groupName, groupCode, description} = dataSource;
+    const {name, userType, groupIds, userIdentity, address} = dataSource;
+    const treeNodes = getTreeNode(staffGroupList);
+    const userTypeCheckbox = Object.keys(enums.UserTypes).map(key =>
+      <Radio key={key} value={key}>{enums.UserTypes[key]}</Radio>);
 
     return <Modal
       title={enums.OperatorType[openType]}
@@ -62,13 +83,30 @@ class StaffUserModal extends PureComponent {
       cancelText="取消"
     >
       <Form>
-        <Form.Item {...formItemLayout} label="分组名称">
-          {getFieldDecorator('groupName', {
-            initialValue: groupName,
+        <Form.Item {...formItemLayout} label="所属分组">
+          {getFieldDecorator('groupIds', {
+            initialValue: groupIds ? groupIds.split(",") : null,
             rules: [
               {
                 required: true,
-                message: '分组名称必填',
+                message: '所属分组必填',
+              },
+            ],
+          })(<TreeSelect
+            disabled={openType === 'view'}
+            allowClear
+            multiple
+            treeDefaultExpandAll>
+            {treeNodes}
+          </TreeSelect>)}
+        </Form.Item>
+        <Form.Item {...formItemLayout} label="姓名">
+          {getFieldDecorator('name', {
+            initialValue: name,
+            rules: [
+              {
+                required: true,
+                message: '姓名必填',
               },
               {
                 max: 64,
@@ -77,13 +115,27 @@ class StaffUserModal extends PureComponent {
             ],
           })(<Input disabled={openType === 'view'}/>)}
         </Form.Item>
-        <Form.Item {...formItemLayout} label="分组编码">
-          {getFieldDecorator('groupCode', {
-            initialValue: groupCode,
+        <Form.Item {...formItemLayout} label="用户类型">
+          {getFieldDecorator('userType', {
+            initialValue: userType,
             rules: [
               {
                 required: true,
-                message: '分组编码必填',
+                message: '用户类型必填',
+              }
+            ],
+          })(<Radio.Group disabled={openType === 'view'}>
+            {userTypeCheckbox}
+          </Radio.Group>)}
+        </Form.Item>
+
+        <Form.Item {...formItemLayout} label="身份证号码">
+          {getFieldDecorator('userIdentity', {
+            initialValue: userIdentity,
+            rules: [
+              {
+                required: true,
+                message: '身份证号码必填',
               },
               {
                 max: 64,
@@ -92,9 +144,10 @@ class StaffUserModal extends PureComponent {
             ],
           })(<Input disabled={openType === 'view'}/>)}
         </Form.Item>
-        <Form.Item {...formItemLayout} label="描述">
-          {getFieldDecorator('description', {
-            initialValue: description,
+
+        <Form.Item {...formItemLayout} label="住址">
+          {getFieldDecorator('address', {
+            initialValue: address,
             rules: [
               {
                 max: 525,
@@ -116,8 +169,8 @@ StaffUserModal.propTypes = {
   openType: PropTypes.string,
   // 回显的数据
   dataSource: PropTypes.object,
-  // 父节点数据
-  pDataSource: PropTypes.object,
+  // 分组
+  staffGroupList: PropTypes.array,
   // 确认方法
   onOk: PropTypes.func,
   // 取消方法

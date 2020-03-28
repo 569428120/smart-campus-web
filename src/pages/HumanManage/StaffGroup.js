@@ -181,7 +181,7 @@ class StaffGroup extends PureComponent {
 
     // 表格组件参数
     const staffGroupTableProps = {
-      dataSource: staffGroupList,
+      dataSource: [{id: "1", groupName: "测试"}],
       loading: loading.effects['staffGroup/getStaffGroupList'],
       selectedRowKeys: this.state.selectedRowKeys,
       onTableSelectChange: (selectedRowKeys, selectedRows) => this.setState({selectedRowKeys, selectedRows}),

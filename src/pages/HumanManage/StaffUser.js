@@ -8,6 +8,7 @@ import SearchForm from '@/pages/HumanManage/components/staffUser/SearchForm';
 import OperatorButton from '@/components/SmartCampus/AuthorityToolbar/OperatorButton';
 import StaffUserTable from '@/pages/HumanManage/components/staffUser/StaffUserTable';
 import StaffUserModal from "@/pages/HumanManage/components/staffUser/StaffUserModal";
+import LoginSettingModal from "@/pages/HumanManage/components/staffUser/LoginSettingModal";
 
 /**
  *  区域管理页面
@@ -25,6 +26,7 @@ class StaffUser extends PureComponent {
     staffUserModalVisible: false,
     staffUserModel: {},
     openType: "",
+    loginSettingModalVisible: false,
   };
 
   componentDidMount() {
@@ -59,6 +61,19 @@ class StaffUser extends PureComponent {
   openStaffUserModal = (record, openType) => {
     this.setState({
       staffUserModalVisible: true,
+      openType,
+      staffUserModel: record,
+    });
+  };
+
+  /**
+   *   设置登录弹窗
+   * @param record
+   * @param openType
+   */
+  openLoginSettingModal = (record, openType) => {
+    this.setState({
+      loginSettingModalVisible: true,
       openType,
       staffUserModel: record,
     });
@@ -137,20 +152,24 @@ class StaffUser extends PureComponent {
   getOperatorButtonProps = () => {
     const {selectedRowKeys, selectedRows} = this.state;
     const buttonList = [];
-    let addText = '新增分组';
-    if ((selectedRowKeys || []).length === 1) {
-      addText = '新增子分组';
-    }
+
     // 新增按钮
     buttonList.push({
       icon: 'plus',
       type: 'primary',
-      text: addText,
+      text: '新增',
       operatorKey: 'staff-user-add',
       onClick: () => this.openStaffUserModal({}, 'add'),
     });
     // 更新按钮，选择一个的时候显示
     if ((selectedRows || []).length === 1) {
+      buttonList.push({
+        icon: '',
+        type: '',
+        text: '登录设置',
+        operatorKey: 'staff-user-login',
+        onClick: () => this.openLoginSettingModal(selectedRows[0], 'edit'),
+      });
       buttonList.push({
         icon: '',
         type: '',
@@ -199,13 +218,24 @@ class StaffUser extends PureComponent {
 
     // 表格组件参数
     const staffUserTableProps = {
-      dataSource: staffUserList,
+      dataSource: [{id: "1", name: "dsadsa", userName: "xwx283594"}, {id: "71", name: "dsadsa", userName: "xwx283594"}, {
+        id: "16",
+        name: "dsadsa"
+      }, {
+        id: "61",
+        name: "dsadsa"
+      }, {id: "15", name: "dsadsa"}, {id: "14", name: "dsadsa"}, {id: "13", name: "dsadsa"}, {
+        id: "12",
+        name: "dsadsa"
+      }, {id: "11", name: "dsadsa"}],
       total,
       current,
       pageSize,
       loading: loading.effects['staffUser/getStaffUserList'],
       selectedRowKeys: this.state.selectedRowKeys,
       onTableSelectChange: (selectedRowKeys, selectedRows) => this.setState({selectedRowKeys, selectedRows}),
+      onTablePageChange: (current, pageSize) => this.onRefreshStaffUserPage(this.state.searchValue, current, pageSize),
+      onShowSizeChange: (current, pageSize) => this.onRefreshStaffUserPage(this.state.searchValue, current, pageSize),
       //onShowView: (record) => this.openStaffUserModal(record, 'view'),
     };
 
@@ -214,9 +244,29 @@ class StaffUser extends PureComponent {
       visible: this.state.staffUserModalVisible,
       openType: this.state.openType,
       dataSource: this.state.staffUserModel,
-      staffGroupList,
+      staffGroupList: [
+        {
+          id: "1",
+          groupName: "测试组1",
+          children: [
+            {
+              id: "2",
+              groupName: "测试组1-1",
+            }
+          ]
+        }
+      ],
       onOk: this.onStaffUserModalOk,
       onCancel: this.closeStaffUserModal
+    };
+
+    // 登录设置弹窗
+    const loginSettingModalProps = {
+      visible: this.state.loginSettingModalVisible,
+      openType: this.state.openType,
+      dataSource: this.state.staffUserModel,
+      onOk: this.onLoginSettingModalOk,
+      onCancel: () => this.setState({loginSettingModalVisible: false})
     };
 
     return (
@@ -233,6 +283,7 @@ class StaffUser extends PureComponent {
           </div>
         </Card>
         <StaffUserModal {...staffUserModalProps}/>
+        <LoginSettingModal {...loginSettingModalProps}/>
       </PageHeaderWrapper>
     );
   }

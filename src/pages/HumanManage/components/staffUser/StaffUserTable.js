@@ -1,4 +1,5 @@
 import React, {Fragment, PureComponent} from 'react';
+import {List} from 'antd';
 import DataTable from '@/components/SmartCampus/Table/DataTable';
 import PropTypes from 'prop-types';
 
@@ -9,18 +10,34 @@ import PropTypes from 'prop-types';
 const tableColumns = onOperator => {
   const columns = [
     {
-      title: '分组名称',
-      dataIndex: 'groupName',
-      width: '25%',
+      title: '姓名',
+      dataIndex: 'name',
+      width: '10%',
     },
     {
-      title: '分组编码',
-      dataIndex: 'groupCode',
-      width: '25%',
+      title: '用户类型',
+      dataIndex: 'user_type',
+      width: '10%',
     },
     {
-      title: '描述',
-      dataIndex: 'description',
+      title: '身份证',
+      dataIndex: 'user_type',
+      width: '15%',
+    },
+    {
+      title: '工号',
+      dataIndex: 'user_type',
+      width: '12%',
+    },
+    {
+      title: '登录设置',
+      dataIndex: 'userName',
+      width: '12%',
+      render: text => (text || '') === '' ? "未设置" : "已设置"
+    },
+    {
+      title: '地址',
+      dataIndex: 'address',
     },
   ];
   if (onOperator) {
@@ -41,8 +58,34 @@ const tableColumns = onOperator => {
  *  权限表格
  */
 class StaffUserTable extends PureComponent {
+
+  getExpandedRowRender = (record) => {
+    return <List
+      header={<div>所属分组</div>}
+      stype={{width: '100%', textAlign: 'center'}}
+      bordered
+      dataSource={[{id: "1", groupName: "测试组1"}]}
+      renderItem={({id, groupName}) => (
+        <List.Item>
+          {groupName}
+        </List.Item>
+      )}
+    />
+  };
+
   render() {
-    const {dataSource, loading, selectedRowKeys, onTableSelectChange, onOperator} = this.props;
+    const {
+      dataSource,
+      total,
+      current,
+      pageSize,
+      loading,
+      selectedRowKeys,
+      onTableSelectChange,
+      onTablePageChange,
+      onShowSizeChange,
+      onOperator
+    } = this.props;
 
     const rowSelection = {
       columnTitle: '选择',
@@ -58,7 +101,12 @@ class StaffUserTable extends PureComponent {
       dataSource,
       loading,
       columns: tableColumns(onOperator),
-      pagination: false,
+      expandedRowRender: this.getExpandedRowRender,
+      total,
+      current,
+      pageSize,
+      onTablePageChange,
+      onShowSizeChange
     };
 
     return <DataTable {...dataTableProps} />;

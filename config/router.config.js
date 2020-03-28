@@ -252,8 +252,8 @@ const appRoutes = [
     path: '/workplace',
     component: './Portal/Workplace',
   },
-  sysManageRoutes,
-  humanManageRoutes,
+  ...sysManageRoutes,
+  ...humanManageRoutes,
   //门禁管理
   {
     path: '/access-control',
