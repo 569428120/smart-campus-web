@@ -27,7 +27,7 @@ class StaffGroupModal extends PureComponent {
   onSubmit = (onOk) => {
     const {form: {validateFields}, openType, dataSource, pDataSource} = this.props;
     const {id} = (dataSource || {});
-    const {pid} = (pDataSource || {});
+    const {id: pid} = (pDataSource || {});
     validateFields((errors, values) => {
       if (errors === null) {
         values.id = id;

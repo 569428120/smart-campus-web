@@ -8,6 +8,7 @@ import OperatorButton from '@/components/SmartCampus/AuthorityToolbar/OperatorBu
 import StaffGroupTable from '@/pages/HumanManage/components/staffGroup/StaffGroupTable';
 import StaffGroupModal from "@/pages/HumanManage/components/staffGroup/StaffGroupModal";
 import {Modal} from "antd/lib/index";
+import GroupToStaffDrawer from "./components/staffGroup/GroupToStaffDrawer";
 
 /**
  *  区域管理页面
@@ -24,6 +25,7 @@ class StaffGroup extends PureComponent {
     staffGroupModalVisible: false,
     staffGroupModel: {},
     openType: "",
+    groupToStaffDrawerVisible: false
   };
 
   componentDidMount() {
@@ -60,6 +62,17 @@ class StaffGroup extends PureComponent {
       staffGroupModel: record,
       pStaffGroupModel: pRecord
     });
+  };
+
+  /**
+   *
+   * @param record
+   */
+  openGroupToStaffDrawer = (record) => {
+    //TODO 查看员工列表
+    this.setState({
+      groupToStaffDrawerVisible: true
+    })
   };
 
   /**
@@ -186,6 +199,7 @@ class StaffGroup extends PureComponent {
       selectedRowKeys: this.state.selectedRowKeys,
       onTableSelectChange: (selectedRowKeys, selectedRows) => this.setState({selectedRowKeys, selectedRows}),
       //onShowView: (record) => this.openStaffGroupModal(record, 'view'),
+      onRowCheck: (record) => this.openGroupToStaffDrawer(record)
     };
 
     // 弹窗参数
@@ -196,6 +210,11 @@ class StaffGroup extends PureComponent {
       pDataSource: this.state.pStaffGroupModel,
       onOk: this.onStaffGroupModalOk,
       onCancel: this.closeStaffGroupModal
+    };
+
+    const groupToStaffDrawerProps = {
+      visible: this.state.groupToStaffDrawerVisible,
+      onClose: () => this.setState({groupToStaffDrawerVisible: false})
     };
 
     return (
@@ -212,6 +231,7 @@ class StaffGroup extends PureComponent {
           </div>
         </Card>
         <StaffGroupModal {...staffGroupModalProps}/>
+        <GroupToStaffDrawer {...groupToStaffDrawerProps}/>
       </PageHeaderWrapper>
     );
   }

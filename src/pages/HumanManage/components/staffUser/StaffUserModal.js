@@ -59,6 +59,7 @@ class StaffUserModal extends PureComponent {
       visible,
       openType,
       dataSource,
+      okLoading,
       staffGroupList,
       onOk,
       onCancel,
@@ -67,10 +68,15 @@ class StaffUserModal extends PureComponent {
       }
     } = this.props;
 
-    const {name, userType, groupIds, userIdentity, address} = dataSource;
+    const {name, userType, groupIds, userIdentity, phoneNumber, address} = dataSource;
     const treeNodes = getTreeNode(staffGroupList);
     const userTypeCheckbox = Object.keys(enums.UserTypes).map(key =>
       <Radio key={key} value={key}>{enums.UserTypes[key]}</Radio>);
+
+    const okButtonProps = {
+      disabled: openType === 'view',
+      loading: okLoading
+    };
 
     return <Modal
       title={enums.OperatorType[openType]}
@@ -79,6 +85,7 @@ class StaffUserModal extends PureComponent {
       onOk={() => this.onSubmit(onOk)}
       width={modalWidth(window.innerWidth * 0.5)}
       onCancel={onCancel}
+      okButtonProps={okButtonProps}
       okText="确认"
       cancelText="取消"
     >
@@ -145,6 +152,22 @@ class StaffUserModal extends PureComponent {
           })(<Input disabled={openType === 'view'}/>)}
         </Form.Item>
 
+        <Form.Item {...formItemLayout} label="手机号码">
+          {getFieldDecorator('phoneNumber', {
+            initialValue: phoneNumber,
+            rules: [
+              {
+                required: true,
+                message: '手机号码必填',
+              },
+              {
+                max: 64,
+                message: '长度不能超过64',
+              },
+            ],
+          })(<Input disabled={openType === 'view'}/>)}
+        </Form.Item>
+
         <Form.Item {...formItemLayout} label="住址">
           {getFieldDecorator('address', {
             initialValue: address,
@@ -169,6 +192,8 @@ StaffUserModal.propTypes = {
   openType: PropTypes.string,
   // 回显的数据
   dataSource: PropTypes.object,
+  // 确认按钮加载
+  okLoading: PropTypes.bool,
   // 分组
   staffGroupList: PropTypes.array,
   // 确认方法

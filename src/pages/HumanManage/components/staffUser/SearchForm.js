@@ -115,7 +115,7 @@ class SearchForm extends PureComponent {
           <Col md={4} sm={24}>
             <FormItem label="所属分组">
               {getFieldDecorator('groupCode')(<Select allowClear placeholder="请输入">
-                <Select.Option key={"1"} value={"1"}>{"测试组1"}</Select.Option>
+                <Select.Option key={"1"} value={"1"}>{"测试组1测试组1测试组1"}</Select.Option>
                 <Select.Option key={"2"} value={"2"}>{"测试组2"}</Select.Option>
               </Select>)}
             </FormItem>

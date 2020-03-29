@@ -2,12 +2,27 @@ import request from "@/utils/request";
 import config from "@/pages/HumanManage/config/config";
 
 /**
- *  保存学校数据
+ *  保存
  * @param values
  * @returns {Promise<void>}
  */
-export async function saveSchoolData(values) {
-  return request(config.schoolApi.saveSchoolData, {
+export async function saveStaffUserData(values) {
+  return request(config.staffUserApi.saveStaffUserData, {
+    method: 'POST',
+    body: {
+      ...values
+    },
+    params: {}
+  });
+}
+
+/**
+ *  保存
+ * @param values
+ * @returns {Promise<void>}
+ */
+export async function saveLoginUser(values) {
+  return request(config.staffUserApi.saveLoginUser, {
     method: 'POST',
     body: {
       ...values
@@ -18,29 +33,29 @@ export async function saveSchoolData(values) {
 
 
 /**
- *  删除学校数据
- * @param schoolIds 学校id
+ *  删除
+ * @param userIds
  * @returns {Promise<void>}
  */
-export async function deleteSchoolByIds(schoolIds) {
+export async function deleteStaffUserByIds(userIds) {
   return request(config.schoolApi.deleteSchoolByIds, {
     method: 'GET',
     params: {
-      regionIds: (schoolIds || []).join(",")
+      regionIds: (userIds || []).join(",")
     }
   });
 }
 
 
 /**
- *  分页搜索学校数据
- * @param searchValue 搜索条件
- * @param current 当前页
- * @param pageSize 每页现实的数量
- * @returns {Promise<Promise<any> | Promise<*>>}
+ *  分页查询
+ * @param searchValue
+ * @param current
+ * @param pageSize
+ * @returns {Promise<void>}
  */
-export async function getSchoolList(searchValue, current, pageSize) {
-  return request(config.schoolApi.getSchoolList, {
+export async function getStaffUserList(searchValue, current, pageSize) {
+  return request(config.staffUserApi.getStaffUserList, {
     method: 'GET',
     params: {
       ...searchValue,

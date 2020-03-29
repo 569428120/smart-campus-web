@@ -59,19 +59,6 @@ const tableColumns = onOperator => {
  */
 class StaffUserTable extends PureComponent {
 
-  getExpandedRowRender = (record) => {
-    return <List
-      header={<div>所属分组</div>}
-      stype={{width: '100%', textAlign: 'center'}}
-      bordered
-      dataSource={[{id: "1", groupName: "测试组1"}]}
-      renderItem={({id, groupName}) => (
-        <List.Item>
-          {groupName}
-        </List.Item>
-      )}
-    />
-  };
 
   render() {
     const {
@@ -84,6 +71,7 @@ class StaffUserTable extends PureComponent {
       onTableSelectChange,
       onTablePageChange,
       onShowSizeChange,
+      onRowCheck,
       onOperator
     } = this.props;
 
@@ -94,6 +82,12 @@ class StaffUserTable extends PureComponent {
       onChange: onTableSelectChange,
     };
 
+    const onRow = (record) => {
+      return {
+        onClick: event => onRowCheck && onRowCheck(record), // 点击行
+      }
+    };
+
     // 表格参数
     const dataTableProps = {
       rowKey: 'id',
@@ -101,12 +95,12 @@ class StaffUserTable extends PureComponent {
       dataSource,
       loading,
       columns: tableColumns(onOperator),
-      expandedRowRender: this.getExpandedRowRender,
       total,
       current,
       pageSize,
       onTablePageChange,
-      onShowSizeChange
+      onShowSizeChange,
+      onRow
     };
 
     return <DataTable {...dataTableProps} />;

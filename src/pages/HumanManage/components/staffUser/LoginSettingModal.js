@@ -42,6 +42,7 @@ class LoginSettingModal extends PureComponent {
       visible,
       openType,
       dataSource,
+      okLoading,
       onOk,
       onCancel,
       form: {
@@ -50,9 +51,14 @@ class LoginSettingModal extends PureComponent {
     } = this.props;
 
     const {userName, userPassword} = dataSource;
+    // 确认按钮参数
+    const okButtonProps = {
+      disabled: openType === 'view',
+      loading: okLoading
+    };
 
     return <Modal
-      title={enums.OperatorType[openType]}
+      title={"登录账户设置"}
       destroyOnClose={true}
       visible={visible}
       onOk={() => this.onSubmit(onOk)}
@@ -107,6 +113,8 @@ LoginSettingModal.propTypes = {
   openType: PropTypes.string,
   // 回显的数据
   dataSource: PropTypes.object,
+  // 确认按钮加载
+  okLoading: PropTypes.bool,
   // 确认方法
   onOk: PropTypes.func,
   // 取消方法

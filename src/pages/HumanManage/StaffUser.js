@@ -10,6 +10,7 @@ import StaffUserTable from '@/pages/HumanManage/components/staffUser/StaffUserTa
 import StaffUserModal from "@/pages/HumanManage/components/staffUser/StaffUserModal";
 import LoginSettingModal from "@/pages/HumanManage/components/staffUser/LoginSettingModal";
 
+
 /**
  *  区域管理页面
  */
@@ -80,6 +81,17 @@ class StaffUser extends PureComponent {
   };
 
   /**
+   *   用户详情抽屉
+   * @param record
+   */
+  openStaffUserDetailDrawer = (record) => {
+    this.setState({
+      staffUserModel: record,
+      staffUserDetailDrawerVisible: true
+    })
+  };
+
+  /**
    *  删除
    */
   deleteStaffUsers = (staffUserIds) => {
@@ -134,6 +146,31 @@ class StaffUser extends PureComponent {
       });
     }
     this.closeStaffUserModal();
+  };
+
+
+  /**
+   * 设置登录账户
+   * @param values
+   * @param openType
+   */
+  onLoginSettingModalOk = (values, openType) => {
+    const {dispatch, staffUser: {current, pageSize}} = this.props;
+    const {searchValue} = this.state;
+    dispatch({
+      type: "staffUser/saveLoginUser",
+      payload: {
+        values
+      }
+    }).then(() => {
+      this.onRefreshStaffUserPage(searchValue, openType === 'edit' ? current : 1, pageSize);
+      // 清除选择
+      this.setState({
+        selectedRowKeys: [],
+        selectedRows: [],
+        loginSettingModalVisible: false
+      })
+    });
   };
 
 
@@ -218,16 +255,7 @@ class StaffUser extends PureComponent {
 
     // 表格组件参数
     const staffUserTableProps = {
-      dataSource: [{id: "1", name: "dsadsa", userName: "xwx283594"}, {id: "71", name: "dsadsa", userName: "xwx283594"}, {
-        id: "16",
-        name: "dsadsa"
-      }, {
-        id: "61",
-        name: "dsadsa"
-      }, {id: "15", name: "dsadsa"}, {id: "14", name: "dsadsa"}, {id: "13", name: "dsadsa"}, {
-        id: "12",
-        name: "dsadsa"
-      }, {id: "11", name: "dsadsa"}],
+      dataSource: [{id: "a", name: "sdsds"}],
       total,
       current,
       pageSize,
@@ -236,6 +264,7 @@ class StaffUser extends PureComponent {
       onTableSelectChange: (selectedRowKeys, selectedRows) => this.setState({selectedRowKeys, selectedRows}),
       onTablePageChange: (current, pageSize) => this.onRefreshStaffUserPage(this.state.searchValue, current, pageSize),
       onShowSizeChange: (current, pageSize) => this.onRefreshStaffUserPage(this.state.searchValue, current, pageSize),
+      // onRowCheck: (record) => this.openStaffUserDetailDrawer(record),
       //onShowView: (record) => this.openStaffUserModal(record, 'view'),
     };
 
@@ -244,18 +273,8 @@ class StaffUser extends PureComponent {
       visible: this.state.staffUserModalVisible,
       openType: this.state.openType,
       dataSource: this.state.staffUserModel,
-      staffGroupList: [
-        {
-          id: "1",
-          groupName: "测试组1",
-          children: [
-            {
-              id: "2",
-              groupName: "测试组1-1",
-            }
-          ]
-        }
-      ],
+      okLoading: loading.effects['staffUser/saveStaffUserData'],
+      staffGroupList,
       onOk: this.onStaffUserModalOk,
       onCancel: this.closeStaffUserModal
     };
@@ -265,8 +284,15 @@ class StaffUser extends PureComponent {
       visible: this.state.loginSettingModalVisible,
       openType: this.state.openType,
       dataSource: this.state.staffUserModel,
+      okLoading: loading.effects['staffUser/saveLoginUser'],
       onOk: this.onLoginSettingModalOk,
       onCancel: () => this.setState({loginSettingModalVisible: false})
+    };
+
+    // 用户详情
+    const staffUserDetailDrawerProps = {
+      visible: this.state.staffUserDetailDrawerVisible,
+      onClose: () => this.setState({staffUserDetailDrawerVisible: false})
     };
 
     return (
