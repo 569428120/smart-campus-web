@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {Card} from 'antd';
+import {Card, Modal} from 'antd';
 import {connect} from 'dva';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from '@/pages/common.less';
@@ -7,8 +7,10 @@ import SearchForm from '@/pages/HumanManage/components/staffGroup/SearchForm';
 import OperatorButton from '@/components/SmartCampus/AuthorityToolbar/OperatorButton';
 import StaffGroupTable from '@/pages/HumanManage/components/staffGroup/StaffGroupTable';
 import StaffGroupModal from "@/pages/HumanManage/components/staffGroup/StaffGroupModal";
-import {Modal} from "antd/lib/index";
 import GroupToStaffDrawer from "./components/staffGroup/GroupToStaffDrawer";
+
+
+const groupToStaffUserPageSize = 5;
 
 /**
  *  区域管理页面
@@ -24,6 +26,7 @@ class StaffGroup extends PureComponent {
     selectedRows: [],
     staffGroupModalVisible: false,
     staffGroupModel: {},
+    pStaffGroupModel: {},
     openType: "",
     groupToStaffDrawerVisible: false
   };
@@ -69,10 +72,30 @@ class StaffGroup extends PureComponent {
    * @param record
    */
   openGroupToStaffDrawer = (record) => {
-    //TODO 查看员工列表
+    //查看员工列表
+    this.onRefreshGroupToStaffUserPage(record.id, 1, groupToStaffUserPageSize);
     this.setState({
-      groupToStaffDrawerVisible: true
+      groupToStaffDrawerVisible: true,
+      staffGroupModel: record,
     })
+  };
+
+  /**
+   *
+   * @param groupId
+   * @param current
+   * @param pageSize
+   */
+  onRefreshGroupToStaffUserPage = (groupId, current, pageSize) => {
+    const {dispatch} = this.props;
+    dispatch({
+      type: "staffGroup/getGroupToStaffUserList",
+      payload: {
+        groupId,
+        current,
+        pageSize
+      }
+    });
   };
 
   /**
@@ -179,7 +202,11 @@ class StaffGroup extends PureComponent {
     const {
       loading,
       staffGroup: {
-        staffGroupList
+        staffGroupList,
+        groupToStaffUserList,
+        total,
+        current,
+        pageSize,
       }
     } = this.props;
 
@@ -214,6 +241,12 @@ class StaffGroup extends PureComponent {
 
     const groupToStaffDrawerProps = {
       visible: this.state.groupToStaffDrawerVisible,
+      groupToStaffUserList,
+      total,
+      current,
+      pageSize,
+      loading: loading.effects['staffGroup/getGroupToStaffUserList'],
+      onStaffUserTablePageChange: (current, pageSize) => this.onRefreshGroupToStaffUserPage(this.state.staffGroupModel.id, current, pageSize),
       onClose: () => this.setState({groupToStaffDrawerVisible: false})
     };
 

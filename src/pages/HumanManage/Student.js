@@ -4,35 +4,35 @@ import {connect} from 'dva';
 import appConfig from "@/config/appConfig";
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from '@/pages/common.less';
-import SearchForm from '@/pages/HumanManage/components/staffUser/SearchForm';
 import OperatorButton from '@/components/SmartCampus/AuthorityToolbar/OperatorButton';
-import StaffUserTable from '@/pages/HumanManage/components/staffUser/StaffUserTable';
-import StaffUserModal from "@/pages/HumanManage/components/staffUser/StaffUserModal";
-import LoginSettingModal from "@/pages/HumanManage/components/staffUser/LoginSettingModal";
-import StaffUserDetailDrawer from "./components/staffUser/StaffUserDetailDrawer";
+import SearchForm from './components/student/SearchForm';
+import StudentTable from './components/student/StudentTable';
+import StudentModal from "./components/student/StudentModal";
+import GuardianModal from "./components/student/GuardianModal";
+import StudentDetailDrawer from "./components/student/StudentDetailDrawer";
 
 
 /**
- *  区域管理页面
+ *  学生管理
  */
-@connect(({loading, staffUser, staffGroup}) => ({
+@connect(({loading, student, studentGroup}) => ({
   loading,
-  staffUser,
-  staffGroup
+  student,
+  studentGroup
 }))
-class StaffUser extends PureComponent {
+class Student extends PureComponent {
   state = {
     searchValue: {},//  搜索条件
     selectedRowKeys: [],
     selectedRows: [],
-    staffUserModalVisible: false,
-    staffUserModel: {},
+    studentModalVisible: false,
+    studentModel: {},
     openType: "",
-    loginSettingModalVisible: false,
+    guardianModalVisible: false,
   };
 
   componentDidMount() {
-    this.onRefreshStaffUserPage({}, 1, appConfig.PAGE_SIZE);
+    this.onRefreshStudentPage({}, 1, appConfig.PAGE_SIZE);
   }
 
   /**
@@ -41,10 +41,10 @@ class StaffUser extends PureComponent {
    * @param current
    * @param pageSize
    */
-  onRefreshStaffUserPage = (searchValue, current, pageSize) => {
+  onRefreshStudentPage = (searchValue, current, pageSize) => {
     const {dispatch} = this.props;
     dispatch({
-      type: "staffUser/getStaffUserList",
+      type: "student/getStudentList",
       payload: {
         searchValue,
         current,
@@ -60,24 +60,24 @@ class StaffUser extends PureComponent {
   /**
    *  新增
    */
-  openStaffUserModal = (record, openType) => {
+  openStudentModal = (record, openType) => {
     this.setState({
-      staffUserModalVisible: true,
+      studentModalVisible: true,
       openType,
-      staffUserModel: record,
+      studentModel: record,
     });
   };
 
   /**
-   *   设置登录弹窗
+   *   设置
    * @param record
    * @param openType
    */
-  openLoginSettingModal = (record, openType) => {
+  openGuardianModal = (record, openType) => {
     this.setState({
-      loginSettingModalVisible: true,
+      guardianModalVisible: true,
       openType,
-      staffUserModel: record,
+      studentModel: record,
     });
   };
 
@@ -85,27 +85,27 @@ class StaffUser extends PureComponent {
    *   用户详情抽屉
    * @param record
    */
-  openStaffUserDetailDrawer = (record) => {
+  openStudentDetailDrawer = (record) => {
     this.setState({
-      staffUserModel: record,
-      staffUserDetailDrawerVisible: true
+      studentModel: record,
+      studentDetailDrawerVisible: true
     })
   };
 
   /**
    *  删除
    */
-  deleteStaffUsers = (staffUserIds) => {
-    const {dispatch, staffUser: {pageSize}} = this.props;
+  deleteStudents = (studentIds) => {
+    const {dispatch, student: {pageSize}} = this.props;
     const {searchValue} = this.state;
     const deleteFunc = () => {
       dispatch({
-        type: "staffUser/deleteStaffUserByIds",
+        type: "student/deleteStudentByIds",
         payload: {
-          staffUserIds,
+          studentIds,
         }
       }).then(() => {
-        this.onRefreshStaffUserPage(searchValue, 1, pageSize);
+        this.onRefreshStudentPage(searchValue, 1, pageSize);
         // 清除选择
         this.setState({
           selectedRowKeys: [],
@@ -128,17 +128,17 @@ class StaffUser extends PureComponent {
    * @param values
    * @param openType
    */
-  onStaffUserModalOk = (values, openType) => {
-    const {dispatch, staffUser: {current, pageSize}} = this.props;
+  onStudentModalOk = (values, openType) => {
+    const {dispatch, student: {current, pageSize}} = this.props;
     const {searchValue} = this.state;
     if (['add', 'edit'].includes(openType)) {
       dispatch({
-        type: "staffUser/saveStaffUserData",
+        type: "student/saveStudentData",
         payload: {
           values
         }
       }).then(() => {
-        this.onRefreshStaffUserPage(searchValue, openType === 'edit' ? current : 1, pageSize);
+        this.onRefreshStudentPage(searchValue, openType === 'edit' ? current : 1, pageSize);
         // 清除选择
         this.setState({
           selectedRowKeys: [],
@@ -146,30 +146,30 @@ class StaffUser extends PureComponent {
         })
       });
     }
-    this.closeStaffUserModal();
+    this.closeStudentModal();
   };
 
 
   /**
-   * 设置登录账户
+   * 设置
    * @param values
    * @param openType
    */
-  onLoginSettingModalOk = (values, openType) => {
-    const {dispatch, staffUser: {current, pageSize}} = this.props;
+  onGuardianModalOk = (values, openType) => {
+    const {dispatch, student: {current, pageSize}} = this.props;
     const {searchValue} = this.state;
     dispatch({
-      type: "staffUser/saveLoginUser",
+      type: "student/saveGuardianUser",
       payload: {
         values
       }
     }).then(() => {
-      this.onRefreshStaffUserPage(searchValue, openType === 'edit' ? current : 1, pageSize);
+      this.onRefreshStudentPage(searchValue, openType === 'edit' ? current : 1, pageSize);
       // 清除选择
       this.setState({
         selectedRowKeys: [],
         selectedRows: [],
-        loginSettingModalVisible: false
+        guardianModalVisible: false
       })
     });
   };
@@ -178,9 +178,9 @@ class StaffUser extends PureComponent {
   /**
    *  关闭弹窗
    */
-  closeStaffUserModal = () => {
+  closeStudentModal = () => {
     this.setState({
-      staffUserModalVisible: false,
+      studentModalVisible: false,
     });
   };
 
@@ -196,24 +196,24 @@ class StaffUser extends PureComponent {
       icon: 'plus',
       type: 'primary',
       text: '新增',
-      operatorKey: 'staff-user-add',
-      onClick: () => this.openStaffUserModal({}, 'add'),
+      operatorKey: 'student-add',
+      onClick: () => this.openStudentModal({}, 'add'),
     });
     // 更新按钮，选择一个的时候显示
     if ((selectedRows || []).length === 1) {
       buttonList.push({
         icon: '',
         type: '',
-        text: '登录设置',
-        operatorKey: 'staff-user-login',
-        onClick: () => this.openLoginSettingModal(selectedRows[0], 'edit'),
+        text: '家长',
+        operatorKey: 'student-guardian-add',
+        onClick: () => this.openGuardianModal(selectedRows[0], 'edit'),
       });
       buttonList.push({
         icon: '',
         type: '',
         text: '更新',
-        operatorKey: 'staff-user-edit',
-        onClick: () => this.openStaffUserModal(selectedRows[0], 'edit'),
+        operatorKey: 'student-edit',
+        onClick: () => this.openStudentModal(selectedRows[0], 'edit'),
       });
     }
 
@@ -222,9 +222,9 @@ class StaffUser extends PureComponent {
     // 大于0 就显示
     if ((selectedRowKeys || []).length > 0) {
       dropdownList.push({
-        operatorKey: 'staff-user-delete',
+        operatorKey: 'student-delete',
         text: '删除',
-        onClick: () => this.deleteStaffUsers(selectedRowKeys),
+        onClick: () => this.deleteStudents(selectedRowKeys),
       });
     }
     return {buttonList, dropdownList};
@@ -234,66 +234,66 @@ class StaffUser extends PureComponent {
     // model里面的数据
     const {
       loading,
-      staffUser: {
-        staffUserList,
+      student: {
+        studentList,
         total,
         current,
         pageSize
       },
-      staffGroup: {
-        staffGroupList
+      studentGroup: {
+        studentGroupList
       }
     } = this.props;
 
     // 搜索框参数
     const searchFormProps = {
-      onSearch: (values) => this.onRefreshStaffUserPage(values, 1, pageSize),
-      onFormReset: (values) => this.onRefreshStaffUserPage(values, 1, pageSize),
+      onSearch: (values) => this.onRefreshStudentPage(values, 1, pageSize),
+      onFormReset: (values) => this.onRefreshStudentPage(values, 1, pageSize),
     };
 
     // 操作按钮参数
     const operatorButtonProps = this.getOperatorButtonProps();
 
     // 表格组件参数
-    const staffUserTableProps = {
+    const studentTableProps = {
       dataSource: [{id: "a", name: "sdsds"}],
       total,
       current,
       pageSize,
-      loading: loading.effects['staffUser/getStaffUserList'],
+      loading: loading.effects['student/getStudentList'],
       selectedRowKeys: this.state.selectedRowKeys,
       onTableSelectChange: (selectedRowKeys, selectedRows) => this.setState({selectedRowKeys, selectedRows}),
-      onTablePageChange: (current, pageSize) => this.onRefreshStaffUserPage(this.state.searchValue, current, pageSize),
-      onShowSizeChange: (current, pageSize) => this.onRefreshStaffUserPage(this.state.searchValue, current, pageSize),
-      // onRowCheck: (record) => this.openStaffUserDetailDrawer(record),
-      //onShowView: (record) => this.openStaffUserModal(record, 'view'),
+      onTablePageChange: (current, pageSize) => this.onRefreshStudentPage(this.state.searchValue, current, pageSize),
+      onShowSizeChange: (current, pageSize) => this.onRefreshStudentPage(this.state.searchValue, current, pageSize),
+      // onRowCheck: (record) => this.openStudentDetailDrawer(record),
+      //onShowView: (record) => this.openStudentModal(record, 'view'),
     };
 
     // 弹窗参数
-    const staffUserModalProps = {
-      visible: this.state.staffUserModalVisible,
+    const studentModalProps = {
+      visible: this.state.studentModalVisible,
       openType: this.state.openType,
-      dataSource: this.state.staffUserModel,
-      okLoading: loading.effects['staffUser/saveStaffUserData'],
-      staffGroupList,
-      onOk: this.onStaffUserModalOk,
-      onCancel: this.closeStaffUserModal
+      dataSource: this.state.studentModel,
+      okLoading: loading.effects['student/saveStudentData'],
+      studentGroupList,
+      onOk: this.onStudentModalOk,
+      onCancel: this.closeStudentModal
     };
 
     // 登录设置弹窗
-    const loginSettingModalProps = {
-      visible: this.state.loginSettingModalVisible,
+    const guardianModalProps = {
+      visible: this.state.guardianModalVisible,
       openType: this.state.openType,
-      dataSource: this.state.staffUserModel,
-      okLoading: loading.effects['staffUser/saveLoginUser'],
-      onOk: this.onLoginSettingModalOk,
-      onCancel: () => this.setState({loginSettingModalVisible: false})
+      dataSource: this.state.studentModel,
+      okLoading: loading.effects['student/saveGuardian'],
+      onOk: this.onGuardianModalOk,
+      onCancel: () => this.setState({guardianModalVisible: false})
     };
 
     // 用户详情
-    const staffUserDetailDrawerProps = {
-      visible: this.state.staffUserDetailDrawerVisible,
-      onClose: () => this.setState({staffUserDetailDrawerVisible: false})
+    const studentDetailDrawerProps = {
+      visible: this.state.studentDetailDrawerVisible,
+      onClose: () => this.setState({studentDetailDrawerVisible: false})
     };
 
     return (
@@ -306,15 +306,15 @@ class StaffUser extends PureComponent {
             <div className={styles.tableListOperator}>
               <OperatorButton {...operatorButtonProps} />
             </div>
-            <StaffUserTable {...staffUserTableProps} />
+            <StudentTable {...studentTableProps} />
           </div>
         </Card>
-        <StaffUserModal {...staffUserModalProps}/>
-        <LoginSettingModal {...loginSettingModalProps}/>
-        <StaffUserDetailDrawer {...staffUserDetailDrawerProps} />
+        <StudentModal {...studentModalProps}/>
+        <GuardianModal {...guardianModalProps}/>
+        <StudentDetailDrawer {...studentDetailDrawerProps} />
       </PageHeaderWrapper>
     );
   }
 }
 
-export default StaffUser;
+export default Student;

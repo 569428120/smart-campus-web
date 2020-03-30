@@ -57,7 +57,7 @@ const tableColumns = onOperator => {
 /**
  *  权限表格
  */
-class StaffUserTable extends PureComponent {
+class StudentTable extends PureComponent {
 
 
   render() {
@@ -107,16 +107,13 @@ class StaffUserTable extends PureComponent {
   }
 }
 
-StaffUserTable.propTypes = {
+StudentTable.propTypes = {
   dataSource: PropTypes.array,
   loading: PropTypes.bool,
-  total: PropTypes.number,
-  current: PropTypes.number,
-  pageSize: PropTypes.number,
   selectedRowKeys: PropTypes.array,
   onTableSelectChange: PropTypes.func,
   onOperator: PropTypes.func,
 };
-StaffUserTable.defaultProps = {};
+StudentTable.defaultProps = {};
 
-export default StaffUserTable;
+export default StudentTable;

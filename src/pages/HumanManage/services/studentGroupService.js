@@ -2,45 +2,62 @@ import request from "@/utils/request";
 import config from "@/pages/HumanManage/config/config";
 
 /**
- *  报错数据
+ *  保存
  * @returns {Promise<void>}
  */
-export async function savePcMenuData(values) {
-  return request(config.pcMenuApi.savePcMenuData, {
+export async function saveStudentGroupData(values) {
+  return request(config.studentGroupApi.saveStudentGroupData, {
     method: 'POST',
     body: {
       ...values
-    },
-    params: {}
-  });
-}
-
-
-/**
- *   删除
- * @param menuIds
- * @returns {Promise<void>}
- */
-export async function deletePcMenuByIds(menuIds) {
-  return request(config.pcMenuApi.deletePcMenuByIds, {
-    method: 'GET',
-    params: {
-      menuIds: (menuIds || []).join(",")
     }
   });
 }
 
 
 /**
- *  查询菜单列表
- * @param values
- * @returns {Promise<*>}
+ *   删除
+ * @param groupIds
+ * @returns {Promise<void>}
  */
-export async function getMenuList(values) {
-  return request(config.pcMenuApi.getMenuList, {
+export async function deleteStudentGroupByIds(groupIds) {
+  return request(config.studentGroupApi.deleteStudentGroupByIds, {
     method: 'GET',
     params: {
-      ...values
+      menuIds: (groupIds || []).join(",")
+    }
+  });
+}
+
+
+/**
+ *  查询
+ * @param searchValue
+ * @returns {Promise<*>}
+ */
+export async function getStudentGroupList(searchValue) {
+  return request(config.studentGroupApi.getStudentGroupList, {
+    method: 'GET',
+    params: {
+      ...searchValue
+    }
+  });
+}
+
+/**
+ *  查询
+ * @param groupId
+ * @param current
+ * @param pageSize
+ * @returns {Promise<void>}
+ */
+export async function getGroupToStudentList(groupId, current, pageSize) {
+  return request(config.studentGroupApi.getGroupToStudentList, {
+    method: 'GET',
+    params: {
+      groupId,
+      current,
+      pageSize
     }
   });
 }

@@ -10,6 +10,8 @@ import StudentGroupModal from "@/pages/HumanManage/components/studentGroup/Stude
 import enums from "@/pages/HumanManage/config/enums";
 import GroupToStudentDrawer from "./components/studentGroup/GroupToStudentDrawer";
 
+const groupToStudentPageSize = 5;
+
 /**
  *  区域管理页面
  */
@@ -70,8 +72,31 @@ class StudentGroup extends PureComponent {
    * @param record
    */
   openGroupToStudentDrawer = (record) => {
-    // TODO 查询学生数据
-    this.setState({groupToStudentDrawerVisible: true});
+    // 查询学生数据
+    const {id: groupId} = record;
+    this.onRefreshGroupToStudentList(groupId, 1, groupToStudentPageSize);
+    this.setState({
+      groupToStudentDrawerVisible: true,
+      studentGroupModel: record,
+    });
+  };
+
+  /**
+   *  刷新group to StudentList
+   * @param groupId
+   * @param current
+   * @param pageSize
+   */
+  onRefreshGroupToStudentList = (groupId, current, pageSize) => {
+    const {dispatch} = this.props;
+    dispatch({
+      type: "studentGroup/getGroupToStudentList",
+      payload: {
+        groupId,
+        current,
+        pageSize
+      }
+    });
   };
 
   /**
@@ -199,7 +224,11 @@ class StudentGroup extends PureComponent {
     const {
       loading,
       studentGroup: {
-        studentGroupList
+        studentGroupList,
+        groupToStudentList,
+        total,
+        current,
+        pageSize
       }
     } = this.props;
 
@@ -234,6 +263,12 @@ class StudentGroup extends PureComponent {
 
     const groupToStudentDrawerProps = {
       visible: this.state.groupToStudentDrawerVisible,
+      groupToStudentList,
+      total,
+      current,
+      pageSize,
+      loading: loading.effects['studentGroup/getGroupToStudentList'],
+      onStudentTablePageChange: (current, pageSize) => this.onRefreshGroupToStudentList(this.state.studentGroupModel.id, current, pageSize),
       onClose: () => this.setState({groupToStudentDrawerVisible: false})
     };
 

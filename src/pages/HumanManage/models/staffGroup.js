@@ -6,6 +6,10 @@ export default {
   state: {
     text: 'staffGroup',
     staffGroupList: [],
+    groupToStaffUserList: [],
+    total: 0,
+    current: 1,
+    pageSize: 5,
   },
   effects: {
     /**
@@ -40,6 +44,24 @@ export default {
      * @param put
      */* saveStaffGroupData({payload: {values}}, {call, put}) {
       yield call(staffGroupService.saveStaffGroupData, values);
+    },
+
+    /**
+     *  查询
+     * @param groupId
+     * @param current
+     * @param pageSize
+     */* getGroupToStaffUserList(groupId, current, pageSize) {
+      const {data: groupToStaffUserList, total, totalPage} = yield call(staffGroupService.getGroupToStaffUserList, groupId, current, pageSize);
+      yield put({
+        type: "setState",
+        payload: {
+          total,
+          current,
+          pageSize,
+          groupToStaffUserList
+        }
+      })
     }
   },
 

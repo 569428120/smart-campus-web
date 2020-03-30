@@ -5,32 +5,67 @@ export default {
   namespace: 'studentGroup',
   state: {
     text: 'studentGroup',
-    regionList: [],// 教育局列表
+    studentGroupList: [],
+    groupToStudentList: [],
     total: 0, // 数量
     current: 1, // 当前页
-    pageSize: appConfig.PAGE_SIZE
+    pageSize: 5
   },
   effects: {
 
     /**
-     *  根据搜索条件查询教育局列表
+     *  搜索
      * @param searchValue
      * @param call
      * @param put
      * @returns {Generator<*, void, ?>}
-     */* getRegionList({payload: {searchValue, current, pageSize}}, {call, put}) {
-      const {data: regionList, total, totalPage} = yield call(regionService.getRegionList, searchValue, current, pageSize);
+     */* getStudentGroupList({payload: {searchValue}}, {call, put}) {
+      const studentGroupList = yield call(studentGroupService.getStudentGroupList, searchValue);
+      yield put({
+        type: "setState",
+        payload: {
+          studentGroupList
+        }
+      })
+    },
+
+    /**
+     *  删除
+     * @param groupIds
+     * @param call
+     * @param put
+     */* deleteStudentGroupByIds({payload: {groupIds}}, {call, put}) {
+      yield call(studentGroupService.deleteStudentGroupByIds, groupIds);
+    },
+
+    /**
+     *  保存
+     * @param values
+     * @param call
+     * @param put
+     */* saveStudentGroupData({payload: {values}}, {call, put}) {
+      yield call(studentGroupService.saveStudentGroupData, values);
+    },
+
+    /**
+     *   查询关联的数据
+     * @param groupId
+     * @param current
+     * @param pageSize
+     * @param call
+     * @param put
+     */* getGroupToStudentList({payload: {groupId, current, pageSize}}, {call, put}) {
+      const {data: groupToStudentList, total, totalPage} = yield call(studentGroupService.getGroupToStudentList, groupId, current, pageSize);
       yield put({
         type: "setState",
         payload: {
           total,
           current,
           pageSize,
-          regionList
+          groupToStudentList
         }
       })
     },
-
 
   },
 

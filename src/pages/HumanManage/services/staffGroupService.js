@@ -57,3 +57,22 @@ export async function saveStaffGroupData(values) {
     }
   });
 }
+
+
+/**
+ *  查询
+ * @param groupId
+ * @param current
+ * @param pageSize
+ * @returns {Promise<void>}
+ */
+export async function getGroupToStaffUserList(groupId, current, pageSize) {
+  return request(config.staffGroupApi.getGroupToStaffUserList, {
+    method: 'GET',
+    params: {
+      groupId,
+      current,
+      pageSize
+    }
+  });
+}
