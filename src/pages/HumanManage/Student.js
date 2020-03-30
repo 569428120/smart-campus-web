@@ -159,7 +159,7 @@ class Student extends PureComponent {
     const {dispatch, student: {current, pageSize}} = this.props;
     const {searchValue} = this.state;
     dispatch({
-      type: "student/saveGuardianUser",
+      type: "student/saveGuardianList",
       payload: {
         values
       }
@@ -280,12 +280,11 @@ class Student extends PureComponent {
       onCancel: this.closeStudentModal
     };
 
-    // 登录设置弹窗
     const guardianModalProps = {
       visible: this.state.guardianModalVisible,
       openType: this.state.openType,
       dataSource: this.state.studentModel,
-      okLoading: loading.effects['student/saveGuardian'],
+      okLoading: loading.effects['student/saveGuardianList'],
       onOk: this.onGuardianModalOk,
       onCancel: () => this.setState({guardianModalVisible: false})
     };
