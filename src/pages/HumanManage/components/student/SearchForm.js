@@ -60,17 +60,33 @@ class SearchForm extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
-          <Col md={6} sm={24}>
+          <Col md={5} sm={24}>
             <FormItem label="姓名">
               {getFieldDecorator('name')(<Input allowClear placeholder="请输入"/>)}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="身份证">
+          <Col md={5} sm={24}>
+            <FormItem label="学号">
               {getFieldDecorator('userIdentity')(<Input allowClear placeholder="请输入"/>)}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={4} sm={24}>
+            <FormItem label="班级">
+              {getFieldDecorator('groupCode')(<Select allowClear placeholder="请输入">
+                <Select.Option key={"1"} value={"1"}>{"测试组1测试组1测试组1"}</Select.Option>
+                <Select.Option key={"2"} value={"2"}>{"测试组2"}</Select.Option>
+              </Select>)}
+            </FormItem>
+          </Col>
+          <Col md={4} sm={24}>
+            <FormItem label="联系人">
+              {getFieldDecorator('userName')(<Select allowClear placeholder="请输入">
+                <Select.Option key={"1"} value={"1"}>{"已设置"}</Select.Option>
+                <Select.Option key={"2"} value={"2"}>{"未设置"}</Select.Option>
+              </Select>)}
+            </FormItem>
+          </Col>
+          <Col md={4} sm={24}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 查询
@@ -78,9 +94,6 @@ class SearchForm extends PureComponent {
               <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
                 重置
               </Button>
-              <a style={{marginLeft: 8}} onClick={this.toggleForm}>
-                更多 <Icon type="down"/>
-              </a>
             </span>
           </Col>
         </Row>
@@ -100,20 +113,12 @@ class SearchForm extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
-            <FormItem label="人员信息">
-              {getFieldDecorator('name')(<Input allowClear placeholder="姓名、证件号码"/>)}
+            <FormItem label="学生信息">
+              {getFieldDecorator('name')(<Input allowClear placeholder="姓名、学号"/>)}
             </FormItem>
           </Col>
           <Col md={4} sm={24}>
-            <FormItem label="用户类型">
-              {getFieldDecorator('userType')(<Select allowClear placeholder="请输入">
-                <Select.Option key={"1"} value={"1"}>{"教师"}</Select.Option>
-                <Select.Option key={"2"} value={"2"}>{"职员"}</Select.Option>
-              </Select>)}
-            </FormItem>
-          </Col>
-          <Col md={4} sm={24}>
-            <FormItem label="所属分组">
+            <FormItem label="班级">
               {getFieldDecorator('groupCode')(<Select allowClear placeholder="请输入">
                 <Select.Option key={"1"} value={"1"}>{"测试组1测试组1测试组1"}</Select.Option>
                 <Select.Option key={"2"} value={"2"}>{"测试组2"}</Select.Option>
@@ -121,7 +126,7 @@ class SearchForm extends PureComponent {
             </FormItem>
           </Col>
           <Col md={4} sm={24}>
-            <FormItem label="登录设置">
+            <FormItem label="联系人">
               {getFieldDecorator('userName')(<Select allowClear placeholder="请输入">
                 <Select.Option key={"1"} value={"1"}>{"已设置"}</Select.Option>
                 <Select.Option key={"2"} value={"2"}>{"未设置"}</Select.Option>

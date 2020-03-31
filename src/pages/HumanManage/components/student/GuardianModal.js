@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import {Radio, Form, Input, Modal, Select} from "antd";
 import PropTypes from "prop-types";
+import enums from "@/pages/HumanManage/config/enums";
 import {modalWidth} from '@/utils/utils';
 
 const {TextArea} = Input;

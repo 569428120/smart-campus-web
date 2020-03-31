@@ -67,7 +67,7 @@ class StudentModal extends PureComponent {
       }
     } = this.props;
 
-    const {name, groupId, studentCode, address} = dataSource;
+    const {name, groupId, studentCode, address} = (dataSource || {});
     const treeNodes = getTreeNode(studentGroupList);
 
     const okButtonProps = {

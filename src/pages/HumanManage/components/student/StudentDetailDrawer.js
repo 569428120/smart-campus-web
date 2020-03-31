@@ -51,6 +51,7 @@ class StudentDetailDrawer extends PureComponent {
       visible,
       onTabsChange,
       studentToGuardianList,
+      selectedRowKeys,
       onTableSelectChange,
       loading,
       onClose,

@@ -12,31 +12,26 @@ const tableColumns = onOperator => {
     {
       title: '姓名',
       dataIndex: 'name',
-      width: '10%',
+      width: '20%',
     },
     {
-      title: '用户类型',
+      title: '学号',
+      dataIndex: 'student_code',
+      width: '20%',
+    },
+    {
+      title: '班级',
       dataIndex: 'user_type',
-      width: '10%',
+      width: '20%',
     },
     {
-      title: '身份证',
-      dataIndex: 'user_type',
-      width: '15%',
+      title: '联系人',
+      dataIndex: 'aaa',
+      width: '20%',
+      render: text => "已设置"
     },
     {
-      title: '工号',
-      dataIndex: 'user_type',
-      width: '12%',
-    },
-    {
-      title: '登录设置',
-      dataIndex: 'userName',
-      width: '12%',
-      render: text => (text || '') === '' ? "未设置" : "已设置"
-    },
-    {
-      title: '地址',
+      title: '家庭住址',
       dataIndex: 'address',
     },
   ];
