@@ -39,5 +39,24 @@ export default {
     view: "查看",
     edit: "修改",
     add: "新增"
+  },
+  // 监护人关系类型
+  FamilyType: {
+    parent: {
+      key: "parent",
+      value: "父母"
+    },
+    grandparents: {
+      key: "grandparents",
+      value: "爷爷奶奶"
+    },
+    relatives: {
+      key: "relatives",
+      value: "亲属"
+    },
+    other: {
+      key: "other",
+      value: "其他"
+    }
   }
 }

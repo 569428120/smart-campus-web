@@ -9,6 +9,7 @@ export default {
     current: 1,// 当前页
     pageSize: appConfig.PAGE_SIZE, //每页显示的大小
     total: 0,// 总数
+    studentToGuardianList: [],
   },
   effects: {
 
@@ -34,6 +35,21 @@ export default {
     },
 
     /**
+     *   获取联系人列表
+     * @param studentId
+     * @param call
+     * @param put
+     */* getStudentToGuardianList({payload: {studentId}}, {call, put}) {
+      const studentToGuardianList = yield call(studentService.getStudentToGuardianList, studentId);
+      yield put({
+        type: "setState",
+        payload: {
+          studentToGuardianList
+        }
+      })
+    },
+
+    /**
      *  保存
      * @param values
      * @param call
@@ -44,13 +60,23 @@ export default {
 
     /**
      *  保存
-     * @param guardianList
+     * @param values
      * @param studentId
      * @param call
      * @param put
-     */* saveGuardianList({payload: {studentId, guardianList}}, {call, put}) {
-      yield call(studentService.saveGuardianList, studentId, guardianList);
+     */* saveStudentToGuardian({payload: {values}}, {call, put}) {
+      yield call(studentService.saveStudentToGuardian, values);
     },
+
+    /**
+     *  删除
+     * @param studentId
+     * @param contactIds
+     * @param call
+     * @param put
+     */* deleteStudentToGuardians({payload: {studentId, contactIds}}, {call, put}) {
+      yield call(studentService.deleteStudentToGuardians, studentId, contactIds);
+    }
 
   },
 

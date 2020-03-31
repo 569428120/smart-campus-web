@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {Radio, Form, Input, Modal, TreeSelect} from "antd";
+import {Form, Input, Modal, Radio, TreeSelect} from "antd";
 import PropTypes from "prop-types";
 import enums from "@/pages/HumanManage/config/enums";
 import {modalWidth} from '@/utils/utils';
@@ -27,8 +27,8 @@ const getTreeNode = (treeData) => {
   if ((treeData || []).length <= 0) {
     return [];
   }
-  return treeData.map(({id, groupName, children}) =>
-    <TreeNode value={id} title={groupName} key={id}>
+  return treeData.map(({id, type, groupName, children}) =>
+    <TreeNode disabled={!'group' === type} value={id} title={groupName} key={id}>
       {getTreeNode(children)}
     </TreeNode>)
 };
@@ -45,7 +45,6 @@ class StudentModal extends PureComponent {
     const {id} = (dataSource || {});
     const formatValues = (values) => {
       values.id = id;
-      values.groupIds = (values.groupIds || []).join(",")
     };
     validateFields((errors, values) => {
       if (errors === null) {
@@ -60,7 +59,7 @@ class StudentModal extends PureComponent {
       openType,
       dataSource,
       okLoading,
-      staffGroupList,
+      studentGroupList,
       onOk,
       onCancel,
       form: {
@@ -68,10 +67,8 @@ class StudentModal extends PureComponent {
       }
     } = this.props;
 
-    const {name, userType, groupIds, userIdentity, phoneNumber, address} = dataSource;
-    const treeNodes = getTreeNode(staffGroupList);
-    const userTypeCheckbox = Object.keys(enums.UserTypes).map(key =>
-      <Radio key={key} value={key}>{enums.UserTypes[key]}</Radio>);
+    const {name, groupId, studentCode, address} = dataSource;
+    const treeNodes = getTreeNode(studentGroupList);
 
     const okButtonProps = {
       disabled: openType === 'view',
@@ -91,8 +88,8 @@ class StudentModal extends PureComponent {
     >
       <Form>
         <Form.Item {...formItemLayout} label="所属分组">
-          {getFieldDecorator('groupIds', {
-            initialValue: groupIds ? groupIds.split(",") : null,
+          {getFieldDecorator('groupId', {
+            initialValue: groupId,
             rules: [
               {
                 required: true,
@@ -102,7 +99,6 @@ class StudentModal extends PureComponent {
           })(<TreeSelect
             disabled={openType === 'view'}
             allowClear
-            multiple
             treeDefaultExpandAll>
             {treeNodes}
           </TreeSelect>)}
@@ -122,27 +118,14 @@ class StudentModal extends PureComponent {
             ],
           })(<Input disabled={openType === 'view'}/>)}
         </Form.Item>
-        <Form.Item {...formItemLayout} label="用户类型">
-          {getFieldDecorator('userType', {
-            initialValue: userType,
-            rules: [
-              {
-                required: true,
-                message: '用户类型必填',
-              }
-            ],
-          })(<Radio.Group disabled={openType === 'view'}>
-            {userTypeCheckbox}
-          </Radio.Group>)}
-        </Form.Item>
 
-        <Form.Item {...formItemLayout} label="身份证号码">
-          {getFieldDecorator('userIdentity', {
-            initialValue: userIdentity,
+        <Form.Item {...formItemLayout} label="学号">
+          {getFieldDecorator('studentCode', {
+            initialValue: studentCode,
             rules: [
               {
                 required: true,
-                message: '身份证号码必填',
+                message: '学号必填',
               },
               {
                 max: 64,
@@ -152,23 +135,7 @@ class StudentModal extends PureComponent {
           })(<Input disabled={openType === 'view'}/>)}
         </Form.Item>
 
-        <Form.Item {...formItemLayout} label="手机号码">
-          {getFieldDecorator('phoneNumber', {
-            initialValue: phoneNumber,
-            rules: [
-              {
-                required: true,
-                message: '手机号码必填',
-              },
-              {
-                max: 64,
-                message: '长度不能超过64',
-              },
-            ],
-          })(<Input disabled={openType === 'view'}/>)}
-        </Form.Item>
-
-        <Form.Item {...formItemLayout} label="住址">
+        <Form.Item {...formItemLayout} label="家庭住址">
           {getFieldDecorator('address', {
             initialValue: address,
             rules: [
@@ -195,7 +162,7 @@ StudentModal.propTypes = {
   // 确认按钮加载
   okLoading: PropTypes.bool,
   // 分组
-  staffGroupList: PropTypes.array,
+  studentGroupList: PropTypes.array,
   // 确认方法
   onOk: PropTypes.func,
   // 取消方法

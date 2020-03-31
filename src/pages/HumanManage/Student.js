@@ -25,8 +25,11 @@ class Student extends PureComponent {
     searchValue: {},//  搜索条件
     selectedRowKeys: [],
     selectedRows: [],
+    guardianSelectedRowKeys: [],// 监护人选择
+    guardianSelectedRows: [],// 监护人选择
     studentModalVisible: false,
     studentModel: {},
+    guardianModel: {},// 监护人对象
     openType: "",
     guardianModalVisible: false,
   };
@@ -58,6 +61,25 @@ class Student extends PureComponent {
 
 
   /**
+   *   刷新联系人数据
+   * @param studentId
+   */
+  onRefreshStudentToGuardianList = (studentId) => {
+    const {dispatch} = this.props;
+    dispatch({
+      type: "student/getStudentToGuardianList",
+      payload: {
+        studentId
+      }
+    });
+    this.setState({
+      guardianSelectedRowKeys: [],
+      guardianSelectedRows: [],
+    })
+  };
+
+
+  /**
    *  新增
    */
   openStudentModal = (record, openType) => {
@@ -70,14 +92,31 @@ class Student extends PureComponent {
 
   /**
    *   设置
-   * @param record
-   * @param openType
    */
-  openGuardianModal = (record, openType) => {
+  openGuardianModal = (studentModel, guardianModel, openType) => {
     this.setState({
       guardianModalVisible: true,
       openType,
-      studentModel: record,
+      studentModel,
+      guardianModel,
+    });
+  };
+
+  /**
+   *   删除联系人
+   * @param studentId
+   * @param contactIds
+   */
+  onDeleteStudentToGuardians = (studentId, contactIds) => {
+    const {dispatch} = this.props;
+    dispatch({
+      type: "student/deleteStudentToGuardians",
+      payload: {
+        studentId,
+        contactIds
+      }
+    }).then(() => {
+      this.onRefreshStudentToGuardianList(studentId)
     });
   };
 
@@ -86,6 +125,7 @@ class Student extends PureComponent {
    * @param record
    */
   openStudentDetailDrawer = (record) => {
+    this.onRefreshStudentToGuardianList(record.id);
     this.setState({
       studentModel: record,
       studentDetailDrawerVisible: true
@@ -159,7 +199,7 @@ class Student extends PureComponent {
     const {dispatch, student: {current, pageSize}} = this.props;
     const {searchValue} = this.state;
     dispatch({
-      type: "student/saveGuardianList",
+      type: "student/saveStudentToGuardian",
       payload: {
         values
       }
@@ -204,13 +244,6 @@ class Student extends PureComponent {
       buttonList.push({
         icon: '',
         type: '',
-        text: '家长',
-        operatorKey: 'student-guardian-add',
-        onClick: () => this.openGuardianModal(selectedRows[0], 'edit'),
-      });
-      buttonList.push({
-        icon: '',
-        type: '',
         text: '更新',
         operatorKey: 'student-edit',
         onClick: () => this.openStudentModal(selectedRows[0], 'edit'),
@@ -238,7 +271,8 @@ class Student extends PureComponent {
         studentList,
         total,
         current,
-        pageSize
+        pageSize,
+        studentToGuardianList
       },
       studentGroup: {
         studentGroupList
@@ -265,7 +299,7 @@ class Student extends PureComponent {
       onTableSelectChange: (selectedRowKeys, selectedRows) => this.setState({selectedRowKeys, selectedRows}),
       onTablePageChange: (current, pageSize) => this.onRefreshStudentPage(this.state.searchValue, current, pageSize),
       onShowSizeChange: (current, pageSize) => this.onRefreshStudentPage(this.state.searchValue, current, pageSize),
-      // onRowCheck: (record) => this.openStudentDetailDrawer(record),
+      onRowCheck: (record) => this.openStudentDetailDrawer(record),
       //onShowView: (record) => this.openStudentModal(record, 'view'),
     };
 
@@ -280,20 +314,32 @@ class Student extends PureComponent {
       onCancel: this.closeStudentModal
     };
 
+    // 用户详情
+    const studentDetailDrawerProps = {
+      visible: this.state.studentDetailDrawerVisible,
+      selectedRowKeys: this.state.guardianSelectedRowKeys,
+      selectedRows: this.state.guardianSelectedRows,
+      loading: loading.effects['student/getStudentToGuardianList'],
+      studentToGuardianList,
+      openStudentModal: (studentModel, guardianModel, openType) => this.openGuardianModal(studentModel, guardianModel, openType),
+      deleteStudentToGuardians: (studentId, contactIds) => this.onDeleteStudentToGuardians(studentId, contactIds),
+      onTableSelectChange: (selectedRowKeys, selectedRows) => this.setState({
+        guardianSelectedRowKeys: selectedRowKeys,
+        guardianSelectedRows: selectedRows
+      }),
+      onClose: () => this.setState({studentDetailDrawerVisible: false})
+    };
+
     const guardianModalProps = {
       visible: this.state.guardianModalVisible,
       openType: this.state.openType,
-      dataSource: this.state.studentModel,
+      studentModel: this.state.studentModel,
+      dataSource: this.state.guardianModel,
       okLoading: loading.effects['student/saveGuardianList'],
       onOk: this.onGuardianModalOk,
       onCancel: () => this.setState({guardianModalVisible: false})
     };
 
-    // 用户详情
-    const studentDetailDrawerProps = {
-      visible: this.state.studentDetailDrawerVisible,
-      onClose: () => this.setState({studentDetailDrawerVisible: false})
-    };
 
     return (
       <PageHeaderWrapper>

@@ -31,7 +31,7 @@ const tableColumns = onOperator => {
     },
     {
       title: '登录设置',
-      dataIndex: 'userName',
+      dataIndex: 'userPassword',
       width: '12%',
       render: text => (text || '') === '' ? "未设置" : "已设置"
     },

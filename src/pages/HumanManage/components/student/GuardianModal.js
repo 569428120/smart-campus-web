@@ -1,8 +1,9 @@
 import React, {PureComponent} from 'react';
-import {Radio, Form, Input, Modal, TreeSelect} from "antd";
+import {Radio, Form, Input, Modal, Select} from "antd";
 import PropTypes from "prop-types";
 import {modalWidth} from '@/utils/utils';
 
+const {TextArea} = Input;
 
 const formItemLayout = {
   labelCol: {
@@ -24,10 +25,16 @@ class GuardianModal extends PureComponent {
    * @param onOk
    */
   onSubmit = (onOk) => {
-    const {form: {validateFields}, openType, dataSource} = this.props;
+    const {form: {validateFields}, openType, dataSource, studentModel} = this.props;
     const {id} = (dataSource || {});
+    const {studentId} = studentModel;
+    if (!studentId) {
+      console.error("数据错误，学生id找不到");
+      return;
+    }
     const formatValues = (values) => {
       values.id = id;
+      values.studentId = studentId;
     };
     validateFields((errors, values) => {
       if (errors === null) {
@@ -40,6 +47,7 @@ class GuardianModal extends PureComponent {
     const {
       visible,
       openType,
+      studentModel,
       dataSource,
       okLoading,
       onOk,
@@ -49,15 +57,20 @@ class GuardianModal extends PureComponent {
       }
     } = this.props;
 
-    const {userName, userPassword} = dataSource;
+    const {familyType, name, phoneNumber, certificate, description} = dataSource;
     // 确认按钮参数
     const okButtonProps = {
       disabled: openType === 'view',
       loading: okLoading
     };
 
+    const familyTypeSelectOptions = Object.keys(enums.FamilyType).map(pKey => {
+      const {key, value} = (enums.FamilyType[pKey] || {});
+      return <Select.Option key={key} value={key}>{value}</Select.Option>
+    });
+
     return <Modal
-      title={"联系人"}
+      title={"监护人"}
       destroyOnClose={true}
       visible={visible}
       onOk={() => this.onSubmit(onOk)}
@@ -67,9 +80,27 @@ class GuardianModal extends PureComponent {
       cancelText="取消"
     >
       <Form>
-        <Form.Item {...formItemLayout} label="登录账户">
-          {getFieldDecorator('userName', {
-            initialValue: userName,
+        <Form.Item {...formItemLayout} label="关系类型">
+          {getFieldDecorator('familyType', {
+            initialValue: familyType,
+            rules: [
+              {
+                required: true,
+                message: '关系类型必填',
+              },
+              {
+                max: 64,
+                message: '长度不能超过64',
+              },
+            ],
+          })(<Select disabled={openType === 'view'}>
+            {familyTypeSelectOptions}
+          </Select>)}
+        </Form.Item>
+
+        <Form.Item {...formItemLayout} label="姓名">
+          {getFieldDecorator('name', {
+            initialValue: name,
             rules: [
               {
                 required: true,
@@ -80,17 +111,16 @@ class GuardianModal extends PureComponent {
                 message: '长度不能超过64',
               },
             ],
-          })(<Input disabled={openType === 'view' || (userName || '').length > 0}/>)}
+          })(<Input.Password disabled={openType === 'view'}/>)}
         </Form.Item>
 
-
-        <Form.Item {...formItemLayout} label="登录密码">
-          {getFieldDecorator('userPassword', {
-            initialValue: userPassword,
+        <Form.Item {...formItemLayout} label="手机号码">
+          {getFieldDecorator('phoneNumber', {
+            initialValue: phoneNumber,
             rules: [
               {
                 required: true,
-                message: '身份证号码必填',
+                message: '手机号码必填',
               },
               {
                 max: 64,
@@ -98,6 +128,30 @@ class GuardianModal extends PureComponent {
               },
             ],
           })(<Input.Password disabled={openType === 'view'}/>)}
+        </Form.Item>
+
+        <Form.Item {...formItemLayout} label="证件号码">
+          {getFieldDecorator('certificate', {
+            initialValue: certificate,
+            rules: [
+              {
+                max: 64,
+                message: '长度不能超过64',
+              },
+            ],
+          })(<Input.Password disabled={openType === 'view'}/>)}
+        </Form.Item>
+
+        <Form.Item {...formItemLayout} label="描述">
+          {getFieldDecorator('description', {
+            initialValue: description,
+            rules: [
+              {
+                max: 525,
+                message: '长度不能超过525',
+              },
+            ]
+          })(<TextArea disabled={openType === 'view'} rows={4}/>)}
         </Form.Item>
       </Form>
     </Modal>;
@@ -110,6 +164,8 @@ GuardianModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   // 操作类型 edit  add
   openType: PropTypes.string,
+  // 学生数据
+  studentModel: PropTypes.object,
   // 回显的数据
   dataSource: PropTypes.object,
   // 确认按钮加载
