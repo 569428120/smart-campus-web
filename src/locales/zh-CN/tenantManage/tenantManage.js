@@ -20,7 +20,7 @@ export default {
   'menu.access-control.access-authority': '门禁权限',
   'menu.access-control.access-authority.strategy': '出入策略',
   'menu.access-control.access-authority.control': '出入控制',
-  'menu.access-control.access-authority.examine': '门禁审核',
+  // 'menu.access-control.access-authority.examine': '门禁审核',
   'menu.access-control.access-record': '出入记录',
   'menu.access-control.access-record.personnel': '人员出入',
   'menu.access-control.access-record.car': '车辆出入',
@@ -30,6 +30,12 @@ export default {
   'menu.info-entry.personnel-feature': '人员特征',
   'menu.info-entry.personnel-feature.card': '一卡通',
   'menu.info-entry.personnel-feature.face': '人脸信息',
+
+
+  'menu.work': '办公OA',
+  'menu.work.flow': '审批流程',
+  'menu.work.flow.entry': '新建流程',
+  'menu.work.flow.record': '流程列表',
 
   'menu.device-manage': '智能设备',
   'menu.device-manage.access-device': '门禁设备',

@@ -245,6 +245,9 @@ const testRoutes = [
 const sysManageRoutes = require('../src/pages/SystemManage/config/routes');
 // 人员管理
 const humanManageRoutes = require('../src/pages/HumanManage/config/routes');
+// 门禁管理
+const accessControlRoutes = require('../src/pages/AccessControl/config/routes');
+
 // 智慧校园的路由
 const appRoutes = [
   {path: '/', redirect: '/workplace'},
@@ -254,57 +257,7 @@ const appRoutes = [
   },
   ...sysManageRoutes,
   ...humanManageRoutes,
-  //门禁管理
-  {
-    path: '/access-control',
-    name: 'access-control',
-    routes: [
-      // 门禁权限
-      {
-        path: '/access-control/access-authority',
-        name: 'access-authority',
-        routes: [
-          {
-            path: '/access-control/access-authority/strategy',
-            name: 'strategy',
-            component: './Dashboard/Analysis',
-          },
-          {
-            path: '/access-control/access-authority/control',
-            name: 'control',
-            component: './Dashboard/Monitor',
-          },
-          {
-            path: '/access-control/access-authority/examine',
-            name: 'examine',
-            component: './Dashboard/Monitor',
-          },
-        ],
-      },
-      // 出入记录
-      {
-        path: '/access-control/access-record',
-        name: 'access-record',
-        routes: [
-          {
-            path: '/access-control/access-record/personnel',
-            name: 'personnel',
-            component: './Dashboard/Analysis',
-          },
-          {
-            path: '/access-control/access-record/car',
-            name: 'car',
-            component: './Dashboard/Monitor',
-          },
-          {
-            path: '/access-control/access-record/statistics',
-            name: 'statistics',
-            component: './Dashboard/Monitor',
-          },
-        ],
-      },
-    ],
-  },
+  ...accessControlRoutes,
   // 信息录入
   {
     path: '/info-entry',
