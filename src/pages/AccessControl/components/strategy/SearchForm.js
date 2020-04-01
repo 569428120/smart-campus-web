@@ -60,14 +60,22 @@ class SearchForm extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
-          <Col md={8} sm={24}>
-            <FormItem label="权限名称">
-              {getFieldDecorator('authorityName')(<Input placeholder="请输入"/>)}
+          <Col md={6} sm={24}>
+            <FormItem label="策略名称">
+              {getFieldDecorator('strategyName')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="权限编码">
-              {getFieldDecorator('authorityCode')(<Input placeholder="请输入"/>)}
+          <Col md={6} sm={24}>
+            <FormItem label="策略编码">
+              {getFieldDecorator('strategyCode')(<Input placeholder="请输入"/>)}
+            </FormItem>
+          </Col>
+          <Col md={4} sm={24}>
+            <FormItem label="状态">
+              {getFieldDecorator('strategyStatus')(<Select allowClear placeholder="请输入">
+                <Select.Option key={"1"} value={"1"}>{"已启用"}</Select.Option>
+                <Select.Option key={"2"} value={"2"}>{"未启用"}</Select.Option>
+              </Select>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>

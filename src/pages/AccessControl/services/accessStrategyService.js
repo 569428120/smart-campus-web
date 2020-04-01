@@ -1,16 +1,20 @@
 import request from "@/utils/request";
-import config from "@/pages/HumanManage/config/config";
+import config from "../config/config";
 
 /**
- *  搜索查询
+ *  查询
  * @param searchValue
+ * @param current
+ * @param pageSize
  * @returns {Promise<void>}
  */
-export async function getStaffGroupList(searchValue) {
-  return request(config.staffGroupApi.getStaffGroupList, {
+export async function getAccessStrategyList(searchValue, current, pageSize) {
+  return request(config.staffGroupApi.getGroupToStaffUserList, {
     method: 'GET',
     params: {
-      ...searchValue
+      ...searchValue,
+      current,
+      pageSize
     }
   });
 }
@@ -59,20 +63,4 @@ export async function saveStaffGroupData(values) {
 }
 
 
-/**
- *  查询
- * @param groupId
- * @param current
- * @param pageSize
- * @returns {Promise<void>}
- */
-export async function getGroupToStaffUserList(groupId, current, pageSize) {
-  return request(config.staffGroupApi.getGroupToStaffUserList, {
-    method: 'GET',
-    params: {
-      groupId,
-      current,
-      pageSize
-    }
-  });
-}
+

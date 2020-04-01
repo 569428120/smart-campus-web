@@ -1,5 +1,5 @@
 import request from "@/utils/request";
-import config from "@/pages/HumanManage/config/config";
+import config from "../config/config";
 
 /**
  *  搜索查询

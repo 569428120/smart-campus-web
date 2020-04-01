@@ -11,12 +11,12 @@ const routes = [
           {
             path: '/access-control/access-authority/strategy',
             name: 'strategy',
-            component: 'AccessControl/Strategy',
+            component: 'AccessControl/AccessStrategy',
           },
           {
             path: '/access-control/access-authority/control',
             name: 'control',
-            component: 'AccessControl/Distribution',
+            component: 'AccessControl/AccessDistribution',
           },
         ],
       },
@@ -28,17 +28,12 @@ const routes = [
           {
             path: '/access-control/access-record/personnel',
             name: 'personnel',
-            component: './Dashboard/Analysis',
+            component: 'AccessControl/PersonnelRecord',
           },
           {
             path: '/access-control/access-record/car',
             name: 'car',
-            component: './Dashboard/Monitor',
-          },
-          {
-            path: '/access-control/access-record/statistics',
-            name: 'statistics',
-            component: './Dashboard/Monitor',
+            component: 'AccessControl/CarRecord',
           },
         ],
       },

@@ -8,13 +8,23 @@ import PropTypes from 'prop-types';
  */
 const tableColumns = onOperator => [
   {
-    title: '权限组名称',
-    dataIndex: 'authorityName',
-    width: '25%',
+    title: '策略名称',
+    dataIndex: 'strategyName',
+    width: '15%',
   },
   {
-    title: '权限组编码',
-    dataIndex: 'authorityCode',
+    title: '策略编码',
+    dataIndex: 'strategyCode',
+    width: '10%',
+  },
+  {
+    title: '状态',
+    dataIndex: 'strategyStatus',
+    width: '8%',
+  },
+  {
+    title: '时间段',
+    dataIndex: 'time',
     width: '25%',
   },
   {
@@ -26,7 +36,7 @@ const tableColumns = onOperator => [
     width: '10%',
     render: (text, record) => (
       <Fragment>
-        <a onClick={() => onOperator(record)}>权限</a>
+        <a onClick={() => onOperator(record)}>启用</a>
       </Fragment>
     ),
   },
