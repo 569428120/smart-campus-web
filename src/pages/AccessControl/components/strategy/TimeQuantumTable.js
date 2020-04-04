@@ -8,14 +8,19 @@ import PropTypes from 'prop-types';
  */
 const tableColumns = onOperator => [
   {
+    title: '时间类型',
+    dataIndex: 'dateType',
+    width: '15%',
+  },
+  {
     title: '开始时间',
-    dataIndex: 'strategyName',
-    width: '30%',
+    dataIndex: 'startTime',
+    width: '15%',
   },
   {
     title: '结束时间',
-    dataIndex: 'strategyCode',
-    width: '30%',
+    dataIndex: 'endTime',
+    width: '15%',
   },
   {
     title: '描述',
@@ -43,6 +48,7 @@ class TimeQuantumTable extends PureComponent {
       rowSelection,
       dataSource,
       loading,
+      height: 188,
       columns: tableColumns(onOperator),
       pagination: false,
     };

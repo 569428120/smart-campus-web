@@ -33,12 +33,23 @@ const tableColumns = onOperator => [
   },
   {
     title: '操作',
+    dataIndex: 'strategyStatus',
     width: '10%',
-    render: (text, record) => (
-      <Fragment>
-        <a onClick={() => onOperator(record)}>启用</a>
-      </Fragment>
-    ),
+    render: (text, record) => {
+      // 启用状态
+      if (text && text.toLowerCase() === 'enable') {
+        return (
+          <Fragment>
+            <a onClick={() => onOperator(record, 'unenable')}>禁用</a>
+          </Fragment>
+        )
+      }
+      return (
+        <Fragment>
+          <a onClick={() => onOperator(record, 'enable')}>启用</a>
+        </Fragment>
+      )
+    },
   },
 ];
 

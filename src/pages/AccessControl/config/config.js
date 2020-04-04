@@ -3,6 +3,21 @@ import appConfig from "@/config/appConfig";
 const api = `${appConfig.API}/accessControl`;
 
 export default {
+  // 策略api
+  accessStrategyApi: {
+    // 分页查询
+    getAccessStrategyList: `${api}/access-strategy/gets/page`,
+    // 查询时间段
+    getStrategyToTimeQuantumList: `${api}/strategy-time-quantum/gets/gets-by-strategyid`,
+    // 删除
+    deleteAccessStrategyByIds: `${api}/access-strategy/deletes/deletes-by-id`,
+    // 保存
+    saveAccessStrategy: `${api}/access-strategy/posts`,
+    // 更新状态
+    updateAccessStrategyStatus: `${api}/access-strategy/status/posts`,
+  },
+
+  //////////////////////////////////////////////TODO 下面的没用
   // 职工组
   staffGroupApi: {
     // 查询用户组

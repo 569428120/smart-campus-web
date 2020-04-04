@@ -9,7 +9,7 @@ import config from "../config/config";
  * @returns {Promise<void>}
  */
 export async function getAccessStrategyList(searchValue, current, pageSize) {
-  return request(config.staffGroupApi.getGroupToStaffUserList, {
+  return request(config.accessStrategyApi.getAccessStrategyList, {
     method: 'GET',
     params: {
       ...searchValue,
@@ -20,41 +20,41 @@ export async function getAccessStrategyList(searchValue, current, pageSize) {
 }
 
 /**
- *  删除
- * @param groupIds
+ *  查询策略的时间段
+ * @param strategyId
  * @returns {Promise<void>}
  */
-export async function deleteStaffGroupByIds(groupIds) {
-  return request(config.staffGroupApi.deleteStaffGroupByIds, {
+export async function getStrategyToTimeQuantumList(strategyId) {
+  return request(config.accessStrategyApi.getStrategyToTimeQuantumList, {
     method: 'GET',
     params: {
-      groupIds: (groupIds || []).join(",")
+      strategyId
     }
   });
 }
-
 
 /**
- *  查询组下的权限列表
- * @param groupId
+ *  删除
+ * @param strategyIds
  * @returns {Promise<void>}
  */
-export async function getMenuListByGroupId(groupId) {
-  return request(config.staffGroupApi.getMenuListByGroupId, {
+export async function deleteAccessStrategyByIds(strategyIds) {
+  return request(config.accessStrategyApi.deleteAccessStrategyByIds, {
     method: 'GET',
     params: {
-      groupId
+      strategyIds: (strategyIds || []).join(",")
     }
   });
 }
+
 
 /**
  *  保存
  * @param values
  * @returns {Promise<void>}
  */
-export async function saveStaffGroupData(values) {
-  return request(config.staffGroupApi.saveStaffGroupData, {
+export async function saveAccessStrategy(values) {
+  return request(config.accessStrategyApi.saveAccessStrategy, {
     method: 'POST',
     body: {
       ...values
@@ -62,5 +62,18 @@ export async function saveStaffGroupData(values) {
   });
 }
 
+/**
+ *  更新状态
+ * @returns {Promise<void>}
+ */
+export async function updateAccessStrategyStatus(strategyId, status) {
+  return request(config.accessStrategyApi.updateAccessStrategyStatus, {
+    method: 'POST',
+    params: {
+      strategyId,
+      status
+    }
+  });
+}
 
 

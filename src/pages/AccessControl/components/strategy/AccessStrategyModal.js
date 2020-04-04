@@ -97,8 +97,14 @@ class AccessStrategyModal extends PureComponent {
    * @returns {*}
    */
   renderTimeQuantumTable = () => {
-    const {timeQuantumTableProps} = this.props;
-    const {onQuantumTableAdd, onQuantumTableDelete, selectedRowKeys} = (timeQuantumTableProps || {});
+    const {timeQuantumTableProps, openType} = this.props;
+    const {
+      timeQuantumList,
+      onQuantumTableAdd,
+      onQuantumTableDelete,
+      onQuantumSelectChange,
+      selectedRowKeys,
+    } = (timeQuantumTableProps || {});
     const buttonList = [];
     // 新增按钮
     buttonList.push({
@@ -106,7 +112,7 @@ class AccessStrategyModal extends PureComponent {
       type: 'primary',
       text: '新建',
       key: 'add',
-      onClick: () => onQuantumTableAdd && onQuantumTableAdd,
+      onClick: () => onQuantumTableAdd && onQuantumTableAdd(),
     });
     if ((selectedRowKeys || []).length > 0) {
       buttonList.push({
@@ -121,9 +127,17 @@ class AccessStrategyModal extends PureComponent {
     const operatorButtonProps = {
       buttonList
     };
+
+    const tableProps = {
+      dataSource: timeQuantumList,
+      loading: false,
+      selectedRowKeys,
+      onTableSelectChange: onQuantumSelectChange,
+    };
+
     return <div>
-      <OperatorButton {...operatorButtonProps} />
-      <TimeQuantumTable/>
+      {['add', 'edit'].includes(openType) ? <OperatorButton {...operatorButtonProps} /> : null}
+      <TimeQuantumTable {...tableProps}/>
     </div>
   };
 
@@ -150,11 +164,11 @@ class AccessStrategyModal extends PureComponent {
       cancelText="取消"
     >
       <Tabs defaultActiveKey="1" onChange={onTabsChange}>
-        <TabPane tab="时间段" key="1">
-          {timeQuantumTable}
-        </TabPane>
-        <TabPane tab="基本信息" key="2">
+        <TabPane tab="基本信息" key="1">
           {form}
+        </TabPane>
+        <TabPane tab="时间段" key="2">
+          {timeQuantumTable}
         </TabPane>
       </Tabs>
     </Modal>;
@@ -169,6 +183,14 @@ AccessStrategyModal.propTypes = {
   openType: PropTypes.string,
   // 回显的数据
   dataSource: PropTypes.object,
+  // 选择的时间段
+  selectedRowKeys: PropTypes.array,
+  // 时间段选择
+  onQuantumSelectChange: PropTypes.func,
+  // 新增时间段
+  onQuantumTableAdd: PropTypes.func,
+  // 删除时间段
+  onQuantumTableDelete: PropTypes.func,
   // 确认方法
   onOk: PropTypes.func,
   // 取消方法

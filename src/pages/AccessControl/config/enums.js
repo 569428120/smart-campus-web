@@ -7,4 +7,15 @@ export default {
     add: "新增"
   },
 
+  DateType: {
+    weekday: {
+      key: "weekday",
+      value: "工作日"
+    },
+    holiday: {
+      key: "holiday",
+      value: "节假日"
+    },
+  }
+
 }
