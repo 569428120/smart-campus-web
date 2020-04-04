@@ -16,6 +16,17 @@ export default {
     // 更新状态
     updateAccessStrategyStatus: `${api}/access-strategy/status/posts`,
   },
+  // 策略分配
+  accessDistributionApi: {
+    // 根据类型不同查询学生和职工分组
+    getAccessDistributionList: `${api}/access-distribution/gets/all`,
+    // 保存策略分配关系, 类型字段不需要设置
+    saveGroupToStrategyId: `${api}/access-distribution/posts`,
+    // 查询策略
+    getAccessStrategyList: `${api}/access-strategy/gets/all`,
+    // 根据策略查询时间段
+    getTimeQuantumListByStrategyId: `${api}/strategy-time-quantum/gets/gets-by-strategyId`,
+  },
 
   //////////////////////////////////////////////TODO 下面的没用
   // 职工组

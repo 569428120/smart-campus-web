@@ -35,6 +35,11 @@ const routes = [
             name: 'car',
             component: 'AccessControl/CarRecord',
           },
+          {
+            path: '/access-control/access-record/statistics',
+            name: 'statistics',
+            component: 'AccessControl/AccessStatistics',
+          },
         ],
       },
     ],

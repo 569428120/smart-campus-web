@@ -6,8 +6,8 @@ import config from "../config/config";
  * @param searchValue
  * @returns {Promise<void>}
  */
-export async function getStaffGroupList(searchValue) {
-  return request(config.staffGroupApi.getStaffGroupList, {
+export async function getAccessDistributionList(searchValue) {
+  return request(config.accessDistributionApi.getAccessDistributionList, {
     method: 'GET',
     params: {
       ...searchValue
@@ -15,45 +15,19 @@ export async function getStaffGroupList(searchValue) {
   });
 }
 
-/**
- *  删除
- * @param groupIds
- * @returns {Promise<void>}
- */
-export async function deleteStaffGroupByIds(groupIds) {
-  return request(config.staffGroupApi.deleteStaffGroupByIds, {
-    method: 'GET',
-    params: {
-      groupIds: (groupIds || []).join(",")
-    }
-  });
-}
-
-
-/**
- *  查询组下的权限列表
- * @param groupId
- * @returns {Promise<void>}
- */
-export async function getMenuListByGroupId(groupId) {
-  return request(config.staffGroupApi.getMenuListByGroupId, {
-    method: 'GET',
-    params: {
-      groupId
-    }
-  });
-}
 
 /**
  *  保存
- * @param values
+ * @param groupIds
+ * @param strategyId
  * @returns {Promise<void>}
  */
-export async function saveStaffGroupData(values) {
-  return request(config.staffGroupApi.saveStaffGroupData, {
+export async function saveGroupToStrategyId(groupIds, strategyId) {
+  return request(config.accessDistributionApi.saveGroupToStrategyId, {
     method: 'POST',
     body: {
-      ...values
+      groupIds,
+      strategyId
     }
   });
 }
@@ -61,18 +35,24 @@ export async function saveStaffGroupData(values) {
 
 /**
  *  查询
- * @param groupId
- * @param current
- * @param pageSize
  * @returns {Promise<void>}
  */
-export async function getGroupToStaffUserList(groupId, current, pageSize) {
-  return request(config.staffGroupApi.getGroupToStaffUserList, {
+export async function getAccessStrategyList() {
+  return request(config.accessDistributionApi.getAccessStrategyList, {
+    method: 'GET',
+    params: {}
+  });
+}
+
+/**
+ *  查询
+ * @returns {Promise<void>}
+ */
+export async function getTimeQuantumListByStrategyId(strategyId) {
+  return request(config.accessDistributionApi.getTimeQuantumListByStrategyId, {
     method: 'GET',
     params: {
-      groupId,
-      current,
-      pageSize
+      strategyId
     }
   });
 }

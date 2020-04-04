@@ -19,7 +19,7 @@ export default {
   'menu.access-control': '门禁管理',
   'menu.access-control.access-authority': '门禁权限',
   'menu.access-control.access-authority.strategy': '出入策略',
-  'menu.access-control.access-authority.control': '出入控制',
+  'menu.access-control.access-authority.control': '策略分配',
   // 'menu.access-control.access-authority.examine': '门禁审核',
   'menu.access-control.access-record': '出入记录',
   'menu.access-control.access-record.personnel': '人员出入',
