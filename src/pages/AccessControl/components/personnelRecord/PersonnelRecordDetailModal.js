@@ -1,0 +1,102 @@
+import React, {PureComponent} from 'react';
+import {Descriptions, Input, Modal, Steps, Tabs} from "antd";
+import PropTypes from "prop-types";
+import enums from '../../config/enums';
+import {modalWidth} from '@/utils/utils';
+
+const {TabPane} = Tabs;
+const {Step} = Steps;
+
+
+class PersonnelRecordDetailModal extends PureComponent {
+
+  /**
+   *  基本信息
+   */
+  renderBaseInfo() {
+    const {
+      personnelRecord: {
+        userName,
+        userType,
+        userCode,
+        strategyType,
+        mode,
+        inOrOut,
+        deviceInfo,
+        modeInfo,
+      }
+    } = this.props;
+    return (
+      <Descriptions column={3} layout="vertical" bordered>
+        <Descriptions.Item label="人员名称">{"xuzhipeng"}</Descriptions.Item>
+        <Descriptions.Item label="人员类型">{userType}</Descriptions.Item>
+        <Descriptions.Item label="策略类型">{strategyType}</Descriptions.Item>
+
+        <Descriptions.Item label="验证方式">{mode}</Descriptions.Item>
+        <Descriptions.Item label="出入类型">{inOrOut}</Descriptions.Item>
+        <Descriptions.Item label="证件号码">{"430481199010220094"}</Descriptions.Item>
+
+        <Descriptions.Item span={3} label="设备信息">{deviceInfo}</Descriptions.Item>
+        <Descriptions.Item span={3} label="卡号或脸部标识">{modeInfo}</Descriptions.Item>
+        <Descriptions.Item span={3} label="策略详情">
+          <Steps direction="vertical" current={1}>
+            <Step title="Finished" description="This is a description."/>
+            <Step title="In Progress" description="This is a description."/>
+            <Step title="Waiting" description="This is a description."/>
+          </Steps>
+        </Descriptions.Item>
+      </Descriptions>
+    );
+  };
+
+
+  render() {
+    const {
+      visible,
+      openType,
+      onOk,
+      onCancel,
+      onTabsChange,
+    } = this.props;
+    //基本信息
+    const baseInfo = this.renderBaseInfo();
+
+    return <Modal
+      title={enums.OperatorType[openType]}
+      destroyOnClose={true}
+      visible={visible}
+      footer={null}
+      onOk={() => this.onSubmit(onOk)}
+      width={modalWidth(window.innerWidth * 0.5)}
+      onCancel={onCancel}
+      okText="确认"
+      cancelText="取消"
+    >
+      <Tabs defaultActiveKey="1" onChange={onTabsChange}>
+        <TabPane tab="基本信息" key="1">
+          {baseInfo}
+        </TabPane>
+      </Tabs>
+    </Modal>;
+  }
+}
+
+
+PersonnelRecordDetailModal.propTypes = {
+  // 是否显示
+  visible: PropTypes.bool.isRequired,
+  // 回显的数据
+  personnelRecord: PropTypes.object,
+  // 确认方法
+  onOk: PropTypes.func,
+  // 取消方法
+  onCancel: PropTypes.func,
+};
+
+PersonnelRecordDetailModal.defaultProps = {
+  personnelRecord: {}
+};
+
+export default PersonnelRecordDetailModal;
+
+

@@ -35,12 +35,12 @@ class TimeQuantumTable extends PureComponent {
   render() {
     const {dataSource, loading, selectedRowKeys, onTableSelectChange, onOperator} = this.props;
 
-    const rowSelection = {
+    const rowSelection = onTableSelectChange ? {
       columnTitle: '选择',
       columnWidth: 80,
       selectedRowKeys,
       onChange: onTableSelectChange,
-    };
+    } : null;
 
     // 表格参数
     const dataTableProps = {
