@@ -1,14 +1,31 @@
 import React, {PureComponent} from 'react';
-import {Descriptions, Input, Modal, Steps, Tabs} from "antd";
+import {Input, Modal, Steps, Tabs, Descriptions} from "antd";
 import PropTypes from "prop-types";
 import enums from '../../config/enums';
 import {modalWidth} from '@/utils/utils';
+import TimeQuantumTable from "../strategy/TimeQuantumTable";
 
 const {TabPane} = Tabs;
 const {Step} = Steps;
 
 
 class PersonnelRecordDetailModal extends PureComponent {
+
+  /**
+   *  策略详情
+   */
+  renderStrategyDetail() {
+    const {personnelRecord: {strategyType}, timeQuantumList} = this.props;
+    // TODO 枚举
+    if (strategyType === 'accessStrategy') {
+      return <TimeQuantumTable dataSource={timeQuantumList}/>
+    }
+    return <Steps direction="vertical" current={1}>
+      <Step title="Finished" description="This is a description."/>
+      <Step title="In Progress" description="This is a description."/>
+      <Step title="Waiting" description="This is a description."/>
+    </Steps>
+  };
 
   /**
    *  基本信息
@@ -26,6 +43,8 @@ class PersonnelRecordDetailModal extends PureComponent {
         modeInfo,
       }
     } = this.props;
+    // 策略详情
+    const strategyDetail = this.renderStrategyDetail();
     return (
       <Descriptions column={3} layout="vertical" bordered>
         <Descriptions.Item label="人员名称">{"xuzhipeng"}</Descriptions.Item>
@@ -38,13 +57,7 @@ class PersonnelRecordDetailModal extends PureComponent {
 
         <Descriptions.Item span={3} label="设备信息">{deviceInfo}</Descriptions.Item>
         <Descriptions.Item span={3} label="卡号或脸部标识">{modeInfo}</Descriptions.Item>
-        <Descriptions.Item span={3} label="策略详情">
-          <Steps direction="vertical" current={1}>
-            <Step title="Finished" description="This is a description."/>
-            <Step title="In Progress" description="This is a description."/>
-            <Step title="Waiting" description="This is a description."/>
-          </Steps>
-        </Descriptions.Item>
+        <Descriptions.Item span={3} label="策略详情">{strategyDetail}</Descriptions.Item>
       </Descriptions>
     );
   };
