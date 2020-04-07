@@ -2,77 +2,69 @@ import request from "@/utils/request";
 import config from "../config/config";
 
 /**
- *  搜索查询
- * @param searchValue
- * @returns {Promise<void>}
- */
-export async function getStaffGroupList(searchValue) {
-  return request(config.staffGroupApi.getStaffGroupList, {
-    method: 'GET',
-    params: {
-      ...searchValue
-    }
-  });
-}
-
-/**
- *  删除
- * @param groupIds
- * @returns {Promise<void>}
- */
-export async function deleteStaffGroupByIds(groupIds) {
-  return request(config.staffGroupApi.deleteStaffGroupByIds, {
-    method: 'GET',
-    params: {
-      groupIds: (groupIds || []).join(",")
-    }
-  });
-}
-
-
-/**
- *  查询组下的权限列表
- * @param groupId
- * @returns {Promise<void>}
- */
-export async function getMenuListByGroupId(groupId) {
-  return request(config.staffGroupApi.getMenuListByGroupId, {
-    method: 'GET',
-    params: {
-      groupId
-    }
-  });
-}
-
-/**
- *  保存
- * @param values
- * @returns {Promise<void>}
- */
-export async function saveStaffGroupData(values) {
-  return request(config.staffGroupApi.saveStaffGroupData, {
-    method: 'POST',
-    body: {
-      ...values
-    }
-  });
-}
-
-
-/**
  *  查询
- * @param groupId
+ * @param searchValue
  * @param current
  * @param pageSize
  * @returns {Promise<void>}
  */
-export async function getGroupToStaffUserList(groupId, current, pageSize) {
-  return request(config.staffGroupApi.getGroupToStaffUserList, {
+export async function getPersonnelRecordList(searchValue, current, pageSize) {
+  return request(config.personnelRecordApi.getPersonnelRecordList, {
     method: 'GET',
     params: {
-      groupId,
+      ...searchValue,
       current,
       pageSize
     }
   });
 }
+
+/**
+ *  查询用户类型
+ * @returns {Promise<void>}
+ */
+export async function getUserTypeList() {
+  return request(config.personnelRecordApi.getUserTypeList, {
+    method: 'GET',
+    params: {}
+  });
+}
+
+/**
+ *   查询策略类型
+ * @returns {Promise<void>}
+ */
+export async function getStrategyTypeList() {
+  return request(config.personnelRecordApi.getStrategyTypeList, {
+    method: 'GET',
+    params: {}
+  });
+}
+
+/**
+ *   验证方式
+ * @returns {Promise<void>}
+ */
+export async function getModeList() {
+  return request(config.personnelRecordApi.getModeList, {
+    method: 'GET',
+    params: {}
+  });
+}
+
+/**
+ *   记录详情
+ * @returns {Promise<void>}
+ */
+export async function getPersonnelRecordDetail(recordId) {
+  return request(config.personnelRecordApi.getPersonnelRecordDetail, {
+    method: 'GET',
+    params: {
+      recordId
+    }
+  });
+}
+
+
+
+

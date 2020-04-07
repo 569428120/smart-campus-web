@@ -9,13 +9,13 @@ const {TabPane} = Tabs;
 const {Step} = Steps;
 
 
-class PersonnelRecordDetailModal extends PureComponent {
+class CarRecordDetailModal extends PureComponent {
 
   /**
    *  策略详情
    */
   renderStrategyDetail() {
-    const {personnelRecord: {strategyType}, timeQuantumList} = this.props;
+    const {carRecord: {strategyType}, timeQuantumList} = this.props;
     // TODO 枚举
     if (strategyType === 'accessStrategy') {
       return <TimeQuantumTable dataSource={timeQuantumList}/>
@@ -32,7 +32,7 @@ class PersonnelRecordDetailModal extends PureComponent {
    */
   renderBaseInfo() {
     const {
-      personnelRecord: {
+      carRecord: {
         userName,
         userType,
         userCode,
@@ -95,21 +95,21 @@ class PersonnelRecordDetailModal extends PureComponent {
 }
 
 
-PersonnelRecordDetailModal.propTypes = {
+CarRecordDetailModal.propTypes = {
   // 是否显示
   visible: PropTypes.bool.isRequired,
   // 回显的数据
-  personnelRecord: PropTypes.object,
+  carRecord: PropTypes.object,
   // 确认方法
   onOk: PropTypes.func,
   // 取消方法
   onCancel: PropTypes.func,
 };
 
-PersonnelRecordDetailModal.defaultProps = {
-  personnelRecord: {}
+CarRecordDetailModal.defaultProps = {
+  carRecord: {}
 };
 
-export default PersonnelRecordDetailModal;
+export default CarRecordDetailModal;
 
 
