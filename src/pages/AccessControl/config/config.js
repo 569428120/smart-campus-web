@@ -32,13 +32,23 @@ export default {
     // 分页查询
     getPersonnelRecordList: `${api}/personnel-record/gets/page`,
     // 查询用户类型
-    getUserTypeList: `${api}/user-type/gets/all`,
+    getUserTypeList: `${api}/personnel-user-type/gets/all`,
     // 策略类型
-    getStrategyTypeList: `${api}/strategy-type/gets/all`,
+    getStrategyTypeList: `${api}/personnel-strategy-type/gets/all`,
     // 验证方式
-    getModeList: `${api}/mode/gets/all`,
+    getModeList: `${api}/personnel-mode/gets/all`,
     // 记录详情
     getPersonnelRecordDetail: `${api}/personnel-record-detail/gets/gets-by-id`,
   },
-
+  // 人员出入记录
+  carRecordApi: {
+    // 分页查询
+    getCarRecordList: `${api}/car-record/gets/page`,
+    // 查询用户类型
+    getUserTypeList: `${api}/car-user-type/gets/all`,
+    // 策略类型
+    getStrategyTypeList: `${api}/car-strategy-type/gets/all`,
+    // 记录详情
+    getCarRecordDetail: `${api}/car-record-detail/gets/gets-by-id`,
+  },
 }

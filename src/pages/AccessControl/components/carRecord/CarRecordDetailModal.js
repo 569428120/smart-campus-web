@@ -51,12 +51,11 @@ class CarRecordDetailModal extends PureComponent {
         <Descriptions.Item label="人员类型">{userType}</Descriptions.Item>
         <Descriptions.Item label="策略类型">{strategyType}</Descriptions.Item>
 
-        <Descriptions.Item label="验证方式">{mode}</Descriptions.Item>
+        <Descriptions.Item label="车牌号">{"粤S6LM58"}</Descriptions.Item>
         <Descriptions.Item label="出入类型">{inOrOut}</Descriptions.Item>
         <Descriptions.Item label="证件号码">{"430481199010220094"}</Descriptions.Item>
 
         <Descriptions.Item span={3} label="设备信息">{deviceInfo}</Descriptions.Item>
-        <Descriptions.Item span={3} label="卡号或脸部标识">{modeInfo}</Descriptions.Item>
         <Descriptions.Item span={3} label="策略详情">{strategyDetail}</Descriptions.Item>
       </Descriptions>
     );

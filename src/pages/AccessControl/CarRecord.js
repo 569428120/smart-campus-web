@@ -33,10 +33,6 @@ class CarRecord extends React.PureComponent {
       type: "carRecord/getStrategyTypeList",
       payload: {}
     });
-    dispatch({
-      type: "carRecord/getModeList",
-      payload: {}
-    });
   }
 
   /**

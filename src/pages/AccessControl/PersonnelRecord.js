@@ -64,6 +64,7 @@ class PersonnelRecord extends React.PureComponent {
    *  打开弹窗
    */
   openPersonnelRecordDetailModal = (record) => {
+    // TODO 查询策略详情
     const {dispatch} = this.props;
     dispatch({
       type: "personnelRecord/getPersonnelRecordDetail",
@@ -71,8 +72,6 @@ class PersonnelRecord extends React.PureComponent {
         recordId: record.id,
       }
     });
-    // TODO 查询策略详情
-
     this.setState({personnelRecordDetailModalVisible: true})
   };
 
@@ -101,7 +100,7 @@ class PersonnelRecord extends React.PureComponent {
     };
     // 表格参数
     const personnelRecordTableProps = {
-      dataSource: [{id:''}],
+      dataSource: [{id: ''}],
       loading: loading.effects['personnelRecord/getPersonnelRecordList'],
       total,
       current,

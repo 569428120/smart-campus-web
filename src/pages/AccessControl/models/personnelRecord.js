@@ -8,7 +8,7 @@ export default {
     personnelRecordList: [],
     total: 0,
     current: 1,
-    pageSize: 5,
+    pageSize: appConfig.PAGE_SIZE,
     userTypeList: [],
     strategyTypeList: [],
     modeList: [],
