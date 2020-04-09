@@ -247,7 +247,8 @@ const sysManageRoutes = require('../src/pages/SystemManage/config/routes');
 const humanManageRoutes = require('../src/pages/HumanManage/config/routes');
 // 门禁管理
 const accessControlRoutes = require('../src/pages/AccessControl/config/routes');
-
+// 信息录入
+const infoEntryRoutes = require('../src/pages/InfoEntry/config/routes');
 // 智慧校园的路由
 const appRoutes = [
   {path: '/', redirect: '/workplace'},
@@ -258,30 +259,7 @@ const appRoutes = [
   ...sysManageRoutes,
   ...humanManageRoutes,
   ...accessControlRoutes,
-  // 信息录入
-  {
-    path: '/info-entry',
-    name: 'info-entry',
-    routes: [
-      // 人员特征
-      {
-        path: '/info-entry/personnel-feature',
-        name: 'personnel-feature',
-        routes: [
-          {
-            path: '/info-entry/personnel-feature/card',
-            name: 'card',
-            component: './Dashboard/Analysis',
-          },
-          {
-            path: '/info-entry/personnel-feature/face',
-            name: 'face',
-            component: './Dashboard/Monitor',
-          },
-        ],
-      },
-    ],
-  },
+  ...infoEntryRoutes,
   // 智能设备
   {
     path: '/device-manage',
