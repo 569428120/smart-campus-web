@@ -11,9 +11,9 @@ import OperatorButton from "../../components/SmartCampus/AuthorityToolbar/Operat
 import enums from "./config/enums";
 
 
-@connect(({loading, user, card}) => ({
+@connect(({loading, featureUser, card}) => ({
   loading,
-  user,
+  featureUser,
   card,
 }))
 class CardManage extends React.PureComponent {
@@ -220,7 +220,7 @@ class CardManage extends React.PureComponent {
         current,
         pageSize,
       },
-      user: {
+      featureUser: {
         userGroupList,
         userList
       }

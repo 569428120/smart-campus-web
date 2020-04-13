@@ -2,9 +2,9 @@ import appConfig from "@/config/appConfig";
 import * as userService from '../services/userService'
 
 export default {
-  namespace: 'user',
+  namespace: 'featureUser',
   state: {
-    text: 'user',
+    text: 'featureUser',
     userGroupList: [],
     userList: [],
   },
@@ -15,7 +15,7 @@ export default {
      * @param call
      * @param put
      */* getStudentGroupList({payload: {}}, {call, put}) {
-      const userGroupList = yield call(cardService.getStudentGroupList);
+      const userGroupList = yield call(userService.getStudentGroupList);
       yield put({
         type: "setState",
         payload: {
@@ -29,7 +29,7 @@ export default {
      * @param call
      * @param put
      */* getStaffGroupList({payload: {}}, {call, put}) {
-      const userGroupList = yield call(cardService.getStaffGroupList);
+      const userGroupList = yield call(userService.getStaffGroupList);
       yield put({
         type: "setState",
         payload: {
@@ -44,7 +44,7 @@ export default {
      * @param call
      * @param put
      */* getStudentList({payload: {groupId}}, {call, put}) {
-      const userList = yield call(cardService.getStudentList, groupId);
+      const userList = yield call(userService.getStudentList, groupId);
       yield put({
         type: "setState",
         payload: {
@@ -59,7 +59,7 @@ export default {
      * @param call
      * @param put
      */* getStaffList({payload: {groupId}}, {call, put}) {
-      const userList = yield call(cardService.getStaffList, groupId);
+      const userList = yield call(userService.getStaffList, groupId);
       yield put({
         type: "setState",
         payload: {

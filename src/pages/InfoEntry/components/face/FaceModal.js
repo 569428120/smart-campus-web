@@ -3,6 +3,7 @@ import {Form, Input, Modal, TreeSelect, Select} from "antd";
 import PropTypes from "prop-types";
 import enums from "../../config/enums";
 import {modalWidth} from '@/utils/utils';
+import PicturesWall from "./PicturesWall";
 
 const {TextArea} = Input;
 const {TreeNode} = TreeSelect;
@@ -130,40 +131,8 @@ class FaceModal extends PureComponent {
           {userListSelectOptions}
         </Select>)}
       </Form.Item>
-      <Form.Item {...formItemLayout} label="卡类型">
-        {getFieldDecorator('cardType', {
-          initialValue: null,
-          rules: [
-            {
-              required: true,
-              message: '卡类型必填',
-            },
-          ],
-        })(<Select disabled={openType === 'view'}>
-          {cardTypeSelectOptions}
-        </Select>)}
-      </Form.Item>
-      <Form.Item {...formItemLayout} label="卡号">
-        {getFieldDecorator('cardNumber', {
-          initialValue: null,
-          rules: [
-            {
-              required: true,
-              message: '卡号必填',
-            },
-          ],
-        })(<Input disabled={openType === 'view'}/>)}
-      </Form.Item>
-      <Form.Item {...formItemLayout} label="描述">
-        {getFieldDecorator('description', {
-          initialValue: null,
-          rules: [
-            {
-              max: 525,
-              message: '长度不能超过525',
-            },
-          ]
-        })(<TextArea disabled={openType === 'view'} rows={4}/>)}
+      <Form.Item {...formItemLayout} label="特征照片">
+          <PicturesWall />
       </Form.Item>
     </Form>
   };
