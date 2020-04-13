@@ -6,5 +6,22 @@ export default {
     edit: "修改",
     add: "新增"
   },
-
+  // 用户类型
+  UserType: {
+    student: {
+      key: "student",
+      value: "学生"
+    },
+    staff: {
+      key: "staff",
+      value: "职员"
+    },
+  },
+  // 卡类型
+  CardType: {
+    ICCard: {
+      key: "ICCard",
+      value: "IC卡"
+    }
+  }
 }

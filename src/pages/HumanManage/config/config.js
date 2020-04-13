@@ -12,7 +12,7 @@ export default {
     // 保存
     saveStaffGroupData: `${api}/staff-group/posts`,
     // 查询  分组下的员工信息
-    getGroupToStaffUserList: `${api}/group-to-staff-user/posts`,
+    getGroupToStaffUserList: `${api}/group-to-staff-user/gets/gets-by-groupid`,
   },
   // 职工管理
   staffUserApi: {
@@ -32,6 +32,6 @@ export default {
     // 保存，输入：字段信息，如带id则更新，无id则新增 返回：数据对象
     saveStudentGroupData: `${api}/student-group/posts`,
     // 查询 分组下的学生  输入：分组id  返回：学生列表
-    getGroupToStudentList: `${api}/group-to-student/gets/gets-by-studentid`,
+    getGroupToStudentList: `${api}/group-to-student/gets/gets-by-groupid`,
   }
 }
