@@ -132,7 +132,7 @@ class FaceModal extends PureComponent {
         </Select>)}
       </Form.Item>
       <Form.Item {...formItemLayout} label="特征照片">
-          <PicturesWall />
+        <PicturesWall/>
       </Form.Item>
     </Form>
   };
@@ -190,40 +190,8 @@ class FaceModal extends PureComponent {
           ],
         })(<Input disabled={true}/>)}
       </Form.Item>
-      <Form.Item {...formItemLayout} label="卡类型">
-        {getFieldDecorator('cardType', {
-          initialValue: cardType,
-          rules: [
-            {
-              required: true,
-              message: '卡类型必填',
-            },
-          ],
-        })(<Select disabled={openType === 'view'}>
-          {cardTypeSelectOptions}
-        </Select>)}
-      </Form.Item>
-      <Form.Item {...formItemLayout} label="卡号">
-        {getFieldDecorator('cardNumber', {
-          initialValue: cardNumber,
-          rules: [
-            {
-              required: true,
-              message: '卡号必填',
-            },
-          ],
-        })(<Input disabled={openType === 'view'}/>)}
-      </Form.Item>
-      <Form.Item {...formItemLayout} label="描述">
-        {getFieldDecorator('description', {
-          initialValue: description,
-          rules: [
-            {
-              max: 525,
-              message: '长度不能超过525',
-            },
-          ]
-        })(<TextArea disabled={openType === 'view'} rows={4}/>)}
+      <Form.Item {...formItemLayout} label="特征照片">
+        <PicturesWall/>
       </Form.Item>
     </Form>
   };
