@@ -249,6 +249,8 @@ const humanManageRoutes = require('../src/pages/HumanManage/config/routes');
 const accessControlRoutes = require('../src/pages/AccessControl/config/routes');
 // 信息录入
 const infoEntryRoutes = require('../src/pages/InfoEntry/config/routes');
+// 办公
+const workOaRoutes = require('../src/pages/WorkOA/config/routes');
 // 智慧校园的路由
 const appRoutes = [
   {path: '/', redirect: '/workplace'},
@@ -260,6 +262,7 @@ const appRoutes = [
   ...humanManageRoutes,
   ...accessControlRoutes,
   ...infoEntryRoutes,
+  ...workOaRoutes,
   // 智能设备
   {
     path: '/device-manage',
