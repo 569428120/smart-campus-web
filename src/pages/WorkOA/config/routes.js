@@ -11,7 +11,7 @@ const routes = [
           {
             path: '/work/flow/record',
             name: 'record',
-            component: './Dashboard/Analysis',
+            component: 'WorkOA/FlowRecord',
           },
         ],
       },
