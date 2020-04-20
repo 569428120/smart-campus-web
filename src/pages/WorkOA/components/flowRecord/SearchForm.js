@@ -68,19 +68,24 @@ class SearchForm extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
-          <Col md={8} sm={24}>
+          <Col md={6} sm={24}>
+            <FormItem label="流程名称">
+              {getFieldDecorator('flowName')(<Input allowClear placeholder={"请输入"}/>)}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
+            <FormItem label="时间段">
+              {getFieldDecorator('timeRange')(<RangePicker allowClear/>)}
+            </FormItem>
+          </Col>
+          <Col md={4} sm={24}>
             <FormItem label="流程类型">
               {getFieldDecorator('flowType')(<Select allowClear placeholder={"请选择"}>
                 {flowTypeSelectOptions}
               </Select>)}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="时间段">
-              {getFieldDecorator('timeRange')(<RangePicker allowClear/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
+          <Col md={6} sm={24}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 查询

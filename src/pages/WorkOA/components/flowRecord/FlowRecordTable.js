@@ -43,23 +43,28 @@ const tableColumns = onOperator => [
  */
 class FlowRecordTable extends PureComponent {
   render() {
-    const {dataSource, loading, selectedRowKeys, onTableSelectChange, onOperator} = this.props;
-
-    const rowSelection = onTableSelectChange ? {
-      columnTitle: '选择',
-      columnWidth: 80,
-      selectedRowKeys,
-      onChange: onTableSelectChange,
-    } : null;
+    const {
+      dataSource,
+      total,
+      current,
+      pageSize,
+      loading,
+      onTablePageChange,
+      onShowSizeChange,
+      onOperator
+    } = this.props;
 
     // 表格参数
     const dataTableProps = {
       rowKey: 'id',
-      rowSelection,
       dataSource,
       loading,
+      total,
+      current,
+      pageSize,
+      onTablePageChange,
+      onShowSizeChange,
       columns: tableColumns(onOperator),
-      pagination: false,
     };
 
     return <DataTable {...dataTableProps} />;

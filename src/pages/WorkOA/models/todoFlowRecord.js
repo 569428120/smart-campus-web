@@ -1,4 +1,5 @@
 import appConfig from "@/config/appConfig";
+import * as flowRecordService from '../services/flowRecordService';
 
 export default {
   namespace: 'todoFlowRecord',
@@ -10,6 +11,25 @@ export default {
   },
   effects: {
 
+    /**
+     *  搜索查询
+     * @param searchValue
+     * @param current
+     * @param pageSize
+     * @param call
+     * @param put
+     */* getFlowRecordList({payload: {searchValue, current, pageSize}}, {call, put}) {
+      const {data: flowRecordList, total, totalPage} = yield call(flowRecordService.getTodoFlowRecordList, searchValue, current, pageSize);
+      yield put({
+        type: "setState",
+        payload: {
+          total,
+          current,
+          pageSize,
+          flowRecordList
+        }
+      })
+    },
   },
 
   reducers: {

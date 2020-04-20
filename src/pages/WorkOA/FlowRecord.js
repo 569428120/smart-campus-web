@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from "dva/index";
-import {Card, Modal,Tabs, message} from 'antd';
+import {Card, Modal, Tabs, message} from 'antd';
 import appConfig from "@/config/appConfig";
 import styles from '@/pages/common.less';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -33,9 +33,10 @@ class FlowRecord extends React.PureComponent {
   };
 
   componentDidMount() {
-    const {activeKey} = this.state;
     // 刷新数据
-    this.onRefreshFlowRecordPage(activeKey, undefined, 1, appConfig.PAGE_SIZE);
+    this.onRefreshFlowRecordPage('1', undefined, 1, appConfig.PAGE_SIZE);
+    this.onRefreshFlowRecordPage('2', undefined, 1, appConfig.PAGE_SIZE);
+    this.onRefreshFlowRecordPage('3', undefined, 1, appConfig.PAGE_SIZE);
   }
 
   /**
@@ -43,8 +44,6 @@ class FlowRecord extends React.PureComponent {
    * @param activeKey
    */
   onTabChange = (activeKey) => {
-    const {flowRecord: {pageSize}} = this.props;
-    this.onRefreshFlowRecordPage(activeKey, undefined, 1, pageSize);
     this.setState({
       activeKey
     })
@@ -139,6 +138,14 @@ class FlowRecord extends React.PureComponent {
   };
 
   /**
+   *   跳转到详情页面
+   * @param record
+   */
+  onToExaminePage = (record) => {
+
+  };
+
+  /**
    *  操作按钮
    */
   getOperatorButtonProps = () => {
@@ -173,6 +180,11 @@ class FlowRecord extends React.PureComponent {
     const todoFlowFlowRecordTableProps = {
       dataSource: todoFlowRecord.flowRecordList,
       loading: loading.effects['todoFlowRecord/getFlowRecordList'],
+      total: todoFlowRecord.total,
+      current: todoFlowRecord.current,
+      pageSize: todoFlowRecord.pageSize,
+      onTablePageChange: (current, pageSize) => this.onRefreshFlowRecordPage(this.state.activeKey, this.state.searchValue1, current, pageSize),
+      onShowSizeChange: (current, pageSize) => this.onRefreshFlowRecordPage(this.state.activeKey, this.state.searchValue1, current, pageSize),
       onOperator: this.onToExaminePage,
     };
     // 已办
@@ -183,6 +195,11 @@ class FlowRecord extends React.PureComponent {
     const alreadyFlowFlowRecordTableProps = {
       dataSource: alreadyFlowRecord.flowRecordList,
       loading: loading.effects['alreadyFlowRecord/getFlowRecordList'],
+      total: alreadyFlowRecord.total,
+      current: alreadyFlowRecord.current,
+      pageSize: alreadyFlowRecord.pageSize,
+      onTablePageChange: (current, pageSize) => this.onRefreshFlowRecordPage(this.state.activeKey, this.state.searchValue2, current, pageSize),
+      onShowSizeChange: (current, pageSize) => this.onRefreshFlowRecordPage(this.state.activeKey, this.state.searchValue2, current, pageSize),
     };
     // 我创建的
     const myCreateFlowSearchFormProps = {
@@ -191,7 +208,12 @@ class FlowRecord extends React.PureComponent {
     };
     const myCreateFlowFlowRecordTableProps = {
       dataSource: myCreateFlowRecord.flowRecordList,
-      loading: loading.effects['alreadyFlowRecord/getFlowRecordList'],
+      loading: loading.effects['myCreateFlowRecord/getFlowRecordList'],
+      total: myCreateFlowRecord.total,
+      current: myCreateFlowRecord.current,
+      pageSize: myCreateFlowRecord.pageSize,
+      onTablePageChange: (current, pageSize) => this.onRefreshFlowRecordPage(this.state.activeKey, this.state.searchValue3, current, pageSize),
+      onShowSizeChange: (current, pageSize) => this.onRefreshFlowRecordPage(this.state.activeKey, this.state.searchValue3, current, pageSize),
     };
 
     return (

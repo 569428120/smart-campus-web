@@ -1,10 +1,11 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import {Button, Col, Form, Icon, Input, Row, Select} from 'antd';
+import {Button, Col, Form, Icon, Input, Row, Select, DatePicker} from 'antd';
 import styles from '@/pages/List/TableList.less';
 
 const FormItem = Form.Item;
 const {Option} = Select;
+const {RangePicker} = DatePicker;
 
 @Form.create()
 class SearchForm extends PureComponent {
@@ -64,42 +65,24 @@ class SearchForm extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
-          <Col md={4} sm={24}>
-            <FormItem label="信息">
-              {getFieldDecorator('info')
-              (<Input allowClear placeholder="名称、证件号码等"/>)}
+          <Col md={6} sm={24}>
+            <FormItem label="人员信息">
+              {getFieldDecorator('userCode')(<Input placeholder="请输入姓名、工号、学号等"/>)}
             </FormItem>
           </Col>
-
-          <Col md={4} sm={24}>
-            <FormItem label="用户类型">
-              {getFieldDecorator('userType')(
-                <Select allowClear>
-                  <Select.Option key={"1"} value={"1"}>{"学生"}</Select.Option>
-                  <Select.Option key={"2"} value={"2"}>{"老师"}</Select.Option>
-                  <Select.Option key={"3"} value={"3"}>{"家长"}</Select.Option>
-                  <Select.Option key={"4"} value={"4"}>{"职工"}</Select.Option>
-                </Select>)}
+          <Col md={6} sm={24}>
+            <FormItem label="时间段">
+              {getFieldDecorator('timeRange')(<RangePicker allowClear/>)}
             </FormItem>
           </Col>
-          <Col md={4} sm={24}>
-            <FormItem label="策略类型">
-              {getFieldDecorator('strategyType')(<Select allowClear>
-                <Select.Option key={"1"} value={"1"}>{"出入策略"}</Select.Option>
-                <Select.Option key={"2"} value={"2"}>{"审批流程"}</Select.Option>
-              </Select>)}
-            </FormItem>
-          </Col>
-
           <Col md={4} sm={24}>
             <FormItem label="出入类型">
-              {getFieldDecorator('inOrOut')(<Select allowClear>
+              {getFieldDecorator('inOrOut')(<Select placeholder={"请选择"} allowClear>
                 <Select.Option key={"1"} value={"1"}>{"进入"}</Select.Option>
                 <Select.Option key={"2"} value={"2"}>{"外出"}</Select.Option>
               </Select>)}
             </FormItem>
           </Col>
-
           <Col md={4} sm={24}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
