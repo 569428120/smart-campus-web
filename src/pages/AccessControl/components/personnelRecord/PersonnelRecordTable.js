@@ -64,6 +64,8 @@ class PersonnelRecordTable extends PureComponent {
       total,
       current,
       pageSize,
+      onTablePageChange,
+      onShowSizeChange,
       onShowDetail
     } = this.props;
 
@@ -75,8 +77,9 @@ class PersonnelRecordTable extends PureComponent {
       total,
       current,
       pageSize,
+      onTablePageChange,
+      onShowSizeChange,
       columns: tableColumns(onShowDetail),
-      pagination: false,
     };
 
     return <DataTable {...dataTableProps} />;

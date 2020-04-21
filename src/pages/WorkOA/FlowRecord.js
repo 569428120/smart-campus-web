@@ -8,6 +8,8 @@ import SearchForm from "./components/flowRecord/SearchForm";
 import FlowRecordTable from "./components/flowRecord/FlowRecordTable";
 import OperatorButton from "../../components/SmartCampus/AuthorityToolbar/OperatorButton";
 import enums from "./config/enums";
+import FlowSelectModal from "./components/flowRecord/FlowSelectModal";
+import router from "umi/router";
 
 const {TabPane} = Tabs;
 
@@ -27,7 +29,7 @@ class FlowRecord extends React.PureComponent {
     searchReset: undefined,// 搜索框重置
     selectedRowKeys: [],
     selectedRows: [],
-    flowRecordModalVisible: false,
+    flowSelectModalVisible: false,
     flowRecordModel: {},
     openType: "",
   };
@@ -122,19 +124,35 @@ class FlowRecord extends React.PureComponent {
    */
   openFlowSelectModal = (flowRecordModel, openType) => {
     this.setState({
-      flowRecordModalVisible: true,
+      flowSelectModalVisible: true,
       flowRecordModel,
       openType,
     })
   };
 
   /**
-   *   确认
-   * @param values
-   * @param openType
+   *  进入填写页面
+   * @param flowType
    */
-  onFlowSelectModalOk = (values, openType) => {
-    // TODO 跳转到对应流程的填写页面
+  onFlowSelect = (flowType) => {
+    this.closeFlowSelectModal();
+    switch (flowType) {
+      case enums.FlowType.access.key:
+        router.push('/work/flow/guard');
+        break;
+      default:
+        message.error(`不支持的流程类型 ${flowType}`)
+    }
+
+  };
+
+  /**
+   * 关闭弹窗
+   */
+  closeFlowSelectModal = () => {
+    this.setState({
+      flowSelectModalVisible: false,
+    })
   };
 
   /**
@@ -159,6 +177,19 @@ class FlowRecord extends React.PureComponent {
       onClick: () => this.openFlowSelectModal({}, 'add'),
     });
     return {buttonList};
+  };
+
+  renderTabBarExtraContent = () => {
+    const buttonList = [
+      {
+        icon: 'plus',
+        type: 'primary',
+        text: '新建',
+        operatorKey: 'flow-add',
+        onClick: this.openFlowSelectModal,
+      }
+    ];
+    return <OperatorButton buttonList={buttonList}/>
   };
 
   render() {
@@ -215,10 +246,16 @@ class FlowRecord extends React.PureComponent {
       onTablePageChange: (current, pageSize) => this.onRefreshFlowRecordPage(this.state.activeKey, this.state.searchValue3, current, pageSize),
       onShowSizeChange: (current, pageSize) => this.onRefreshFlowRecordPage(this.state.activeKey, this.state.searchValue3, current, pageSize),
     };
-
+    const flowSelectModalProps = {
+      visible: this.state.flowSelectModalVisible,
+      onSelect: this.onFlowSelect,
+      onOk: this.closeFlowSelectModal,
+      onCancel: this.closeFlowSelectModal,
+    };
+    const tabBarExtraContent = this.renderTabBarExtraContent();
     return (
       <PageHeaderWrapper>
-        <Tabs activeKey={this.state.activeKey} onChange={this.onTabChange}>
+        <Tabs activeKey={this.state.activeKey} onChange={this.onTabChange} tabBarExtraContent={tabBarExtraContent}>
           <TabPane tab="待办流程" key="1">
             <div className={styles.tableList}>
               <div className={styles.tableListForm}>
@@ -243,6 +280,7 @@ class FlowRecord extends React.PureComponent {
               <FlowRecordTable {...myCreateFlowFlowRecordTableProps}/>
             </div>
           </TabPane>
+          <FlowSelectModal {...flowSelectModalProps}/>
         </Tabs>
       </PageHeaderWrapper>
     );
