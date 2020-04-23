@@ -138,7 +138,7 @@ class FlowRecord extends React.PureComponent {
     this.closeFlowSelectModal();
     switch (flowType) {
       case enums.FlowType.access.key:
-        router.push('/work/flow/guard');
+        router.push(`/work/flow/guard-entry?openType=create`);
         break;
       default:
         message.error(`不支持的流程类型 ${flowType}`)

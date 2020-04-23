@@ -14,17 +14,8 @@ const routes = [
             component: 'WorkOA/FlowRecord',
           },
           {
-            path: '/work/flow/entry',
-            name: 'entry',
-            hideChildrenInMenu: true,
-            routes: [
-              {
-                path: '/work/flow/record/guard',
-                name: 'guard',
-                component: 'WorkOA/GuardFlowEntry',
-              }
-            ]
-
+            path: '/work/flow/guard-entry',
+            component: 'WorkOA/GuardFlowEntry',
           },
         ],
       },

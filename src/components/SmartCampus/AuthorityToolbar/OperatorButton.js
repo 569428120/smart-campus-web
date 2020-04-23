@@ -1,12 +1,13 @@
-import React, { PureComponent } from 'react';
-import { connect } from 'dva';
-import { Button, Dropdown, Icon, Menu } from 'antd';
+import React, {PureComponent} from 'react';
+import {connect} from 'dva';
+import {Button, Dropdown, Icon, Menu} from 'antd';
 import PropTypes from 'prop-types';
+import styles from '@/pages/common.less';
 
 /**
  *  权限按钮
  */
-@connect(({ menu, loading }) => ({
+@connect(({menu, loading}) => ({
   menu,
   loading,
 }))
@@ -24,7 +25,7 @@ class OperatorButton extends PureComponent {
     const menu = (
       <Menu selectedKeys={[]}>
         {dropdownList.map(dropdown => {
-          const { onClick, operatorKey, text, ...ret } = dropdown;
+          const {onClick, operatorKey, text, ...ret} = dropdown;
           return (
             <Menu.Item onClick={onClick} key={operatorKey} {...ret}>
               {text}
@@ -37,7 +38,7 @@ class OperatorButton extends PureComponent {
     return (
       <Dropdown overlay={menu}>
         <Button>
-          批量操作 <Icon type="down" />
+          批量操作 <Icon type="down"/>
         </Button>
       </Dropdown>
     );
@@ -48,11 +49,11 @@ class OperatorButton extends PureComponent {
      *
      *  dropdowns:
      */
-    const { buttonList, dropdownList, menu } = this.props;
+    const {buttonList, dropdownList, menu} = this.props;
 
     // 操作按钮
     const operatorButtons = buttonList.map(item => {
-      const { icon, type, isShow, operatorKey, text, onClick } = item;
+      const {icon, type, isShow, operatorKey, text, onClick} = item;
       // 是否在权限列表中,如果没在则不显示
       if (isShow && !isShow(operatorKey)) {
         return null;
@@ -66,7 +67,7 @@ class OperatorButton extends PureComponent {
 
     // 操作菜单
     const dropdown = this.renderDropdown(dropdownList, []);
-    return [...operatorButtons, dropdown];
+    return <div className={styles.tableListOperator}>{[...operatorButtons, dropdown]}</div>;
   }
 }
 
