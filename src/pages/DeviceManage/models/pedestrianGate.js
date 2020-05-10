@@ -1,10 +1,9 @@
 import appConfig from "@/config/appConfig";
-import * as cardService from '../services/cardService'
+import * as cardService from '../services/pedestrianGateService'
 
 export default {
-  namespace: 'card',
+  namespace: 'pedestrianGate',
   state: {
-    text: 'card',
     cardList: [],// 学校列表
     current: 1,// 当前页
     pageSize: appConfig.PAGE_SIZE, //每页显示的大小
@@ -38,7 +37,7 @@ export default {
      * @param call
      * @param put
      */* deleteCardByIds({payload: {cardIds}}, {call, put}) {
-      yield call(cardService.deleteCardByIds,cardIds);
+      yield call(cardService.deleteCardByIds);
     },
 
     /**

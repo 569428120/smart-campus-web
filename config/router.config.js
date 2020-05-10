@@ -251,6 +251,8 @@ const accessControlRoutes = require('../src/pages/AccessControl/config/routes');
 const infoEntryRoutes = require('../src/pages/InfoEntry/config/routes');
 // 办公
 const workOaRoutes = require('../src/pages/WorkOA/config/routes');
+// 硬件设备
+const deviceManageRoutes = require('../src/pages/DeviceManage/config/routes');
 // 智慧校园的路由
 const appRoutes = [
   {path: '/', redirect: '/workplace'},
@@ -263,30 +265,7 @@ const appRoutes = [
   ...accessControlRoutes,
   ...infoEntryRoutes,
   ...workOaRoutes,
-  // 智能设备
-  {
-    path: '/device-manage',
-    name: 'device-manage',
-    routes: [
-      // 门禁设备
-      {
-        path: '/device-manage/access-device',
-        name: 'access-device',
-        routes: [
-          {
-            path: '/device-manage/access-device/gate',
-            name: 'gate',
-            component: './Dashboard/Analysis',
-          },
-          {
-            path: '/device-manage/access-device/car-gate',
-            name: 'car-gate',
-            component: './Dashboard/Monitor',
-          },
-        ],
-      },
-    ],
-  },
+  ...deviceManageRoutes,
 ];
 
 export default [
