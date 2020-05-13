@@ -150,7 +150,7 @@ class CarGate extends React.PureComponent {
    */
   onRefreshTest = (testLog) => {
     const {dispatch} = this.props;
-    const {deviceId} = (testLog || {});
+    const {id: deviceId} = (testLog || {});
     if (!deviceId) {
       message.info("测试log刷新失败，获取不到deviceId");
       return

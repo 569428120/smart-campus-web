@@ -8,6 +8,8 @@ let total = 0;
 let manufacturerList = [];
 let testLog = {};
 
+let count = 0;
+
 
 const startTest = (deviceId) => {
   testLog = {
@@ -24,17 +26,24 @@ const startTest = (deviceId) => {
       }
     ]
   };
+  count = 0;
   return testLog;
 };
 
 const getTestLogByDeviceId = (deviceId) => {
   const logList = (testLog.logList || []);
-  logList.push({
-    id: moment().format('YYYY-MM-DD HH:mm:ss'),
-    createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-    logText: "log数据...." + moment().format('YYYY-MM-DD HH:mm:ss'),
-  });
-  testLog.logList = logList;
+  if (count <= 10) {
+    logList.push({
+      id: moment().format('YYYY-MM-DD HH:mm:ss'),
+      createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+      logText: "log数据...." + moment().format('YYYY-MM-DD HH:mm:ss'),
+    });
+    testLog.logList = logList;
+    count++;
+  }else {
+    testLog.status = '';
+  }
+  return testLog
 };
 
 const getCarGateList = (searchValue, current1, pageSize1) => {

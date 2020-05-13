@@ -1,4 +1,4 @@
-const  getFlowTemplate = () => {
+const getFlowTemplate = () => {
   const flowPool = {
     id: '1',
     originatorName: 'xuzhipeng',
@@ -7,8 +7,8 @@ const  getFlowTemplate = () => {
     applicantName: 'xxxx',
     applicantCode: 'xxxxxx',
     steps: '1##2##3',
-    currStep: '1',
-    examineStatus: '',
+    currStep: '2',
+    examineStatus: 'toReviewed',
     flowName: '门禁审核-徐志鹏-2019-12-02',
   };
   const flowStepList = [
@@ -37,7 +37,13 @@ const  getFlowTemplate = () => {
       handleStatus: 'wait', //wait process finish error
     }
   ];
-  return {flowPool, flowStepList}
+  const flowServiceModel = {
+    id: "",
+    startTime: "",
+    endTime: "",
+    carNumber: "xxxxxxxx"
+  };
+  return {flowPool, flowStepList, flowServiceModel}
 };
 
 // 测试数据

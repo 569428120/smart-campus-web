@@ -5,6 +5,16 @@ export default {
     edit: "修改",
     add: "新增"
   },
+  FlowPoolStatus: {
+    unSubmit: {
+      key: 'unSubmit',
+      value: '待提交'
+    },
+    toReviewed: {
+      key: 'toReviewed',
+      value: '待审核',
+    }
+  },
   FlowStatus: {
     todo: {
       key: "TODO",
@@ -19,10 +29,10 @@ export default {
       value: "创建"
     }
   },
-  FlowType:{
-     access:{
-       key:"access",
-       value:"门禁审批"
-     }
+  FlowType: {
+    access: {
+      key: "access",
+      value: "门禁审批"
+    }
   }
 }

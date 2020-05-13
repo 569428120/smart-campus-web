@@ -7,6 +7,7 @@ export default {
   namespace: 'guardFlowEntry',
   state: {
     flowPool: {},
+    flowServiceModel: {},
     flowStepList: []
   },
   effects: {
@@ -17,12 +18,13 @@ export default {
      * @param put
      */* getFlowTemplate({payload: {}}, {call, put}) {
       //const {flowPool,flowStepList} = yield call(guardFlowEntryService.getFlowTemplate);
-      const {flowPool, flowStepList} = mock.guardFlowEntryService.getFlowTemplate();
+      const {flowPool, flowStepList, flowServiceModel} = mock.guardFlowEntryService.getFlowTemplate();
       yield put({
         type: "setState",
         payload: {
           flowPool,
-          flowStepList
+          flowStepList,
+          flowServiceModel
         }
       })
     },

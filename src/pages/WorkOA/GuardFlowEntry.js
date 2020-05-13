@@ -6,6 +6,7 @@ import styles from '@/pages/common.less';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import router from "umi/router";
 import OperatorButton from "../../components/SmartCampus/AuthorityToolbar/OperatorButton";
+import GuardFlowForm from "./components/flowEntry/GuardFlowForm";
 
 
 const {Step} = Steps;
@@ -102,10 +103,16 @@ class GuardFlowEntry extends React.PureComponent {
   getOperatorButtonProps = () => {
     const buttonList = [
       {
-        text: '返回',
+        text: '返回列表',
         isShow: () => true,
         operatorKey: 'flow-entry-fanhui',
         onClick: this.toFlowRecordPage,
+      },
+      {
+        text: '保存',
+        isShow: () => true,
+        operatorKey: 'flow-entry-save',
+        onClick: () => message.info("提交成功"),
       },
       {
         type: 'primary',
@@ -139,26 +146,28 @@ class GuardFlowEntry extends React.PureComponent {
     return <Steps direction="vertical" current={this.state.current}>{steps}</Steps>
   };
 
-  /**
-   *  填写表单
-   */
-  renderEntryForm() {
-
-  };
-
   render() {
+    const {guardFlowEntry: {flowPool, flowStepList, flowServiceModel}} = this.props;
+    const createStep = (flowStepList || [{}])[0];
+    const currFlowStep = ((flowStepList || [{}])[this.state.current] || {});
     const steps = this.renderSteps();
-    const entryForm = this.renderEntryForm();
     // 操作按钮参数
     const operatorButtonProps = this.getOperatorButtonProps();
+    const guardFlowFormProps = {
+      userModel: this.state.userModel,
+      createStep,
+      currFlowStep,
+      flowPool,
+      flowServiceModel,
+    };
     return (
       <PageHeaderWrapper>
         <Card bordered={false}>
           <Row style={{height: window.innerHeight - 250}}>
+            <Col span={18}><GuardFlowForm {...guardFlowFormProps} ref={r => this.guardFlowForm = r}/></Col>
             <Col span={6}>{steps}</Col>
-            <Col span={18}>{entryForm}</Col>
           </Row>
-          <Row style={{textAlign:'center'}}><OperatorButton {...operatorButtonProps} /></Row>
+          <Row style={{textAlign: 'center'}}><OperatorButton {...operatorButtonProps} /></Row>
         </Card>
       </PageHeaderWrapper>
     );

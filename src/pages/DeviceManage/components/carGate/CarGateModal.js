@@ -160,16 +160,22 @@ class CarGateModal extends PureComponent {
   /**
    *  获取设备类型列表
    */
-  getDeviceTypeList = () => {
+  getDeviceTypeList = (manufacturerId) => {
     const {
       manufacturerList,
-      form: {
-        getFieldValue
-      }
     } = this.props;
-    const manufacturerId = getFieldValue("manufacturerId");
     const manufacturer = (manufacturerList || []).find(item => item.id === manufacturerId);
     return (manufacturer || {}).deviceTypeList;
+  };
+
+  onManufacturerChange = (manufacturerId) => {
+    const {dataSource} = this.state;
+    this.setState({
+      dataSource: {
+        ...dataSource,
+        manufacturerId
+      }
+    })
   };
 
   /**
@@ -182,10 +188,10 @@ class CarGateModal extends PureComponent {
       form
     } = this.props;
     const {dataSource} = this.state;
-    const {manufacturerId, deviceType, description} = dataSource;
+    const {manufacturerId, manufacturerType, description} = dataSource;
     const manufacturerOptions = (manufacturerList || []).map(item => <Option key={item.id}
                                                                              value={item.id}>{item.name}</Option>);
-    const deviceTypeList = this.getDeviceTypeList();
+    const deviceTypeList = this.getDeviceTypeList(manufacturerId);
     const deviceTypeOptions = (deviceTypeList || []).map(item => <Option key={item.id}
                                                                          value={item.id}>{`${item.name} ${item.version}`}</Option>);
 
@@ -200,12 +206,13 @@ class CarGateModal extends PureComponent {
             },
           ]
         })(
-          <Select placeholder={"请选择"} style={{width: '100%'}}>{manufacturerOptions}</Select>
+          <Select placeholder={"请选择"} onChange={this.onManufacturerChange}
+                  style={{width: '100%'}}>{manufacturerOptions}</Select>
         )}
       </FormItem>,
       <FormItem key="manufacturerType" {...this.formLayout} label="设备型号">
         {form.getFieldDecorator('manufacturerType', {
-          initialValue: deviceType,
+          initialValue: manufacturerType,
           rules: [
             {
               required: true,
@@ -302,7 +309,7 @@ class CarGateModal extends PureComponent {
         <Col span={6}><Button onClick={this.onStartTestInterval}
                               loading={this.state.testInterval !== undefined}>开始</Button></Col>
       </Row>
-      <Timeline pending={logDesc} reverse={'normal' === status}>{logItems}</Timeline>
+      <Timeline  pending={logDesc} reverse={'normal' === status}>{logItems}</Timeline>
     </div>
   };
 
@@ -326,12 +333,12 @@ class CarGateModal extends PureComponent {
 
   onStartTestInterval = () => {
     const {onStartTest, onRefreshTest, form: {getFieldValue}} = this.props;
-    const {testInterval} = this.state;
+    const {testInterval, dataSource} = this.state;
     if (testInterval !== undefined) {
       message.info("已经启动，请勿重复点击");
       return;
     }
-    const deviceId = getFieldValue("deviceId");
+    const {deviceId} = dataSource;
     if (!deviceId) {
       message.info("设备id不能为空");
       return;
