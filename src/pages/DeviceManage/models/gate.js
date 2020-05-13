@@ -1,11 +1,11 @@
 import appConfig from "@/config/appConfig";
-import * as carGateService from '../services/carGateService'
+import * as gateService from '../services/gateService'
 import mock from "../config/mock"
 
 export default {
-  namespace: 'carGate',
+  namespace: 'gate',
   state: {
-    carGateList: [],// 学校列表
+    gateList: [],// 学校列表
     current: 1,// 当前页
     pageSize: appConfig.PAGE_SIZE, //每页显示的大小
     total: 0,// 总数
@@ -20,7 +20,7 @@ export default {
      * @param call
      * @param put
      */* startTest({payload: {deviceId}}, {call, put}) {
-      // const testLog = yield call(carGateService.startTest, deviceId);
+      // const testLog = yield call(gateService.startTest, deviceId);
       const testLog = mock.startTest(deviceId);
       yield put({
         type: "setState",
@@ -36,7 +36,7 @@ export default {
      * @param call
      * @param put
      */* getTestLogByDeviceId({payload: {deviceId}}, {call, put}) {
-      //const testLog = yield call(carGateService.getTestLogByDeviceId, deviceId);
+      //const testLog = yield call(gateService.getTestLogByDeviceId, deviceId);
       const testLog = mock.getTestLogByDeviceId(deviceId);
       yield put({
         type: "setState",
@@ -51,7 +51,7 @@ export default {
      * @param call
      * @param put
      */* getManufacturerList({payload: {}}, {call, put}) {
-      //const manufacturerList = yield call(carGateService.getManufacturerList);
+      //const manufacturerList = yield call(gateService.getManufacturerList);
       const manufacturerList = mock.getManufacturerList();
       yield put({
         type: "setState",
@@ -68,36 +68,36 @@ export default {
      * @param pageSize
      * @param call
      * @param put
-     */* getCarGateList({payload: {searchValue, current, pageSize}}, {call, put}) {
-      //const {data: carGateList, total, totalPage} = yield call(carGateService.getCarGateList, searchValue, current, pageSize);
-      const {data: carGateList, total, totalPage} = mock.getCarGateList(searchValue, current, pageSize);
+     */* getGateList({payload: {searchValue, current, pageSize}}, {call, put}) {
+      //const {data: gateList, total, totalPage} = yield call(gateService.getGateList, searchValue, current, pageSize);
+      const {data: gateList, total, totalPage} = mock.getGateList(searchValue, current, pageSize);
       yield put({
         type: "setState",
         payload: {
           total,
           current,
           pageSize,
-          carGateList
+          gateList
         }
       })
     },
 
     /**
      *  删除
-     * @param carGateIds
+     * @param gateIds
      * @param call
      * @param put
-     */* deleteCarGateByIds({payload: {carGateIds}}, {call, put}) {
-      yield call(carGateService.deleteCarGateByIds, carGateIds);
+     */* deleteGateByIds({payload: {gateIds}}, {call, put}) {
+      yield call(gateService.deleteGateByIds, gateIds);
     },
 
     /**
      *  保存
-     * @param carGateIds
+     * @param values
      * @param call
      * @param put
-     */* saveCarGateData({payload: {values}}, {call, put}) {
-      yield call(carGateService.saveCarGateData, values);
+     */* saveGateData({payload: {values}}, {call, put}) {
+      yield call(gateService.saveGateData, values);
     },
   },
 

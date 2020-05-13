@@ -4,25 +4,24 @@ import {Card, Modal, message} from 'antd';
 import appConfig from "@/config/appConfig";
 import styles from '@/pages/common.less';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import SearchForm from "./components/carGate/SearchForm";
-import CarGateTable from "./components/carGate/CarGateTable";
-import CarGateModal from "./components/carGate/CarGateModal";
+import SearchForm from "./components/Gate/SearchForm";
+import GateTable from "./components/Gate/GateTable";
+import GateModal from "./components/Gate/GateModal";
 import OperatorButton from "../../components/SmartCampus/AuthorityToolbar/OperatorButton";
-import enums from "./config/enums";
 
 
-@connect(({loading, carGate}) => ({
+@connect(({loading, gate}) => ({
   loading,
-  carGate
+  gate
 }))
-class CarGate extends React.PureComponent {
+class Gate extends React.PureComponent {
 
   state = {
     searchValue: {},//  搜索条件
     selectedRowKeys: [],
     selectedRows: [],
-    carGateModalVisible: false,
-    carGateModel: {},
+    gateModalVisible: false,
+    gateModel: {},
     openType: "",
     mDisabled: false,
     currentStep: 0,
@@ -30,7 +29,7 @@ class CarGate extends React.PureComponent {
 
   componentDidMount() {
     // 刷新数据
-    this.onRefreshCarGatePage({}, 1, appConfig.PAGE_SIZE);
+    this.onRefreshGatePage({}, 1, appConfig.PAGE_SIZE);
     // 刷新厂商数据
     this.onRefreshManufacturerList();
   }
@@ -41,7 +40,7 @@ class CarGate extends React.PureComponent {
   onRefreshManufacturerList = () => {
     const {dispatch} = this.props;
     dispatch({
-      type: "carGate/getManufacturerList",
+      type: "gate/getManufacturerList",
       payload: {}
     })
   };
@@ -52,10 +51,10 @@ class CarGate extends React.PureComponent {
    * @param current
    * @param pageSize
    */
-  onRefreshCarGatePage = (searchValue, current, pageSize) => {
+  onRefreshGatePage = (searchValue, current, pageSize) => {
     const {dispatch} = this.props;
     dispatch({
-      type: "carGate/getCarGateList",
+      type: "gate/getGateList",
       payload: {
         searchValue,
         current,
@@ -70,12 +69,12 @@ class CarGate extends React.PureComponent {
   /**
    *  打开弹窗
    */
-  openCarGateModal = (carGateModel, openType, currentStep, mDisabled) => {
+  openGateModal = (gateModel, openType, currentStep, mDisabled) => {
     const {dispatch} = this.props;
-    this.carGateModal.onInitDataSource(carGateModel);
+    this.gateModal.onInitDataSource(gateModel);
     this.setState({
-      carGateModalVisible: true,
-      carGateModel,
+      gateModalVisible: true,
+      gateModel,
       openType,
       mDisabled,
       currentStep
@@ -85,21 +84,21 @@ class CarGate extends React.PureComponent {
   /**
    *  删除
    */
-  onDeleteCarGate = () => {
+  onDeleteGate = () => {
     const {selectedRowKeys, searchValue} = this.state;
-    const {dispatch, carGate: {pageSize}} = this.props;
+    const {dispatch, gate: {pageSize}} = this.props;
     const deleteFunc = () => {
       dispatch({
-        type: "carGate/deleteCarGateByIds",
+        type: "gate/deleteGateByIds",
         payload: {
-          carGateIds: selectedRowKeys
+          gateIds: selectedRowKeys
         }
       }).then(() => {
         this.setState({
           selectedRowKeys: [],
           selectedRows: [],
         });
-        this.onRefreshCarGatePage(searchValue, 1, pageSize);
+        this.onRefreshGatePage(searchValue, 1, pageSize);
       });
 
     };
@@ -118,15 +117,15 @@ class CarGate extends React.PureComponent {
    * @param values
    * @param openType
    */
-  onCarGateModalOk = (values, openType) => {
-    const {dispatch, carGate: {current, pageSize}} = this.props;
+  onGateModalOk = (values, openType) => {
+    const {dispatch, gate: {current, pageSize}} = this.props;
     dispatch({
-      type: "carGate/saveCarGateData",
+      type: "gate/saveGateData",
       payload: {
         values
       }
     }).then(() => {
-      this.onRefreshCarGatePage(openType === 'edit' ? current : 1, pageSize);
+      this.onRefreshGatePage(openType === 'edit' ? current : 1, pageSize);
     });
   };
 
@@ -136,7 +135,7 @@ class CarGate extends React.PureComponent {
   onStartTest = (deviceId, onStartTestInterval) => {
     const {dispatch} = this.props;
     dispatch({
-      type: "carGate/startTest",
+      type: "gate/startTest",
       payload: {
         deviceId
       }
@@ -156,7 +155,7 @@ class CarGate extends React.PureComponent {
       return
     }
     dispatch({
-      type: "carGate/getTestLogByDeviceId",
+      type: "gate/getTestLogByDeviceId",
       payload: {
         deviceId
       }
@@ -174,8 +173,8 @@ class CarGate extends React.PureComponent {
       icon: 'plus',
       type: 'primary',
       text: '新建',
-      operatorKey: 'car-gate-add',
-      onClick: () => this.openCarGateModal({}, 'add', 0, false),
+      operatorKey: 'gate-add',
+      onClick: () => this.openGateModal({}, 'add', 0, false),
     });
     // 更新按钮，选择一个的时候显示
     if ((selectedRows || []).length === 1) {
@@ -183,8 +182,8 @@ class CarGate extends React.PureComponent {
         icon: '',
         type: '',
         text: '更新',
-        operatorKey: 'car-gate-update',
-        onClick: () => this.openCarGateModal(selectedRows[0], 'edit', 0, false),
+        operatorKey: 'gate-update',
+        onClick: () => this.openGateModal(selectedRows[0], 'edit', 0, false),
       });
     }
 
@@ -193,9 +192,9 @@ class CarGate extends React.PureComponent {
     // 大于0 就显示
     if ((selectedRowKeys || []).length > 0) {
       dropdownList.push({
-        operatorKey: 'car-gate-delete',
+        operatorKey: 'gate-delete',
         text: '删除',
-        onClick: this.onDeleteCarGate,
+        onClick: this.onDeleteGate,
       });
     }
     return {buttonList, dropdownList};
@@ -204,8 +203,8 @@ class CarGate extends React.PureComponent {
   render() {
     const {
       loading,
-      carGate: {
-        carGateList,
+      gate: {
+        gateList,
         total,
         current,
         pageSize,
@@ -216,38 +215,38 @@ class CarGate extends React.PureComponent {
 
     // 搜索参数
     const searchFormProps = {
-      onSearch: (searchValue) => this.onRefreshCarGatePage(searchValue, 1, pageSize),
-      onFormReset: (searchValue) => this.onRefreshCarGatePage(searchValue, 1, pageSize)
+      onSearch: (searchValue) => this.onRefreshGatePage(searchValue, 1, pageSize),
+      onFormReset: (searchValue) => this.onRefreshGatePage(searchValue, 1, pageSize)
     };
     // 操作按钮参数
     const operatorButtonProps = this.getOperatorButtonProps();
     // 表格参数
-    const carGateTableProps = {
-      dataSource: carGateList,
+    const gateTableProps = {
+      dataSource: gateList,
       selectedRowKeys: this.state.selectedRowKeys,
-      loading: loading.effects['carGate/getCarGateList'],
+      loading: loading.effects['gate/getGateList'],
       total,
       current,
       pageSize,
       onTableSelectChange: (rowKeys, rows) => this.setState({selectedRowKeys: rowKeys, selectedRows: rows,}),
-      onTablePageChange: (current, pageSize) => this.onRefreshCarGatePage(this.state.searchValue, current, pageSize),
-      onShowSizeChange: (current, pageSize) => this.onRefreshCarGatePage(this.state.searchValue, current, pageSize),
-      onOperator: (record) => this.openCarGateModal(record, "debug", 2, true),
+      onTablePageChange: (current, pageSize) => this.onRefreshGatePage(this.state.searchValue, current, pageSize),
+      onShowSizeChange: (current, pageSize) => this.onRefreshGatePage(this.state.searchValue, current, pageSize),
+      onOperator: (record) => this.openGateModal(record, "debug", 2, true),
     };
     // 详情弹窗
-    const carGateModalProps = {
-      visible: this.state.carGateModalVisible,
+    const gateModalProps = {
+      visible: this.state.gateModalVisible,
       openType: this.state.openType,
       mDisabled: this.state.mDisabled,
-      dataSource: this.state.carGateModel,
+      dataSource: this.state.gateModel,
       currentStep: this.state.currentStep,
       manufacturerList,
       testLog,
       onCurrentStepChange: (currentStep) => this.setState({currentStep}),
       onStartTest: this.onStartTest,
       onRefreshTest: this.onRefreshTest,
-      onOk: this.onCarGateModalOk,
-      onCancel: () => this.setState({carGateModalVisible: false})
+      onOk: this.onGateModalOk,
+      onCancel: () => this.setState({gateModalVisible: false})
     };
 
     return (
@@ -260,13 +259,13 @@ class CarGate extends React.PureComponent {
             <div className={styles.tableListOperator}>
               <OperatorButton {...operatorButtonProps} />
             </div>
-            <CarGateTable {...carGateTableProps} />
+            <GateTable {...gateTableProps} />
           </div>
         </Card>
-        <CarGateModal {...carGateModalProps} onRef={r => this.carGateModal = r}/>
+        <GateModal {...gateModalProps} onRef={r => this.gateModal = r}/>
       </PageHeaderWrapper>
     );
   }
 }
 
-export default CarGate;
+export default Gate;

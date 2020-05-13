@@ -57,7 +57,7 @@ const tableColumns = onOperator => {
 /**
  *  权限表格
  */
-class CarGateTable extends PureComponent {
+class GateTable extends PureComponent {
 
 
   render() {
@@ -107,13 +107,13 @@ class CarGateTable extends PureComponent {
   }
 }
 
-CarGateTable.propTypes = {
+GateTable.propTypes = {
   dataSource: PropTypes.array,
   loading: PropTypes.bool,
   selectedRowKeys: PropTypes.array,
   onTableSelectChange: PropTypes.func,
   onOperator: PropTypes.func,
 };
-CarGateTable.defaultProps = {};
+GateTable.defaultProps = {};
 
-export default CarGateTable;
+export default GateTable;

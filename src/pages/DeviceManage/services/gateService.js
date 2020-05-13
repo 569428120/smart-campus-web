@@ -6,8 +6,8 @@ import config from "../config/config";
  * @param values
  * @returns {Promise<void>}
  */
-export async function saveCarGateData(values) {
-  return request(config.carGateApi.saveCarGateData, {
+export async function saveGateData(values) {
+  return request(config.gate.saveGateData, {
     method: 'POST',
     body: {
       ...values
@@ -18,14 +18,14 @@ export async function saveCarGateData(values) {
 
 /**
  *  删除
- * @param carGateIds
+ * @param gateIds
  * @returns {Promise<void>}
  */
-export async function deleteCarGateByIds(carGateIds) {
-  return request(config.carGateApi.deleteCarGateByIds, {
+export async function deleteGateByIds(gateIds) {
+  return request(config.gateApi.deleteGateByIds, {
     method: 'GET',
     params: {
-      regionIds: (carGateIds || []).join(",")
+      regionIds: (gateIds || []).join(",")
     }
   });
 }
@@ -38,8 +38,8 @@ export async function deleteCarGateByIds(carGateIds) {
  * @param pageSize
  * @returns {Promise<void>}
  */
-export async function getCarGateList(searchValue, current, pageSize) {
-  return request(config.carGateApi.getCarGateList, {
+export async function getGateList(searchValue, current, pageSize) {
+  return request(config.gateApi.getGateList, {
     method: 'GET',
     params: {
       ...searchValue,
@@ -54,8 +54,8 @@ export async function getCarGateList(searchValue, current, pageSize) {
  * @param values
  * @returns {Promise<void>}
  */
-export function validatorCarGate(values) {
-  return request(config.carGateApi.validatorCarGate, {
+export function validatorGate(values) {
+  return request(config.gateApi.validatorGate, {
     method: 'POST',
     body: {
       ...values

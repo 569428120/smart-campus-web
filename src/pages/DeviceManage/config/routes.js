@@ -11,13 +11,8 @@ const routes = [
           {
             path: '/device-manage/access-device/gate',
             name: 'gate',
-            component: 'DeviceManage/CarGate',
-          },
-          {
-            path: '/device-manage/access-device/car-gate',
-            name: 'car-gate',
-            component: './Dashboard/Monitor',
-          },
+            component: 'DeviceManage/Gate',
+          }
         ],
       },
     ],

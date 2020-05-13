@@ -40,6 +40,5 @@ export default {
 
   'menu.device-manage': '智能设备',
   'menu.device-manage.access-device': '门禁设备',
-  'menu.device-manage.access-device.gate': '人行门闸',
-  'menu.device-manage.access-device.car-gate': '车行门闸',
+  'menu.device-manage.access-device.gate': '门闸设备',
 };

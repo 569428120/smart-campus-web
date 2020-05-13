@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {Form, Input, Modal, Timeline, Select, Steps, message, Button, Row, Col, Progress} from "antd";
 import PropTypes from "prop-types";
 import enums from "../../config/enums";
-import * as carGateService from "../../services/carGateService"
+import * as gateService from "../../services/gateService"
 
 
 const FormItem = Form.Item;
@@ -11,7 +11,7 @@ const {TextArea} = Input;
 const {Option} = Select;
 
 @Form.create()
-class CarGateModal extends PureComponent {
+class GateModal extends PureComponent {
   state = {
     testInterval: undefined,
     dataSource: {}
@@ -45,6 +45,7 @@ class CarGateModal extends PureComponent {
 
   close = () => {
     const {onCancel} = this.props;
+    this.clearTestInterval();
     onCancel && onCancel();
   };
 
@@ -169,7 +170,15 @@ class CarGateModal extends PureComponent {
   };
 
   onManufacturerChange = (manufacturerId) => {
-    const {dataSource} = this.state;
+    const {
+      dataSource
+    } = this.state;
+    const {
+      form: {
+        setFieldsValue
+      }
+    } = this.props;
+    setFieldsValue({manufacturerType: null});
     this.setState({
       dataSource: {
         ...dataSource,
@@ -256,7 +265,7 @@ class CarGateModal extends PureComponent {
               message: 'DeviceID必填',
             },
             {
-              validator: async (rule, value) => carGateService.validatorCarGate({"deviceId": value})
+              validator: async (rule, value) => gateService.validatorGate({"deviceId": value})
             }
           ],
         })(<Input placeholder={"设备的DeviceID"} disabled={openType === 'view'}/>)}
@@ -305,11 +314,11 @@ class CarGateModal extends PureComponent {
     </Timeline.Item>);
     return <div>
       <Row>
-        <Col span={18}><Progress status={status} percent={percent}/></Col>
-        <Col span={6}><Button onClick={this.onStartTestInterval}
+        <Col span={20}><Progress status={status} percent={percent}/></Col>
+        <Col span={4}><Button onClick={this.onStartTestInterval}
                               loading={this.state.testInterval !== undefined}>开始</Button></Col>
       </Row>
-      <Timeline  pending={logDesc} reverse={'normal' === status}>{logItems}</Timeline>
+      <Timeline style={{height: 250, overflow: 'auto'}} reverse={'normal' === status}>{logItems}</Timeline>
     </div>
   };
 
@@ -368,7 +377,6 @@ class CarGateModal extends PureComponent {
       onCancel,
     } = this.props;
 
-    const {dataSource} = this.state;
     const steps = this.stepList.map(({key, title}) => <Steps.Step key={key} title={title}/>);
     const {renderContent} = (this.stepList[currentStep] || {});
     return <Modal
@@ -387,7 +395,7 @@ class CarGateModal extends PureComponent {
 }
 
 
-CarGateModal.propTypes = {
+GateModal.propTypes = {
   // 是否显示
   visible: PropTypes.bool.isRequired,
   // 操作类型 edit  add
@@ -414,8 +422,8 @@ CarGateModal.propTypes = {
   onCancel: PropTypes.func,
 };
 
-CarGateModal.defaultProps = {};
+GateModal.defaultProps = {};
 
-export default CarGateModal;
+export default GateModal;
 
 

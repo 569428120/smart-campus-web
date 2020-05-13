@@ -32,21 +32,23 @@ const startTest = (deviceId) => {
 
 const getTestLogByDeviceId = (deviceId) => {
   const logList = (testLog.logList || []);
-  if (count <= 10) {
+  if (count < 10) {
     logList.push({
       id: moment().format('YYYY-MM-DD HH:mm:ss'),
       createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
       logText: "log数据...." + moment().format('YYYY-MM-DD HH:mm:ss'),
     });
     testLog.logList = logList;
+    testLog.percent = (count * 10)+1;
     count++;
-  }else {
+  } else {
+    testLog.percent = 100;
     testLog.status = '';
   }
   return testLog
 };
 
-const getCarGateList = (searchValue, current1, pageSize1) => {
+const getGateList = (searchValue, current1, pageSize1) => {
   current = current1;
   pageSize = pageSize1;
   if (carGateList.length <= 0) {
@@ -92,6 +94,17 @@ const getManufacturerList = () => {
             version: "(体温版本)"
           }
         ]
+      },
+      {
+        id: 'm2',
+        name: "海普天1",
+        deviceTypeList: [
+          {
+            id: "d3",
+            name: "人脸一体机1",
+            version: "(体温版本)1"
+          }
+        ]
       }
     ]);
   }
@@ -102,6 +115,6 @@ const getManufacturerList = () => {
 export default {
   startTest,
   getTestLogByDeviceId,
-  getCarGateList,
+  getGateList,
   getManufacturerList,
 }
