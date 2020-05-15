@@ -1,5 +1,6 @@
 import appConfig from "@/config/appConfig";
-import * as gateService from '../services/gateService'
+import * as gateService from '../services/gateService';
+import * as  testService from '../services/gateTestService';
 import mock from "../config/mock"
 
 export default {
@@ -20,8 +21,8 @@ export default {
      * @param call
      * @param put
      */* startTest({payload: {deviceId}}, {call, put}) {
-      // const testLog = yield call(gateService.startTest, deviceId);
-      const testLog = mock.startTest(deviceId);
+      const testLog = yield call(testService.startTest, deviceId);
+      //const testLog = mock.startTest(deviceId);
       yield put({
         type: "setState",
         payload: {
@@ -36,8 +37,8 @@ export default {
      * @param call
      * @param put
      */* getTestLogByDeviceId({payload: {deviceId}}, {call, put}) {
-      //const testLog = yield call(gateService.getTestLogByDeviceId, deviceId);
-      const testLog = mock.getTestLogByDeviceId(deviceId);
+      const testLog = yield call(testService.getTestLogByDeviceId, deviceId);
+      //const testLog = mock.getTestLogByDeviceId(deviceId);
       yield put({
         type: "setState",
         payload: {
@@ -51,8 +52,8 @@ export default {
      * @param call
      * @param put
      */* getManufacturerList({payload: {}}, {call, put}) {
-      //const manufacturerList = yield call(gateService.getManufacturerList);
-      const manufacturerList = mock.getManufacturerList();
+      const manufacturerList = yield call(gateService.getManufacturerList);
+      //const manufacturerList = mock.getManufacturerList();
       yield put({
         type: "setState",
         payload: {
@@ -69,8 +70,8 @@ export default {
      * @param call
      * @param put
      */* getGateList({payload: {searchValue, current, pageSize}}, {call, put}) {
-      //const {data: gateList, total, totalPage} = yield call(gateService.getGateList, searchValue, current, pageSize);
-      const {data: gateList, total, totalPage} = mock.getGateList(searchValue, current, pageSize);
+      const {data: gateList, total, totalPage} = yield call(gateService.getGateList, searchValue, current, pageSize);
+      //const {data: gateList, total, totalPage} = mock.getGateList(searchValue, current, pageSize);
       yield put({
         type: "setState",
         payload: {

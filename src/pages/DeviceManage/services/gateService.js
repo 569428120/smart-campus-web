@@ -1,13 +1,25 @@
 import request from "@/utils/request";
 import config from "../config/config";
 
+
+/**
+ *  查询厂商
+ * @returns {Promise<void>}
+ */
+export async function getManufacturerList() {
+  return request(config.manufacturerApi.getGateManufacturerList, {
+    method: 'GET',
+    params: {},
+  });
+}
+
 /**
  *  保存
  * @param values
  * @returns {Promise<void>}
  */
 export async function saveGateData(values) {
-  return request(config.gate.saveGateData, {
+  return request(config.gateApi.saveGateData, {
     method: 'POST',
     body: {
       ...values
