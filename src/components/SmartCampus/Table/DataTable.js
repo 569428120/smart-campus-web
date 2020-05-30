@@ -44,7 +44,7 @@ class DataTable extends PureComponent {
     };
 
     return (
-      <div style={{textAlign: 'right', height: tableHeight + 30}}>
+      <div style={{textAlign: 'right', height: tableHeight + 45}}>
         <Table {...tableProps} />
         {pagination === true && onTablePageChange ? <Pagination style={{marginTop: 10}} {...paginationProps} /> : null}
       </div>
