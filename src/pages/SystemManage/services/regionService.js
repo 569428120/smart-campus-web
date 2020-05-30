@@ -49,3 +49,17 @@ export async function getRegionList(searchValue, current, pageSize) {
     }
   });
 }
+
+/**
+ *  校验
+ * @param values
+ * @returns {Promise<void>}
+ */
+export async function validatorRegion(values) {
+  return request(config.regionApi.validatorRegion, {
+    method: 'POST',
+    body: {
+      ...values
+    },
+  }, true);
+}

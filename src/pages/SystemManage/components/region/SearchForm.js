@@ -62,12 +62,12 @@ class SearchForm extends PureComponent {
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={8} sm={24}>
             <FormItem label="区域名称">
-              {getFieldDecorator('regionName')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('regionName')(<Input allowClear placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="教育局名">
-              {getFieldDecorator('educationName')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('educationName')(<Input allowClear placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>

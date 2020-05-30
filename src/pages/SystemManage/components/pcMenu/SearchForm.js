@@ -61,12 +61,12 @@ class SearchForm extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={8} sm={24}>
-            <FormItem label="菜单名称">
+            <FormItem label="菜单或操作名称">
               {getFieldDecorator('menuName')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="路由">
+            <FormItem label="菜单或操作编码">
               {getFieldDecorator('route')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
@@ -78,9 +78,6 @@ class SearchForm extends PureComponent {
               <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
                 重置
               </Button>
-              <a style={{marginLeft: 8}} onClick={this.toggleForm}>
-                展开 <Icon type="down"/>
-              </a>
             </span>
           </Col>
         </Row>
@@ -88,56 +85,9 @@ class SearchForm extends PureComponent {
     );
   }
 
-  renderAdvancedForm() {
-    const {
-      form: {getFieldDecorator},
-    } = this.props;
-    return (
-      <Form onSubmit={this.handleSearch} layout="inline">
-        <Row gutter={{md: 8, lg: 24, xl: 48}}>
-          <Col md={8} sm={24}>
-            <FormItem label="菜单名称">
-              {getFieldDecorator('menuName')(<Input placeholder="请输入"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="路由">
-              {getFieldDecorator('route')(<Input placeholder="请输入"/>)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="操作名称">
-              {getFieldDecorator('operateName')(<Input placeholder="请输入"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={{md: 8, lg: 24, xl: 48}}>
-          <Col md={8} sm={24}>
-            <FormItem label="操作编码">
-              {getFieldDecorator('operateCode')(<Input placeholder="请输入"/>)}
-            </FormItem>
-          </Col>
-        </Row>
-        <div style={{overflow: 'hidden'}}>
-          <div style={{float: 'right', marginBottom: 24}}>
-            <Button type="primary" htmlType="submit">
-              查询
-            </Button>
-            <Button style={{marginLeft: 8}} onClick={this.handleFormReset}>
-              重置
-            </Button>
-            <a style={{marginLeft: 8}} onClick={this.toggleForm}>
-              收起 <Icon type="up"/>
-            </a>
-          </div>
-        </div>
-      </Form>
-    );
-  }
-
   render() {
     const {expandForm} = this.state;
-    return expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
+    return this.renderSimpleForm();
   }
 }
 

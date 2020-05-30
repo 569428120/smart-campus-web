@@ -53,7 +53,7 @@ class AuthorityGroupModal extends PureComponent {
       destroyOnClose={true}
       visible={visible}
       onOk={() => this.onSubmit(onOk)}
-      width={modalWidth(window.innerWidth * 0.5)}
+      width={500}
       onCancel={onCancel}
       okText="确认"
       cancelText="取消"

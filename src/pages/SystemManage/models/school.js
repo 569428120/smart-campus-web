@@ -1,5 +1,5 @@
 import appConfig from "@/config/appConfig";
-import * as schoolService from '@/pages/SystemManage/services/schoolService'
+import * as schoolService from '../services/schoolService'
 
 export default {
   namespace: 'school',

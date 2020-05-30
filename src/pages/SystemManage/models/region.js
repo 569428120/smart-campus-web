@@ -1,5 +1,5 @@
 import appConfig from "@/config/appConfig";
-import * as regionService from '@/pages/SystemManage/services/regionService'
+import * as regionService from '../services/regionService'
 
 export default {
   namespace: 'region',
@@ -15,6 +15,8 @@ export default {
     /**
      *  根据搜索条件查询教育局列表
      * @param searchValue
+     * @param current
+     * @param pageSize
      * @param call
      * @param put
      * @returns {Generator<*, void, ?>}

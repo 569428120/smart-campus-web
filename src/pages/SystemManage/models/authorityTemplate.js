@@ -15,7 +15,7 @@ export default {
      * @param put
      * @returns {Generator<*, void, ?>}
      */* getAuthorityTemplateList({payload: {}}, {call, put}) {
-      const authorityTemplateList = yield call(templateService.getAuthorityTemplateList);
+      const {data: authorityTemplateList, total, totalPage} = yield call(templateService.getAuthorityTemplateList);
       yield put({
         type: "setState",
         payload: {

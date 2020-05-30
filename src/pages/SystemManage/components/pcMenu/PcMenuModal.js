@@ -183,7 +183,7 @@ class PcMenuModal extends PureComponent {
       destroyOnClose={true}
       visible={visible}
       onOk={() => this.onSubmit(onOk)}
-      width={modalWidth(500)}
+      width={500}
       onCancel={onCancel}
       okText="确认"
       cancelText="取消"

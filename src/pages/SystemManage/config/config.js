@@ -9,6 +9,8 @@ export default {
     deleteRegionByIds: `${appConfig.API}/region/deletes/deletes-by-ids`,
     // 保存教育局的数据
     saveRegionData: `${appConfig.API}/region/posts`,
+    // 校验
+    validatorRegion: `${appConfig.API}/region/validator`,
   },
   // 学校管理api
   schoolApi: {

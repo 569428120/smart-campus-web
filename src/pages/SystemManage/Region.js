@@ -3,7 +3,7 @@ import {connect} from 'dva';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import {Card, message, Modal} from 'antd';
 import styles from '@/pages/common.less';
-import SearchForm from '@/pages/SystemManage/components/region/SearchForm';
+import SearchForm from './components/region/SearchForm';
 import OperatorButton from '@/components/SmartCampus/AuthorityToolbar/OperatorButton';
 import RegionTable from '@/pages/SystemManage/components/region/RegionTable';
 import appConfig from "@/config/appConfig";
@@ -189,11 +189,11 @@ class Region extends PureComponent {
           }
         }
       }).then(() => {
+        // 关闭窗口
+        this.closeRegionModal();
         this.onTablePageChange(openType === 'edit' ? current : 1, pageSize);
       });
     }
-    // 关闭窗口
-    this.closeRegionModal();
   };
 
   /**
@@ -276,7 +276,7 @@ class Region extends PureComponent {
       loading: loading.effects['region/getRegionList'],
       selectedRowKeys: this.state.selectedRowKeys,
       onTableSelectChange: this.onTableSelectChange,
-      onShowView: (record) => this.openRegionModal('view', record),
+      onShowView: (record) => this.openRegionModal('view', record, 1, true),
       current,
       pageSize,
       total,
@@ -292,6 +292,7 @@ class Region extends PureComponent {
       currentStep: this.state.currentStep,
       onCurrentStepChange: (currentStep) => this.setState({currentStep}),
       authorityTemplateList,
+      confirmLoading: loading.effects['region/saveRegionData'],
       onOk: this.onRegionModalOk,
       onCancel: this.closeRegionModal,
     };

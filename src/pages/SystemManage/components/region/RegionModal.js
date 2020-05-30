@@ -2,22 +2,12 @@ import React, {PureComponent} from 'react';
 import {Form, Input, Modal, Select, Steps, Button} from "antd";
 import PropTypes from "prop-types";
 import enums from '@/pages/SystemManage/config/enums';
+import * as regionService from "../../services/regionService";
 
 const {TextArea} = Input;
 const {Option} = Select;
 const {Step} = Steps;
 const FormItem = Form.Item;
-
-const formItemLayout = {
-  labelCol: {
-    xs: {span: 24},
-    sm: {span: 6},
-  },
-  wrapperCol: {
-    xs: {span: 24},
-    sm: {span: 16},
-  },
-};
 
 /**
  *  新增修改弹窗
@@ -51,10 +41,9 @@ class RegionModal extends PureComponent {
 
   /**
    *  提交数据
-   * @param onOk
    */
-  onSubmit = (onOk) => {
-    const {form: {validateFields}, openType} = this.props;
+  onSubmit = () => {
+    const {form: {validateFields}, onOk, openType} = this.props;
     const {dataSource} = this.state;
     validateFields((errors, values) => {
       if (errors === null) {
@@ -154,20 +143,20 @@ class RegionModal extends PureComponent {
     const {dataSource} = this.state;
     const {userName, password, contact} = (dataSource || {});
     return [
-      <FormItem key="userName" {...this.formLayout} label="用户名称">
-        {getFieldDecorator('userName', {
-          initialValue: userName,
+      <FormItem key="contact" {...this.formLayout} label="手机号码">
+        {getFieldDecorator('contact', {
+          initialValue: contact,
           rules: [
             {
               required: true,
-              message: '用户名称必填',
+              message: '手机号码必填',
             },
             {
               max: 64,
               message: '长度不能超过64',
             },
-          ],
-        })(<Input placeholder={"请输入用户名称"} disabled={openType === 'view'}/>)}
+          ]
+        })(<Input placeholder={"请输入手机号码"} disabled={openType === 'view'}/>)}
       </FormItem>,
       <FormItem key="password" {...this.formLayout} label="登录密码">
         {getFieldDecorator('password', {
@@ -182,18 +171,7 @@ class RegionModal extends PureComponent {
               message: '长度不能超过64',
             },
           ],
-        })(<Input.Password placeholder={"请输入管理员登录密码"} disabled={openType === 'view'}/>)}
-      </FormItem>,
-      <FormItem key="contact" {...this.formLayout} label="手机号码">
-        {getFieldDecorator('contact', {
-          initialValue: contact,
-          rules: [
-            {
-              max: 64,
-              message: '长度不能超过64',
-            },
-          ]
-        })(<Input placeholder={"请输入手机号码"} disabled={openType === 'view'}/>)}
+        })(<Input placeholder={"请输入登录密码"} disabled={openType === 'view'}/>)}
       </FormItem>,
     ]
   };
@@ -209,7 +187,7 @@ class RegionModal extends PureComponent {
     const {dataSource} = this.state;
     const {authorityTemplateId} = (dataSource || {});
     const authorityTemplateOptions = (authorityTemplateList || []).map(item => <Option key={item.id}
-                                                                                       value={item.id}>{item.name}</Option>);
+                                                                                       value={item.id}>{item.authorityName}</Option>);
     return [
       <FormItem key="authorityTemplateId" {...this.formLayout} label="权限模板">
         {getFieldDecorator('authorityTemplateId', {
@@ -221,6 +199,7 @@ class RegionModal extends PureComponent {
             }
           ],
         })(<Select placeholder={"请选择管理员权限模板"}
+                   disabled={openType === 'view'}
                    style={{width: '100%'}}>{authorityTemplateOptions}</Select>)}
       </FormItem>
     ]
@@ -230,7 +209,7 @@ class RegionModal extends PureComponent {
     const {mDisabled, confirmLoading} = this.props;
     const {buttonList} = (this.stepList[currentStep] || {});
     return (buttonList || []).map(({text, ...ret}) => <Button
-      loading={ret.key === 'submit' && confirmLoading} {...ret} >
+      loading={ret.key === 'submit' && confirmLoading} disabled={mDisabled} {...ret} >
       {text}
     </Button>)
   };
@@ -329,7 +308,6 @@ class RegionModal extends PureComponent {
       bodyStyle={{padding: '32px 40px 48px', height: 325}}
       destroyOnClose={true}
       visible={visible}
-      onOk={() => this.onSubmit(onOk)}
       onCancel={onCancel}
       footer={this.renderFooter(currentStep)}
     >

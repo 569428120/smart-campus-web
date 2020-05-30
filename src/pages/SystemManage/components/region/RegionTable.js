@@ -26,7 +26,7 @@ const tableColumns = onShowView => [
     width: '10%',
     render: (text, record) => (
       <Fragment>
-        <a onClick={() => onShowView(record)}>查看详情</a>
+        <a onClick={() => onShowView(record)}>管理员</a>
       </Fragment>
     ),
   },

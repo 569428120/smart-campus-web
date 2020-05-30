@@ -1,9 +1,9 @@
 import React, {PureComponent} from 'react';
-import {Card} from 'antd';
+import {Card, Modal} from 'antd';
 import {connect} from 'dva';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from '@/pages/common.less';
-import SearchForm from '@/pages/SystemManage/components/school/SearchForm';
+import SearchForm from './components/school/SearchForm';
 import OperatorButton from '@/components/SmartCampus/AuthorityToolbar/OperatorButton';
 import SchoolTable from '@/pages/SystemManage/components/school/SchoolTable';
 import appConfig from "@/config/appConfig";
@@ -12,10 +12,11 @@ import SchoolModal from "@/pages/SystemManage/components/school/SchoolModal";
 /**
  *  区域管理页面
  */
-@connect(({loading, school, region}) => ({
+@connect(({loading, school, region, authorityTemplate}) => ({
   loading,
   school,
-  region
+  region,
+  authorityTemplate
 }))
 class School extends PureComponent {
   state = {
@@ -25,12 +26,12 @@ class School extends PureComponent {
     schoolModalVisible: false,// 弹窗是否显示
     openType: '',// 操作类型
     schoolModel: {},// 回显的数据
-
+    mDisabled: false,// 弹窗按钮是否可用
+    currentStep: 0, // 弹窗步骤
   };
 
   componentDidMount() {
     const {dispatch} = this.props;
-
     this.onRefreshSchoolPage({}, 1, appConfig.PAGE_SIZE);
     // 获取教育局下拉列表
     dispatch({
@@ -38,9 +39,14 @@ class School extends PureComponent {
       payload: {
         searchValue: {},
         current: 1,
-        pageSize: 50
+        pageSize: 1000
       }
     });
+    // 权限模板列表
+    dispatch({
+      type: "authorityTemplate/getAuthorityTemplateList",
+      payload: {}
+    })
   };
 
   /**
@@ -119,11 +125,15 @@ class School extends PureComponent {
   /**
    *  新增
    */
-  openCreateSchoolModal = (record, openType) => {
+  openSchoolModal = (record, openType, currentStep = 0, mDisabled = false) => {
+    // 初始化弹窗的数据
+    this.schoolModal.onInitDataSource(record);
     this.setState({
       schoolModalVisible: true,
       openType,
-      schoolModel: record
+      schoolModel: record,
+      currentStep,
+      mDisabled
     });
   };
 
@@ -133,14 +143,27 @@ class School extends PureComponent {
    */
   onDeleteSchool = schoolIds => {
     const {dispatch, school: {current, pageSize}} = this.props;
-    const {searchValue} = this.state;
-    dispatch({
-      type: "school/deleteSchoolByIds",
-      payload: {
-        schoolIds
-      }
-    }).then(() => {
-      this.onRefreshSchoolPage(searchValue, current, pageSize);
+    const {searchValue, selectedRowKeys} = this.state;
+    const deleteRegion = () => {
+      dispatch({
+        type: "school/deleteSchoolByIds",
+        payload: {
+          schoolIds: selectedRowKeys
+        }
+      }).then(() => {
+        this.setState({
+          selectedRowKeys: [],
+          selectedRows: [],
+        });
+        this.onRefreshSchoolPage(searchValue, current, pageSize);
+      });
+    };
+    Modal.confirm({
+      title: '删除确认',
+      content: '是否删除选择的数据',
+      onOk: deleteRegion,
+      okText: '确认',
+      cancelText: '取消',
     });
   };
 
@@ -163,9 +186,9 @@ class School extends PureComponent {
         }
       }).then(() => {
         this.onRefreshSchoolPage(searchValue, openType === 'edit' ? current : 1, pageSize);
+        this.closeSchoolModal();
       });
     }
-    this.closeSchoolModal();
   };
 
   /**
@@ -188,8 +211,8 @@ class School extends PureComponent {
       icon: 'plus',
       type: 'primary',
       text: '新建',
-      operatorKey: 'test-key',
-      onClick: () => this.openCreateSchoolModal({}, 'add'),
+      operatorKey: 'school-add',
+      onClick: () => this.openSchoolModal({}, 'add'),
     });
     // 更新按钮，选择一个的时候显示
     if ((selectedRows || []).length === 1) {
@@ -197,8 +220,8 @@ class School extends PureComponent {
         icon: '',
         type: '',
         text: '更新',
-        operatorKey: 'test-key1',
-        onClick: () => this.openCreateSchoolModal(selectedRows[0], 'edit'),
+        operatorKey: 'school-update',
+        onClick: () => this.openSchoolModal(selectedRows[0], 'edit'),
       });
     }
 
@@ -207,7 +230,7 @@ class School extends PureComponent {
     // 大于0 就显示
     if ((selectedRowKeys || []).length > 0) {
       dropdownList.push({
-        operatorKey: 'aaaaa',
+        operatorKey: 'school-delete',
         text: '删除',
         onClick: () => this.onDeleteSchool(selectedRowKeys),
       });
@@ -228,11 +251,15 @@ class School extends PureComponent {
       },
       region: {
         regionList
+      },
+      authorityTemplate: {
+        authorityTemplateList
       }
     } = this.props;
 
     // 搜索框参数
     const searchFormProps = {
+      regionList,
       onSearch: this.onSearchFormSearch,
       onFormReset: this.onSearchFormReset,
       onRegionSelectChange: this.onRegionSelectChange
@@ -247,11 +274,11 @@ class School extends PureComponent {
       loading: loading.effects['school/getSchoolList'],
       selectedRowKeys: this.state.selectedRowKeys,
       onTableSelectChange: this.onTableSelectChange,
-      onShowView: (record) => this.openCreateSchoolModal(record, 'view'),
+      onShowView: (record) => this.openSchoolModal(record, 'view', 1, true),
       current,
       pageSize,
       total,
-      onTablePageChange: (current) => this.onRefreshSchoolPage(this.state.searchValue, current, pageSize),
+      onTablePageChange: (current, pageSize) => this.onRefreshSchoolPage(this.state.searchValue, current, pageSize),
       onTablePageSizeChange: (current, pageSize) => this.onRefreshSchoolPage(this.state.searchValue, 1, pageSize),
     };
 
@@ -259,8 +286,12 @@ class School extends PureComponent {
     const schoolModalProps = {
       visible: this.state.schoolModalVisible,
       openType: this.state.openType,
-      dataSource: this.state.schoolModel,
+      mDisabled: this.state.mDisabled,
+      currentStep: this.state.currentStep,
+      onCurrentStepChange: (currentStep) => this.setState({currentStep}),
+      authorityTemplateList,
       regionList,
+      confirmLoading: loading.effects['school/saveSchoolData'],
       onOk: this.onSchoolModalOk,
       onCancel: this.closeSchoolModal
     };
@@ -278,7 +309,7 @@ class School extends PureComponent {
             <SchoolTable {...schoolTableProps} />
           </div>
         </Card>
-        <SchoolModal {...schoolModalProps}/>
+        <SchoolModal {...schoolModalProps} onRef={r => this.schoolModal = r}/>
       </PageHeaderWrapper>
     );
   }

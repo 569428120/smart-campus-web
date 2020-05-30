@@ -1,12 +1,12 @@
 import React, {PureComponent} from 'react';
-import {Card} from 'antd';
+import {Card, Modal} from 'antd';
 import {connect} from 'dva';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from '@/pages/common.less';
-import SearchForm from '@/pages/SystemManage/components/pcMenu/SearchForm';
+import SearchForm from './components/pcMenu/SearchForm';
 import OperatorButton from '@/components/SmartCampus/AuthorityToolbar/OperatorButton';
-import PcMenuTable from '@/pages/SystemManage/components/pcMenu/PcMenuTable';
-import PcMenuModal from "@/pages/SystemManage/components/pcMenu/PcMenuModal";
+import PcMenuTable from './components/pcMenu/PcMenuTable';
+import PcMenuModal from "./components/pcMenu/PcMenuModal";
 
 /**
  *  区域管理页面
@@ -94,13 +94,22 @@ class PcMenu extends PureComponent {
   deletePcMenus = (menuIds) => {
     const {dispatch} = this.props;
     const {searchValue} = this.state;
-    dispatch({
-      type: "pcMenu/deletePcMenuByIds",
-      payload: {
-        menuIds,
-      }
-    }).then(() => {
-      this.onRefreshPcMenuList(searchValue);
+    const deleteFunc = () => {
+      dispatch({
+        type: "pcMenu/deletePcMenuByIds",
+        payload: {
+          menuIds,
+        }
+      }).then(() => {
+        this.onRefreshPcMenuList(searchValue);
+      });
+    };
+    Modal.confirm({
+      title: '删除确认',
+      content: '是否删除选择的数据',
+      onOk: deleteFunc,
+      okText: '确认',
+      cancelText: '取消',
     });
   };
 
@@ -203,11 +212,11 @@ class PcMenu extends PureComponent {
 
     // 表格组件参数
     const pcMenuTableProps = {
+      height: window.innerHeight - 365,
       dataSource: menuList,
       loading: loading.effects['pcMenu/getMenuList'],
       selectedRowKeys: this.state.selectedRowKeys,
       onTableSelectChange: this.onTableSelectChange,
-      onShowView: (record) => this.openCreatePcMenuModal(record, 'view'),
     };
 
     const pcMenuModalProps = {

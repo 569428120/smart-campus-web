@@ -19,29 +19,16 @@ const tableColumns = onShowView => [
     width: '15%',
   },
   {
-    title: '级别',
-    dataIndex: 'schoolLevel',
-    width: '10%',
-    render: (text) => {
-      return (text || "").split("##").map(key => enums.SchoolLevel[key]).join(",");
-    }
-  },
-  {
-    title: '学校类型',
-    dataIndex: 'schoolType',
-    width: '10%',
-    render: (text) => enums.SchoolType[text]
-  },
-  {
     title: '描述',
     dataIndex: 'description',
     width: '35%',
   },
   {
     title: '操作',
+    width: '10%',
     render: (text, record) => (
       <Fragment>
-        <a onClick={() => onShowView(record)}>查看详情</a>
+        <a onClick={() => onShowView(record)}>管理员</a>
       </Fragment>
     ),
   },
@@ -83,8 +70,8 @@ class RegionTable extends PureComponent {
       current,
       pageSize,
       total,
-      onChange: onTablePageChange,
-      onShowSizeChange: onTablePageSizeChange,
+      onTablePageChange,
+      onTablePageSizeChange,
     };
 
     return <DataTable {...dataTableProps} />;

@@ -8,6 +8,9 @@ import config from "@/pages/SystemManage/config/config";
 export async function getAuthorityTemplateList() {
   return request(config.authorityGroupApi.getAuthorityGroupList, {
     method: 'GET',
-    params: {}
+    params: {
+      current: 1,
+      pageSize: 1000
+    }
   });
 }

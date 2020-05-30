@@ -26,7 +26,7 @@ export async function deleteSchoolByIds(schoolIds) {
   return request(config.schoolApi.deleteSchoolByIds, {
     method: 'GET',
     params: {
-      regionIds: (schoolIds || []).join(",")
+      schoolIds: (schoolIds || []).join(",")
     }
   });
 }
