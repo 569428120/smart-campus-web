@@ -52,8 +52,8 @@ export default {
      * @param call
      * @param put
      */* getManufacturerList({payload: {}}, {call, put}) {
-      const manufacturerList = yield call(gateService.getManufacturerList);
-      //const manufacturerList = mock.getManufacturerList();
+      //const manufacturerList = yield call(gateService.getManufacturerList);
+      const manufacturerList = mock.getManufacturerList();
       yield put({
         type: "setState",
         payload: {

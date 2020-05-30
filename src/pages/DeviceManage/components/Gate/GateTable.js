@@ -2,6 +2,7 @@ import React, {Fragment, PureComponent} from 'react';
 import DataTable from '@/components/SmartCampus/Table/DataTable';
 import {Badge} from 'antd';
 import PropTypes from 'prop-types';
+import enums from '../../config/enums';
 
 /**
  *  表格列
@@ -33,7 +34,11 @@ const tableColumns = onOperator => {
       title: '状态',
       dataIndex: 'status',
       width: '10%',
-      render: (text, record) => <span><Badge status={text}/>{text}</span>
+      render: (text, record) => {
+        const status = enums.DeviceStatus[text];
+        const desc = (status || {}).key;
+        return <span><Badge status={text}/>{desc}</span>
+      }
     },
     {
       title: '描述',
@@ -62,6 +67,7 @@ class GateTable extends PureComponent {
 
   render() {
     const {
+      height,
       dataSource,
       total,
       current,
@@ -90,6 +96,7 @@ class GateTable extends PureComponent {
 
     // 表格参数
     const dataTableProps = {
+      height,
       rowKey: 'id',
       rowSelection,
       dataSource,

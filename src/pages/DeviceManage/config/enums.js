@@ -24,5 +24,20 @@ export default {
       key: "ICCard",
       value: "IC卡"
     }
+  },
+  // 设备状态
+  DeviceStatus: {
+    Processing: {
+      key: "Processing",
+      value: "运行中"
+    },
+    Warning: {
+      key: "Warning",
+      value: "警告"
+    },
+    Error: {
+      key: "Error",
+      value: "错误"
+    }
   }
 }

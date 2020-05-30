@@ -72,6 +72,16 @@ class GateModal extends PureComponent {
   };
 
   /**
+   *  提交数据
+   */
+  onSubmit = () => {
+    const {onOk, openType} = this.props;
+    const {dataSource} = this.state;
+    onOk(dataSource, openType);
+  };
+
+
+  /**
    *  步骤对应的表格内容
    * @type {{}}
    */
@@ -144,19 +154,6 @@ class GateModal extends PureComponent {
     }
   ];
 
-  /**
-   *  提交数据
-   */
-  onSubmit = () => {
-    const {onOk, form: {validateFields}, openType, dataSource} = this.props;
-    const {id} = (dataSource || {});
-    validateFields((errors, values) => {
-      if (errors === null) {
-        values.id = id;
-        onOk && onOk(values, openType);
-      }
-    });
-  };
 
   /**
    *  获取设备类型列表
@@ -220,7 +217,7 @@ class GateModal extends PureComponent {
         )}
       </FormItem>,
       <FormItem key="manufacturerType" {...this.formLayout} label="设备型号">
-        {form.getFieldDecorator('manufacturerType', {
+        {form.getFieldDecorator('manufacturerTypeId8', {
           initialValue: manufacturerType,
           rules: [
             {
@@ -373,6 +370,7 @@ class GateModal extends PureComponent {
       visible,
       openType,
       currentStep,
+      confirmLoading,
       onOk,
       onCancel,
     } = this.props;
@@ -385,6 +383,7 @@ class GateModal extends PureComponent {
       bodyStyle={{padding: '32px 40px 48px'}}
       destroyOnClose={true}
       visible={visible}
+      confirmLoading={confirmLoading}
       footer={this.renderFooter(currentStep)}
       onCancel={onCancel}
     >

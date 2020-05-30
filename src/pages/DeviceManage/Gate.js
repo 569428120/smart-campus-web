@@ -216,12 +216,14 @@ class Gate extends React.PureComponent {
     // 搜索参数
     const searchFormProps = {
       onSearch: (searchValue) => this.onRefreshGatePage(searchValue, 1, pageSize),
-      onFormReset: (searchValue) => this.onRefreshGatePage(searchValue, 1, pageSize)
+      onFormReset: (searchValue) => this.onRefreshGatePage(searchValue, 1, pageSize),
+      manufacturerList,
     };
     // 操作按钮参数
     const operatorButtonProps = this.getOperatorButtonProps();
     // 表格参数
     const gateTableProps = {
+      height: window.innerHeight - 350,
       dataSource: gateList,
       selectedRowKeys: this.state.selectedRowKeys,
       loading: loading.effects['gate/getGateList'],
@@ -245,6 +247,7 @@ class Gate extends React.PureComponent {
       onCurrentStepChange: (currentStep) => this.setState({currentStep}),
       onStartTest: this.onStartTest,
       onRefreshTest: this.onRefreshTest,
+      confirmLoading: loading.effects['gate/saveGateData'],
       onOk: this.onGateModalOk,
       onCancel: () => this.setState({gateModalVisible: false})
     };

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Button, Col, DatePicker, Form, Icon, Input, InputNumber, Row, Select} from 'antd';
 import styles from '@/pages/List/TableList.less';
+import enums from '../../config/enums';
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -10,6 +11,7 @@ const {Option} = Select;
 class SearchForm extends React.PureComponent {
   state = {
     expandForm: false, // 是否展开搜索框
+    deviceTypeList: [],
   };
 
   /**
@@ -49,30 +51,65 @@ class SearchForm extends React.PureComponent {
     });
   };
 
+  onManufacturerChange = (manufacturerId) => {
+    const {
+      manufacturerList,
+      form: {
+        setFieldsValue
+      }
+    } = this.props;
+    const manufacturerVo = (manufacturerList || []).find(item => item.id === manufacturerId);
+    setFieldsValue({manufacturerTypeId: undefined});
+    this.setState({
+      deviceTypeList: ((manufacturerVo || {}).deviceTypeList || [])
+    })
+  };
+
   /**
    *  简单的表单
    * @returns {*}
    */
   renderSimpleForm() {
     const {
+      manufacturerList,
       form: {getFieldDecorator},
     } = this.props;
+    const {deviceTypeList} = this.state;
+
+    const manufacturerOptions = (manufacturerList || []).map(({id, name}) => <Option key={id}
+                                                                                     value={id}>{name}</Option>);
+    const deviceTypeOptions = (deviceTypeList || []).map(({id, name}) => <Option key={id}
+                                                                                 value={id}>{name}</Option>);
+    const statusOptions = Object.values(enums.DeviceStatus).map(({key, value}) => <Option key={key}
+                                                                                          value={key}>{value}</Option>);
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
           <Col md={6} sm={24}>
-            <FormItem label="姓名">
-              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
+            <FormItem label="厂商">
+              {getFieldDecorator('manufacturerId')(
+                <Select allowClear placeholder={"请选择"} onChange={this.onManufacturerChange}>
+                  {manufacturerOptions}
+                </Select>
+              )}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
-            <FormItem label="编号">
-              {getFieldDecorator('userCode')(<Input placeholder="请输入工号，学号等"/>)}
+            <FormItem label="设备型号">
+              {getFieldDecorator('manufacturerTypeId')(
+                <Select allowClear placeholder={"请选择"}>
+                  {deviceTypeOptions}
+                </Select>
+              )}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
-            <FormItem label="卡号">
-              {getFieldDecorator('cardNumber')(<Input placeholder="请输入"/>)}
+            <FormItem label="状态">
+              {getFieldDecorator('status')(
+                <Select allowClear placeholder={"请选择"}>
+                  {statusOptions}
+                </Select>
+              )}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
