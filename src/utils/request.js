@@ -81,14 +81,14 @@ const cachedSave = (response, hashcode) => {
  * @param  {object} [option] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-export default function request(url, option) {
+export default function request(url, option, isText) {
   const options = {
     expirys: isAntdPro(),
     ...option,
   };
   url = urlParams(url, option.params);
   /**
-   * Produce fingerprints based on url and parameters
+   * Produce fingerprints based onaurl and parameters
    * Maybe url has the same parameters
    */
   const fingerprint = url + (options.body ? JSON.stringify(options.body) : '');
@@ -101,7 +101,7 @@ export default function request(url, option) {
     credentials: 'include',
   };
   const newOptions = {...defaultOptions, ...options};
-  newOptions.headers={
+  newOptions.headers = {
     Authentication: localStorage.getItem('antd-pro-authority'),
   };
   if (
@@ -140,14 +140,13 @@ export default function request(url, option) {
       sessionStorage.removeItem(`${hashcode}:timestamp`);
     }
   }
-  console.log(url);
   return fetch(url, newOptions)
     .then(checkStatus)
     .then(response => cachedSave(response, hashcode))
     .then(response => {
       // DELETE and 204 do not return data by default
       // using .json will report an error.
-      if (newOptions.method === 'DELETE' || response.status === 204) {
+      if (newOptions.method === 'DELETE' || isText === true || response.status === 204) {
         return response.text();
       }
       return response.json();
@@ -168,7 +167,7 @@ export default function request(url, option) {
         return;
       }
       if (status <= 504 && status >= 500) {
-        router.push('/exception/500');
+        // router.push('/exception/500');
         return;
       }
       if (status >= 404 && status < 422) {
