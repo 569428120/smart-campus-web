@@ -1,5 +1,4 @@
-import appConfig from "@/config/appConfig";
-import * as staffGroupService from '@/pages/HumanManage/services/staffGroupService'
+import * as staffGroupService from '../services/staffGroupService'
 
 export default {
   namespace: 'staffGroup',
@@ -47,21 +46,33 @@ export default {
     },
 
     /**
-     *  查询
-     * @param groupId
-     * @param current
-     * @param pageSize
-     */* getGroupToStaffUserList(groupId, current, pageSize) {
-      const {data: groupToStaffUserList, total, totalPage} = yield call(staffGroupService.getGroupToStaffUserList, groupId, current, pageSize);
-      yield put({
-        type: "setState",
-        payload: {
-          total,
-          current,
-          pageSize,
-          groupToStaffUserList
-        }
-      })
+     *   复制分组到分组
+     * @param sourceIds
+     * @param targetIds
+     * @param call
+     * @param put
+     */* copyGroupToGroup({payload: {sourceIds, targetIds}}, {call, put}) {
+      yield call(staffGroupService.copyGroupToGroup, sourceIds, targetIds);
+    },
+
+    /**
+     *  移动
+     * @param sourceIds
+     * @param targetId
+     * @param call
+     * @param put
+     */* moveGroupToGroup({payload: {sourceIds, targetId}}, {call, put}) {
+      yield call(staffGroupService.moveGroupToGroup, sourceIds, targetId);
+    },
+
+    /**
+     *  移动用户
+     * @param userIds
+     * @param targetId
+     * @param call
+     * @param put
+     */* moveUserToGroup({payload: {userIds, targetId}}, {call, put}) {
+      yield call(staffGroupService.moveUserToGroup, userIds, targetId);
     }
   },
 

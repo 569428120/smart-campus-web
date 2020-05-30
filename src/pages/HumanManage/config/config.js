@@ -6,13 +6,17 @@ export default {
   // 职工组
   staffGroupApi: {
     // 查询用户组
-    getStaffGroupList: `${api}/staff-group/gets/all`,
+    getStaffGroupList: `${api}/staff-group/gets/tree`,
     // 删除
     deleteStaffGroupByIds: `${api}/staff-group/deletes/deletes-by-ids`,
     // 保存
     saveStaffGroupData: `${api}/staff-group/posts`,
-    // 查询  分组下的员工信息
-    getGroupToStaffUserList: `${api}/group-to-staff-user/gets/gets-by-groupid`,
+    // 复制分组
+    copyGroupToGroup: `${api}/staff-group/copy`,
+    // 移动分组
+    moveGroupToGroup: `${api}/staff-group/move`,
+    // 移动用户
+    moveUserToGroup: `${api}/staff-group/user/move`,
   },
   // 职工管理
   staffUserApi: {
@@ -20,8 +24,8 @@ export default {
     getStaffUserList: `${api}/staff-user/gets/page`,
     // 保存基本信息
     saveStaffUserData: `${api}/staff-user/posts`,
-    // 保存登录账户和密码
-    saveLoginUser: `${api}/staff-user/login-user/posts`,
+    // 删除
+    deleteStaffUserByIds: `${api}/staff-user/deletes/deletes-by-ids`,
   },
   // 班级管理
   studentGroupApi: {

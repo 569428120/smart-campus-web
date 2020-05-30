@@ -1,5 +1,5 @@
 import appConfig from "@/config/appConfig";
-import * as staffUserService from '@/pages/HumanManage/services/staffUserService'
+import * as staffUserService from '../services/staffUserService'
 
 export default {
   namespace: 'staffUser',
@@ -37,15 +37,6 @@ export default {
     },
 
     /**
-     *  保存数据
-     * @param values
-     * @param call
-     * @param put
-     */* saveLoginUser({payload: {values}}, {call, put}) {
-      yield call(staffUserService.saveLoginUser, values);
-    },
-
-    /**
      *  删除
      * @param userIds
      * @param call
@@ -53,7 +44,6 @@ export default {
      */* deleteStaffUserByIds({payload: {userIds}}, {call, put}) {
       yield call(staffUserService.deleteStaffUserByIds, userIds);
     }
-
   },
 
   reducers: {

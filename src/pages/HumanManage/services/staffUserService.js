@@ -17,35 +17,18 @@ export async function saveStaffUserData(values) {
 }
 
 /**
- *  保存
- * @param values
- * @returns {Promise<void>}
- */
-export async function saveLoginUser(values) {
-  return request(config.staffUserApi.saveLoginUser, {
-    method: 'POST',
-    body: {
-      ...values
-    },
-    params: {}
-  });
-}
-
-
-/**
  *  删除
  * @param userIds
  * @returns {Promise<void>}
  */
 export async function deleteStaffUserByIds(userIds) {
-  return request(config.schoolApi.deleteSchoolByIds, {
+  return request(config.staffUserApi.deleteStaffUserByIds, {
     method: 'GET',
     params: {
-      regionIds: (userIds || []).join(",")
+      userIds: (userIds || []).join(",")
     }
   });
 }
-
 
 /**
  *  分页查询

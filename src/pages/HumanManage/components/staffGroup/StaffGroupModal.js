@@ -56,7 +56,7 @@ class StaffGroupModal extends PureComponent {
       destroyOnClose={true}
       visible={visible}
       onOk={() => this.onSubmit(onOk)}
-      width={modalWidth(window.innerWidth * 0.5)}
+      width={500}
       onCancel={onCancel}
       okText="确认"
       cancelText="取消"
@@ -69,21 +69,6 @@ class StaffGroupModal extends PureComponent {
               {
                 required: true,
                 message: '分组名称必填',
-              },
-              {
-                max: 64,
-                message: '长度不能超过64',
-              },
-            ],
-          })(<Input disabled={openType === 'view'}/>)}
-        </Form.Item>
-        <Form.Item {...formItemLayout} label="分组编码">
-          {getFieldDecorator('groupCode', {
-            initialValue: groupCode,
-            rules: [
-              {
-                required: true,
-                message: '分组编码必填',
               },
               {
                 max: 64,

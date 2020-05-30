@@ -11,6 +11,7 @@ const tableColumns = onOperator => {
     {
       title: '分组名称',
       dataIndex: 'groupName',
+      align: 'left',
       width: '25%',
     },
     {
@@ -42,14 +43,23 @@ const tableColumns = onOperator => {
  */
 class StaffGroupTable extends PureComponent {
   render() {
-    const {dataSource, loading, selectedRowKeys, onTableSelectChange, onRowCheck, onOperator} = this.props;
+    const {
+      height,
+      dataSource,
+      loading,
+      rowSelection,
+      selectedRowKeys,
+      onTableSelectChange,
+      onRowCheck,
+      onOperator
+    } = this.props;
 
-    const rowSelection = {
+    const mRowSelection = (rowSelection || {
       columnTitle: '选择',
       columnWidth: 80,
       selectedRowKeys,
       onChange: onTableSelectChange,
-    };
+    });
 
     const onRow = (record) => {
       return {
@@ -59,8 +69,9 @@ class StaffGroupTable extends PureComponent {
 
     // 表格参数
     const dataTableProps = {
+      height,
       rowKey: 'id',
-      rowSelection,
+      rowSelection: mRowSelection,
       dataSource,
       loading,
       onRow,

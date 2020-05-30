@@ -11,7 +11,7 @@ const routes = [
           {
             path: '/personnel-manage/staff-manage/staff-group',
             name: 'staff-group',
-            component: 'HumanManage/StaffGroup',
+            component: 'HumanManage/GroupToUser',
           },
           {
             path: '/personnel-manage/staff-manage/staff-user',

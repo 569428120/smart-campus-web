@@ -21,12 +21,12 @@ const tableColumns = onOperator => {
     },
     {
       title: '身份证',
-      dataIndex: 'user_type',
+      dataIndex: 'shenfz',
       width: '15%',
     },
     {
       title: '工号',
-      dataIndex: 'user_type',
+      dataIndex: 'gh',
       width: '12%',
     },
     {
@@ -62,6 +62,7 @@ class StaffUserTable extends PureComponent {
 
   render() {
     const {
+      height,
       dataSource,
       total,
       current,
@@ -90,6 +91,7 @@ class StaffUserTable extends PureComponent {
 
     // 表格参数
     const dataTableProps = {
+      height,
       rowKey: 'id',
       rowSelection,
       dataSource,

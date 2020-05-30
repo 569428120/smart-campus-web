@@ -1,5 +1,5 @@
 import request from "@/utils/request";
-import config from "@/pages/HumanManage/config/config";
+import config from "../config/config";
 
 /**
  *  搜索查询
@@ -29,21 +29,6 @@ export async function deleteStaffGroupByIds(groupIds) {
   });
 }
 
-
-/**
- *  查询组下的权限列表
- * @param groupId
- * @returns {Promise<void>}
- */
-export async function getMenuListByGroupId(groupId) {
-  return request(config.staffGroupApi.getMenuListByGroupId, {
-    method: 'GET',
-    params: {
-      groupId
-    }
-  });
-}
-
 /**
  *  保存
  * @param values
@@ -58,21 +43,50 @@ export async function saveStaffGroupData(values) {
   });
 }
 
-
 /**
- *  查询
- * @param groupId
- * @param current
- * @param pageSize
+ *  复制分组
+ * @param sourceIds
+ * @param targetIds
  * @returns {Promise<void>}
  */
-export async function getGroupToStaffUserList(groupId, current, pageSize) {
-  return request(config.staffGroupApi.getGroupToStaffUserList, {
-    method: 'GET',
+export async function copyGroupToGroup(sourceIds, targetIds) {
+  return request(config.staffGroupApi.copyGroupToGroup, {
+    method: 'POST',
     params: {
-      groupId,
-      current,
-      pageSize
+      sourceIds: (sourceIds || []).join(","),
+      targetIds: (targetIds || []).join(","),
+    }
+  });
+}
+
+/**
+ *  移动分组
+ * @param sourceIds
+ * @param targetId
+ * @returns {Promise<void>}
+ */
+export async function moveGroupToGroup(sourceIds, targetId) {
+  return request(config.staffGroupApi.moveGroupToGroup, {
+    method: 'POST',
+    params: {
+      sourceIds: (sourceIds || []).join(","),
+      targetId,
+    }
+  });
+}
+
+/**
+ *  移动用户
+ * @param userIds
+ * @param targetId
+ * @returns {Promise<void>}
+ */
+export async function moveUserToGroup(userIds, targetId) {
+  return request(config.staffGroupApi.copyGroupToGroup, {
+    method: 'POST',
+    params: {
+      userIds: (userIds || []).join(","),
+      targetId,
     }
   });
 }
