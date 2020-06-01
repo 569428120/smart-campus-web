@@ -81,7 +81,7 @@ class SearchForm extends PureComponent {
               {getFieldDecorator('code')(<Input allowClear placeholder="请输入证件号码、工号"/>)}
             </FormItem>
           </Col>
-          <Col md={4} sm={24}>
+          <Col md={5} sm={24}>
             <FormItem label="用户类型">
               {getFieldDecorator('userType')(<Select allowClear placeholder="请输入">
                 <Select.Option key={"1"} value={"1"}>{"教师"}</Select.Option>

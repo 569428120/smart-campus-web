@@ -10,6 +10,11 @@ import PropTypes from 'prop-types';
 const tableColumns = onOperator => {
   const columns = [
     {
+      title: '用户组',
+      dataIndex: 'name1',
+      width: '25%',
+    },
+    {
       title: '姓名',
       dataIndex: 'name',
       width: '10%',
@@ -17,27 +22,12 @@ const tableColumns = onOperator => {
     {
       title: '用户类型',
       dataIndex: 'user_type',
-      width: '10%',
+      width: '8%',
     },
     {
       title: '身份证',
       dataIndex: 'shenfz',
       width: '15%',
-    },
-    {
-      title: '工号',
-      dataIndex: 'gh',
-      width: '12%',
-    },
-    {
-      title: '登录设置',
-      dataIndex: 'userPassword',
-      width: '12%',
-      render: text => (text || '') === '' ? "未设置" : "已设置"
-    },
-    {
-      title: '地址',
-      dataIndex: 'address',
     },
   ];
   if (onOperator) {
@@ -46,7 +36,7 @@ const tableColumns = onOperator => {
       width: '10%',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => onOperator(record)}>权限</a>
+          <a onClick={() => onOperator(record)}>详情</a>
         </Fragment>
       ),
     })
@@ -78,7 +68,7 @@ class StaffUserTable extends PureComponent {
 
     const rowSelection = {
       columnTitle: '选择',
-      columnWidth: 80,
+      columnWidth: 60,
       selectedRowKeys,
       onChange: onTableSelectChange,
     };
