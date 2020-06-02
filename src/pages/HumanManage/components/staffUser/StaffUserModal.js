@@ -18,21 +18,6 @@ const formItemLayout = {
   },
 };
 
-/**
- *  获取树节点
- * @param treeData
- * @returns {Array}
- */
-const getTreeNode = (treeData) => {
-  if ((treeData || []).length <= 0) {
-    return [];
-  }
-  return treeData.map(({id, groupName, children}) =>
-    <TreeNode value={id} title={groupName} key={id}>
-      {getTreeNode(children)}
-    </TreeNode>)
-};
-
 @Form.create()
 class StaffUserModal extends PureComponent {
 
@@ -45,7 +30,7 @@ class StaffUserModal extends PureComponent {
     const {id} = (dataSource || {});
     const formatValues = (values) => {
       values.id = id;
-      values.groupIds = (values.groupIds || []).join(",")
+      return values;
     };
     validateFields((errors, values) => {
       if (errors === null) {
@@ -60,7 +45,6 @@ class StaffUserModal extends PureComponent {
       openType,
       dataSource,
       okLoading,
-      staffGroupList,
       onOk,
       onCancel,
       form: {
@@ -68,45 +52,22 @@ class StaffUserModal extends PureComponent {
       }
     } = this.props;
 
-    const {name, userType, groupIds, userIdentity, phoneNumber, address} = dataSource;
-    const treeNodes = getTreeNode(staffGroupList);
+    const {name, userType, userIdentity, contact, address} = (dataSource || {});
     const userTypeCheckbox = Object.keys(enums.UserTypes).map(key =>
       <Radio key={key} value={key}>{enums.UserTypes[key]}</Radio>);
-
-    const okButtonProps = {
-      disabled: openType === 'view',
-      loading: okLoading
-    };
 
     return <Modal
       title={enums.OperatorType[openType]}
       destroyOnClose={true}
       visible={visible}
       onOk={() => this.onSubmit(onOk)}
-      width={modalWidth(window.innerWidth * 0.5)}
+      width={600}
       onCancel={onCancel}
-      okButtonProps={okButtonProps}
+      confirmLoading={okLoading}
       okText="确认"
       cancelText="取消"
     >
       <Form>
-        <Form.Item {...formItemLayout} label="所属分组">
-          {getFieldDecorator('groupIds', {
-            initialValue: groupIds ? groupIds.split(",") : null,
-            rules: [
-              {
-                required: true,
-                message: '所属分组必填',
-              },
-            ],
-          })(<TreeSelect
-            disabled={openType === 'view'}
-            allowClear
-            multiple
-            treeDefaultExpandAll>
-            {treeNodes}
-          </TreeSelect>)}
-        </Form.Item>
         <Form.Item {...formItemLayout} label="姓名">
           {getFieldDecorator('name', {
             initialValue: name,
@@ -135,26 +96,9 @@ class StaffUserModal extends PureComponent {
             {userTypeCheckbox}
           </Radio.Group>)}
         </Form.Item>
-
-        <Form.Item {...formItemLayout} label="身份证号码">
-          {getFieldDecorator('userIdentity', {
-            initialValue: userIdentity,
-            rules: [
-              {
-                required: true,
-                message: '身份证号码必填',
-              },
-              {
-                max: 64,
-                message: '长度不能超过64',
-              },
-            ],
-          })(<Input disabled={openType === 'view'}/>)}
-        </Form.Item>
-
         <Form.Item {...formItemLayout} label="手机号码">
-          {getFieldDecorator('phoneNumber', {
-            initialValue: phoneNumber,
+          {getFieldDecorator('contact', {
+            initialValue: contact,
             rules: [
               {
                 required: true,
@@ -167,7 +111,17 @@ class StaffUserModal extends PureComponent {
             ],
           })(<Input disabled={openType === 'view'}/>)}
         </Form.Item>
-
+        <Form.Item {...formItemLayout} label="身份证号码">
+          {getFieldDecorator('userIdentity', {
+            initialValue: userIdentity,
+            rules: [
+              {
+                max: 64,
+                message: '长度不能超过64',
+              },
+            ],
+          })(<Input disabled={openType === 'view'}/>)}
+        </Form.Item>
         <Form.Item {...formItemLayout} label="住址">
           {getFieldDecorator('address', {
             initialValue: address,
