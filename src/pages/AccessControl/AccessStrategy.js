@@ -10,13 +10,7 @@ import AccessStrategyTable from "./components/strategy/AccessStrategyTable";
 import AccessStrategyModal from "./components/strategy/AccessStrategyModal";
 import TimeQuantumModal from "./components/strategy/TimeQuantumModal";
 
-const genId = () => {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    const r = Math.random() * 16 | 0,
-      v = c === 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  }).toUpperCase();
-};
+
 
 @connect(({loading, accessStrategy}) => ({
   loading,
@@ -33,6 +27,8 @@ class AccessStrategy extends PureComponent {
     accessStrategyModel: {}, // 弹窗数据
     timeQuantumModalVisible: false,// 时间段弹窗
     timeQuantumSelectedRowKeys: [],// 时间段选择
+    mDisabled: false,//下一步上一步保存按钮是否可用
+    currentStep: 0,//当前步骤
   };
 
   componentDidMount() {
@@ -94,22 +90,17 @@ class AccessStrategy extends PureComponent {
 
   /**
    *   打开新增编辑弹窗
-   * @param accessStrategyModel
-   * @param openType
    */
-  openAccessStrategyModal = (accessStrategyModel, openType) => {
+  openAccessStrategyModal = (accessStrategyModel, openType, mDisabled = false, currentStep = 0) => {
     const {dispatch} = this.props;
     const strategyId = (accessStrategyModel || {});
-    dispatch({
-      type: "accessStrategy/getStrategyToTimeQuantumList",
-      payload: {
-        strategyId
-      }
-    });
+    this.accessStrategyModal.setState({dataSource: accessStrategyModel});
     this.setState({
       accessStrategyModalVisible: true,
       accessStrategyModel,
-      openType
+      openType,
+      mDisabled,
+      currentStep
     })
   };
 
@@ -193,65 +184,17 @@ class AccessStrategy extends PureComponent {
       });
     }
 
-    // 下拉菜单按钮
-    const dropdownList = [];
     // 大于0 就显示
     if ((selectedRowKeys || []).length > 0) {
-      dropdownList.push({
+      buttonList.push({
+        icon: '',
+        type: '',
         operatorKey: 'access-strategy-delete',
         text: '删除',
         onClick: () => this.onDeleteAccessStrategy(selectedRowKeys),
       });
     }
-    return {buttonList, dropdownList};
-  };
-
-  /**
-   *  打开新增弹窗
-   */
-  openTimeQuantumModal = () => {
-    this.setState({
-      timeQuantumModalVisible: true
-    })
-  };
-
-  /**
-   *  删除时间段
-   */
-  onQuantumTableDelete = (selectedRowKeys) => {
-    const {accessStrategy: {strategyToTimeQuantumList}, dispatch} = this.props;
-    const deleteFunc = () => {
-      const newStrategyToTimeQuantumList = [...(strategyToTimeQuantumList || [])].filter(item => !(selectedRowKeys || []).includes(item.id));
-      dispatch({
-        type: "accessStrategy/setState",
-        payload: {
-          strategyToTimeQuantumList: newStrategyToTimeQuantumList
-        }
-      })
-    };
-    Modal.confirm({
-      title: '删除确认',
-      content: '是否删除选择的数据',
-      onOk: deleteFunc,
-      okText: '确认',
-      cancelText: '取消',
-    });
-  };
-
-  onTimeQuantumModalOk = (values) => {
-    const {accessStrategy: {strategyToTimeQuantumList}, dispatch} = this.props;
-    const newStrategyToTimeQuantumList = [...(strategyToTimeQuantumList || []), {
-      ...values,
-      id: genId(),
-      status: 'add'
-    }];
-    dispatch({
-      type: "accessStrategy/setState",
-      payload: {
-        strategyToTimeQuantumList: newStrategyToTimeQuantumList
-      }
-    });
-    this.setState({timeQuantumModalVisible: false})
+    return {buttonList};
   };
 
   render() {
@@ -276,41 +219,23 @@ class AccessStrategy extends PureComponent {
 
     // 表格参数
     const accessStrategyTableProps = {
-      dataSource: [{id: '1'}],
+      dataSource: accessStrategyList,
       loading: loading.effects['accessStrategy/getAccessStrategyList'],
       selectedRowKeys: this.state.selectedRowKeys,
       onTableSelectChange: (selectedRowKeys, selectedRows) => this.setState({selectedRowKeys, selectedRows}),
       onOperator: this.onAccessStrategyStatusChange
     };
 
-    // 时间段参数
-    const timeQuantumTableProps = {
-      timeQuantumList: strategyToTimeQuantumList,
-      onQuantumTableAdd: this.openTimeQuantumModal,
-      onQuantumTableDelete: this.onQuantumTableDelete,
-      onQuantumSelectChange: (rowKeys, rows) => this.setState({timeQuantumSelectedRowKeys: rowKeys}),
-      selectedRowKeys: this.state.timeQuantumSelectedRowKeys,
-    };
-
     // 弹窗参数
     const accessStrategyModalProps = {
       visible: this.state.accessStrategyModalVisible,
       openType: this.state.openType,
-      dataSource: this.state.accessStrategyModel,
+      mDisabled: this.state.mDisabled,
+      currentStep: this.state.currentStep,
+      onCurrentStepChange: (currentStep) => this.setState({currentStep}),
       onOk: this.onSaveAccessStrategy,
       onCancel: this.closeAccessStrategyModal,
-      timeQuantumTableProps,
     };
-
-    // 时间段弹窗
-    const timeQuantumModalProps = {
-      visible: this.state.timeQuantumModalVisible,
-      openType: this.state.openType,
-      dataSource: {},
-      onOk: this.onTimeQuantumModalOk,
-      onCancel: () => this.setState({timeQuantumModalVisible: false})
-    };
-
     return (
       <PageHeaderWrapper>
         <Card bordered={false}>
@@ -324,8 +249,7 @@ class AccessStrategy extends PureComponent {
             <AccessStrategyTable {...accessStrategyTableProps} />
           </div>
         </Card>
-        <AccessStrategyModal {...accessStrategyModalProps}/>
-        <TimeQuantumModal {...timeQuantumModalProps}/>
+        <AccessStrategyModal {...accessStrategyModalProps} onRef={r => this.accessStrategyModal = r}/>
       </PageHeaderWrapper>
     );
   }

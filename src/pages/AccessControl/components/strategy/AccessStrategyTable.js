@@ -13,11 +13,6 @@ const tableColumns = onOperator => [
     width: '15%',
   },
   {
-    title: '策略编码',
-    dataIndex: 'strategyCode',
-    width: '10%',
-  },
-  {
     title: '状态',
     dataIndex: 'strategyStatus',
     width: '8%',

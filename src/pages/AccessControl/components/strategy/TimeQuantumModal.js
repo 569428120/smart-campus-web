@@ -46,6 +46,7 @@ class TimeQuantumModal extends PureComponent {
     const {
       visible,
       openType,
+      okLoading,
       onOk,
       onCancel,
       dataSource,
@@ -64,7 +65,8 @@ class TimeQuantumModal extends PureComponent {
       destroyOnClose={true}
       visible={visible}
       onOk={() => this.onSubmit(onOk)}
-      width={modalWidth(window.innerWidth * 0.4)}
+      width={400}
+      confirmLoading={okLoading}
       onCancel={onCancel}
       okText="确认"
       cancelText="取消"

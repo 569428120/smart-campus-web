@@ -10,7 +10,7 @@ const tableColumns = onOperator => [
   {
     title: '时间类型',
     dataIndex: 'dateType',
-    width: '15%',
+    width: '25%',
   },
   {
     title: '开始时间',
@@ -33,7 +33,7 @@ const tableColumns = onOperator => [
  */
 class TimeQuantumTable extends PureComponent {
   render() {
-    const {dataSource, loading, selectedRowKeys, onTableSelectChange, onOperator} = this.props;
+    const {dataSource, loading,height, selectedRowKeys, onTableSelectChange, onOperator} = this.props;
 
     const rowSelection = onTableSelectChange ? {
       columnTitle: '选择',
@@ -48,7 +48,7 @@ class TimeQuantumTable extends PureComponent {
       rowSelection,
       dataSource,
       loading,
-      height: 188,
+      height,
       columns: tableColumns(onOperator),
       pagination: false,
     };
