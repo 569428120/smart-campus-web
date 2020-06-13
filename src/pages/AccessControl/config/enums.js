@@ -16,6 +16,17 @@ export default {
       key: "holiday",
       value: "节假日"
     },
+  },
+  // 策略状态
+  StrategyStatus: {
+    Enable: {
+      key: "Enable",
+      value: "已启用"
+    },
+    UnEnable: {
+      key: "UnEnable",
+      value: "未启用"
+    }
   }
 
 }

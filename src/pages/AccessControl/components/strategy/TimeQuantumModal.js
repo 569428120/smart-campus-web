@@ -1,9 +1,10 @@
 import React, {PureComponent} from 'react';
-import {Form, Input, Modal, Tabs, Radio, TimePicker} from "antd";
+import {Form, Input, Modal, Tabs, Radio, TimePicker, Row, Col} from "antd";
 import moment from 'moment';
 import PropTypes from "prop-types";
 import {modalWidth} from '@/utils/utils';
 import enums from '../../config/enums';
+import WeekRangeSelect from "../../../../components/SmartCampus/TimeSelect/WeekRangeSelect";
 
 const {TextArea} = Input;
 
@@ -61,11 +62,11 @@ class TimeQuantumModal extends PureComponent {
       return <Radio key={key} value={key}>{value}</Radio>
     });
     return <Modal
-      title={enums.OperatorType[openType]}
+      title={"新增时间段"}
       destroyOnClose={true}
       visible={visible}
       onOk={() => this.onSubmit(onOk)}
-      width={400}
+      width={500}
       confirmLoading={okLoading}
       onCancel={onCancel}
       okText="确认"
@@ -81,31 +82,38 @@ class TimeQuantumModal extends PureComponent {
                 message: '日期类型必填',
               }
             ],
-          })(<Radio.Group disabled={openType === 'view'}>
-            {dateTypeRadios}
-          </Radio.Group>)}
+          })(<WeekRangeSelect/>)}
         </Form.Item>
-        <Form.Item {...formItemLayout} label="开始时间">
-          {getFieldDecorator('startTime', {
-            initialValue: startTime,
-            rules: [
-              {
-                required: true,
-                message: '开始时间必填',
-              }
-            ],
-          })(<TimePicker format={format} minuteStep={15} disabled={openType === 'view'}/>)}
-        </Form.Item>
-        <Form.Item {...formItemLayout} label="结束时间">
-          {getFieldDecorator('endTime', {
-            initialValue: endTime,
-            rules: [
-              {
-                required: true,
-                message: '结束时间必填',
-              }
-            ],
-          })(<TimePicker format={format} minuteStep={15} disabled={openType === 'view'}/>)}
+        <Form.Item {...formItemLayout} label="时间段">
+          <Row>
+            <Col span={11}>
+              <Form.Item {...formItemLayout} >
+                {getFieldDecorator('startTime', {
+                  initialValue: startTime,
+                  rules: [
+                    {
+                      required: true,
+                      message: '开始时间必填',
+                    }
+                  ],
+                })(<TimePicker format={format} minuteStep={15} disabled={openType === 'view'}/>)}
+              </Form.Item>
+            </Col>
+            <Col span={2}> ~ </Col>
+            <Col span={11}>
+              <Form.Item {...formItemLayout}>
+                {getFieldDecorator('endTime', {
+                  initialValue: endTime,
+                  rules: [
+                    {
+                      required: true,
+                      message: '结束时间必填',
+                    }
+                  ],
+                })(<TimePicker format={format} minuteStep={15} disabled={openType === 'view'}/>)}
+              </Form.Item>
+            </Col>
+          </Row>
         </Form.Item>
         <Form.Item {...formItemLayout} label="描述">
           {getFieldDecorator('description', {

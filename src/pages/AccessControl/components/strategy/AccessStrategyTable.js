@@ -1,6 +1,8 @@
 import React, {Fragment, PureComponent} from 'react';
-import DataTable from '@/components/SmartCampus/Table/DataTable';
 import PropTypes from 'prop-types';
+import DataTable from "../../../../components/SmartCampus/Table/DataTable";
+import styles from '../../../../components/SmartCampus/Table/DataTable.less';
+import enums from '../../config/enums';
 
 /**
  *  表格列
@@ -16,35 +18,7 @@ const tableColumns = onOperator => [
     title: '状态',
     dataIndex: 'strategyStatus',
     width: '8%',
-  },
-  {
-    title: '时间段',
-    dataIndex: 'time',
-    width: '25%',
-  },
-  {
-    title: '描述',
-    dataIndex: 'description',
-  },
-  {
-    title: '操作',
-    dataIndex: 'strategyStatus',
-    width: '10%',
-    render: (text, record) => {
-      // 启用状态
-      if (text && text.toLowerCase() === 'enable') {
-        return (
-          <Fragment>
-            <a onClick={() => onOperator(record, 'unenable')}>禁用</a>
-          </Fragment>
-        )
-      }
-      return (
-        <Fragment>
-          <a onClick={() => onOperator(record, 'enable')}>启用</a>
-        </Fragment>
-      )
-    },
+    render: (text, record) => enums.StrategyStatus[text].value || ""
   },
 ];
 
@@ -52,24 +26,66 @@ const tableColumns = onOperator => [
  *  权限表格
  */
 class AuthorityGroupTable extends PureComponent {
+
+  getRowClassName = (record) => {
+    const {selectStrategyModel} = this.props;
+    if (record.id === (selectStrategyModel || {}).id) {
+      return styles.highlight;
+    }
+  };
+
+  onTableRowClick = (record) => {
+    const {selectStrategyModel, onRowClick} = this.props;
+    if (record.id === (selectStrategyModel || {}).id) {
+      return;
+    }
+    onRowClick && onRowClick(record);
+  };
+
   render() {
-    const {dataSource, loading, selectedRowKeys, onTableSelectChange, onOperator} = this.props;
+    const {
+      height,
+      dataSource,
+      total,
+      current,
+      pageSize,
+      selectStrategyModel,
+      loading,
+      selectedRowKeys,
+      onTableSelectChange,
+      onTablePageChange,
+      onTablePageSizeChange,
+      onOperator
+    } = this.props;
 
     const rowSelection = {
       columnTitle: '选择',
-      columnWidth: 80,
+      columnWidth: 40,
       selectedRowKeys,
       onChange: onTableSelectChange,
+    };
+
+    const onRow = (record) => {
+      return {
+        onClick: () => this.onTableRowClick(record)
+      }
     };
 
     // 表格参数
     const dataTableProps = {
       rowKey: 'id',
+      rowClassName: this.getRowClassName,
+      height,
       rowSelection,
       dataSource,
+      total,
+      current,
+      pageSize,
       loading,
+      onRow,
       columns: tableColumns(onOperator),
-      pagination: false,
+      onTablePageChange,
+      onTablePageSizeChange,
     };
 
     return <DataTable {...dataTableProps} />;

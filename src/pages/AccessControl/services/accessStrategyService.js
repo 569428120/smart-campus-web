@@ -34,13 +34,41 @@ export async function getStrategyToTimeQuantumList(strategyId) {
 }
 
 /**
+ *  删除时间段
+ * @param timeQuantumIds
+ * @returns {Promise<void>}
+ */
+export async function deleteTimeQuantum(timeQuantumIds) {
+  return request(config.accessStrategyApi.deleteTimeQuantum, {
+    method: 'GET',
+    params: {
+      timeQuantumIds: (timeQuantumIds || []).join(",")
+    }
+  });
+}
+
+/**
+ *  保存时间段
+ * @param values
+ * @returns {Promise<void>}
+ */
+export async function saveTimeQuantum(values) {
+  return request(config.accessStrategyApi.saveTimeQuantum, {
+    method: 'POST',
+    body: {
+      ...values
+    }
+  });
+}
+
+/**
  *  删除
  * @param strategyIds
  * @returns {Promise<void>}
  */
 export async function deleteAccessStrategyByIds(strategyIds) {
   return request(config.accessStrategyApi.deleteAccessStrategyByIds, {
-    method: 'GET',
+    method: 'DELETE',
     params: {
       strategyIds: (strategyIds || []).join(",")
     }

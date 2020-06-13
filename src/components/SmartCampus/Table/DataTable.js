@@ -20,13 +20,13 @@ class DataTable extends PureComponent {
     } = this.props;
 
     const tableHeight = (height || window.innerHeight - 360);
-
+    const paginationHeight = ((pagination === true && onTablePageChange) ? 80 : 0);
     // 表格属性
     const tableProps = {
       className: styles.table,
       pagination: false,
-      scroll: {y: tableHeight},
-      style: {height: tableHeight},
+      scroll: {y: tableHeight - paginationHeight},
+      style: {height: tableHeight - paginationHeight + 35},
       ...ret,
     };
 
@@ -42,11 +42,12 @@ class DataTable extends PureComponent {
       onChange: onTablePageChange,
       onShowSizeChange: onTablePageChange,
     };
-
+    const paginationContent = pagination === true && onTablePageChange ?
+      <Pagination style={{marginTop: 10}} {...paginationProps} /> : null;
     return (
-      <div style={{textAlign: 'right', height: tableHeight + 45}}>
+      <div style={{textAlign: 'right', height: (tableHeight)}}>
         <Table {...tableProps} />
-        {pagination === true && onTablePageChange ? <Pagination style={{marginTop: 10}} {...paginationProps} /> : null}
+        {paginationContent}
       </div>
     );
   }

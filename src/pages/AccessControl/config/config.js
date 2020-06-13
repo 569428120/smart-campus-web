@@ -5,15 +5,19 @@ const api = `${appConfig.API}/access-control`;
 export default {
   // 策略api
   accessStrategyApi: {
-    // 分页查询
+    // 分页查询策略
     getAccessStrategyList: `${api}/access-strategy/gets/page`,
-    // 查询时间段
+    // 根据策略id查询时间段
     getStrategyToTimeQuantumList: `${api}/strategy-time-quantum/gets/gets-by-strategyid`,
-    // 删除
-    deleteAccessStrategyByIds: `${api}/access-strategy/deletes/deletes-by-id`,
-    // 保存
+    // 删除时间段
+    deleteTimeQuantum: `${api}/strategy-time-quantum/deletes/deletes-by-ids`,
+    // 保存时间段
+    saveTimeQuantum: `${api}/strategy-time-quantum/posts`,
+    // 删除策略
+    deleteAccessStrategyByIds: `${api}/access-strategy/deletes/deletes-by-ids`,
+    // 保存策略
     saveAccessStrategy: `${api}/access-strategy/posts`,
-    // 更新状态
+    // 更新状态策略的状态
     updateAccessStrategyStatus: `${api}/access-strategy/status/posts`,
   },
   // 策略分配

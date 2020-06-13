@@ -51,6 +51,25 @@ export default {
     },
 
     /**
+     *  删除时间段
+     * @param timeQuantumIds
+     * @param call
+     * @param put
+     */* deleteTimeQuantum({payload: {timeQuantumIds}}, {call, put}) {
+      yield call(accessStrategyService.deleteTimeQuantum, timeQuantumIds);
+    },
+
+    /**
+     *  保存时间段
+     * @param strategyId
+     * @param values
+     * @param call
+     * @param put
+     */* saveTimeQuantum({payload: {strategyId, values}}, {call, put}) {
+      yield call(accessStrategyService.saveTimeQuantum, {...values, strategyId});
+    },
+
+    /**
      *  删除
      * @param strategyIds
      * @param call
