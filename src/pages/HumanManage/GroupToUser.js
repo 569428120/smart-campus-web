@@ -65,7 +65,9 @@ class StaffUser extends PureComponent {
       }
     });
     this.setState({
-      searchValue
+      searchValue,
+      selectedRowKeys: [],
+      selectedRows: [],
     })
   };
 
@@ -124,11 +126,11 @@ class StaffUser extends PureComponent {
   onStaffUserModalOk = (values, openType) => {
     const {dispatch, staffUser: {current, pageSize}} = this.props;
     const {treeSelectedRowKeys, searchValue} = this.state;
-    if ((treeSelectedRowKeys || []).length <= 0 || treeSelectedRowKeys[0] === "root") {
-      message.info("所属分组不能为空或者root");
-      return;
-    }
     if (['add', 'edit'].includes(openType)) {
+      if (((treeSelectedRowKeys || []).length <= 0 || treeSelectedRowKeys[0] === "root") && openType === "add") {
+        message.info("所属分组不能为空或者root");
+        return;
+      }
       dispatch({
         type: "staffUser/saveStaffUserData",
         payload: {
@@ -407,7 +409,7 @@ class StaffUser extends PureComponent {
 
     // 表格组件参数
     const staffUserTableProps = {
-      height: window.innerHeight - 450,
+      height: window.innerHeight - 400,
       dataSource: staffUserList,
       total,
       current,
@@ -417,8 +419,7 @@ class StaffUser extends PureComponent {
       onTableSelectChange: (selectedRowKeys, selectedRows) => this.setState({selectedRowKeys, selectedRows}),
       onTablePageChange: (current, pageSize) => this.onRefreshStaffUserPage(this.state.searchValue, current, pageSize),
       onShowSizeChange: (current, pageSize) => this.onRefreshStaffUserPage(this.state.searchValue, current, pageSize),
-      // onRowCheck: (record) => this.openStaffUserDetailDrawer(record),
-      // onShowView: (record) => this.openStaffUserModal(record, 'view'),
+      onOperator: (record) => this.openStaffUserModal(record, "view"),
     };
 
     // 弹窗参数
@@ -454,7 +455,7 @@ class StaffUser extends PureComponent {
     };
 
     const userGroupTreeProps = {
-      height: window.innerHeight - 230,
+      height: window.innerHeight - 220,
       loading: loading.effects['staffGroup/getStaffGroupList'],
       userGroupList: staffGroupList,
       selectedRowKeys: this.state.treeSelectedRowKeys,

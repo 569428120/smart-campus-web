@@ -1,7 +1,7 @@
 import React, {Fragment, PureComponent} from 'react';
-import {List} from 'antd';
-import DataTable from '@/components/SmartCampus/Table/DataTable';
 import PropTypes from 'prop-types';
+import DataTable from "../../../../components/SmartCampus/Table/DataTable";
+import enums from "../../config/enums";
 
 /**
  *  表格列
@@ -11,7 +11,7 @@ const tableColumns = onOperator => {
   const columns = [
     {
       title: '用户组',
-      dataIndex: 'name1',
+      dataIndex: 'groupName',
       width: '25%',
     },
     {
@@ -21,12 +21,13 @@ const tableColumns = onOperator => {
     },
     {
       title: '用户类型',
-      dataIndex: 'user_type',
+      dataIndex: 'userType',
       width: '8%',
+      render: (text, record) => enums.UserTypes[text] || "",
     },
     {
       title: '身份证',
-      dataIndex: 'shenfz',
+      dataIndex: 'userIdentity',
       width: '15%',
     },
   ];
@@ -83,6 +84,7 @@ class StaffUserTable extends PureComponent {
     const dataTableProps = {
       height,
       rowKey: 'id',
+      pagination: true,
       rowSelection,
       dataSource,
       loading,

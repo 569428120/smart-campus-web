@@ -82,7 +82,7 @@ export async function moveGroupToGroup(sourceIds, targetId) {
  * @returns {Promise<void>}
  */
 export async function moveUserToGroup(userIds, targetId) {
-  return request(config.staffGroupApi.copyGroupToGroup, {
+  return request(config.staffGroupApi.moveUserToGroup, {
     method: 'POST',
     params: {
       userIds: (userIds || []).join(","),

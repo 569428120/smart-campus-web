@@ -193,12 +193,7 @@ class UserGroupTree extends PureComponent {
         backgroundColor: '#D9D9D8',
         marginBottom: '2px'
       }}>
-        <Col span={19}>用户分组</Col>
-        <Col span={5}>
-          {
-            isEdit ? <OperatorButton {...operatorButtonProps} /> : null
-          }
-        </Col>
+        <Col span={24}>用户分组</Col>
       </Row>
       <Row>
         <Search style={{marginBottom: 8}} allowClear placeholder="请输入" onSearch={this.onSearch}/>
