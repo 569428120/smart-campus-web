@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {Card, Modal, Row, Col, Tabs, message} from 'antd';
+import {Card, Modal, Row, Col, Tabs, message, Descriptions, Spin, Select} from 'antd';
 import {connect} from 'dva';
 import appConfig from "@/config/appConfig";
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -37,9 +37,37 @@ class StaffUser extends PureComponent {
   };
 
   componentDidMount() {
+    //  刷新用户列表
     this.onRefreshStaffUserPage({}, 1, appConfig.PAGE_SIZE);
+    // 刷新分组列表
     this.onRefreshGroupList({});
+    // 刷新门禁策略
+    this.onRefreshAccessStrategyList();
+    // 刷新菜单权限
+    this.onRefreshMenuAuthorityGroupList();
   }
+
+  /**
+   * 刷新菜单权限
+   */
+  onRefreshMenuAuthorityGroupList = () => {
+    const {dispatch} = this.props;
+    dispatch({
+      type: "staffGroup/getMenuAuthorityGroupList",
+      payload: {}
+    });
+  };
+
+  /**
+   * 刷新门禁策略
+   */
+  onRefreshAccessStrategyList = () => {
+    const {dispatch} = this.props;
+    dispatch({
+      type: "staffGroup/getAccessStrategyList",
+      payload: {}
+    });
+  };
 
   /**
    *   刷新数据
@@ -243,8 +271,19 @@ class StaffUser extends PureComponent {
     };
     this.userSearchForm.resetFields();
     this.onRefreshStaffUserPage(searchValue, 1, pageSize);
+    this.onRefreshGroupInfo(treeSelectedRowKeys[0]);
     this.setState({
       treeSelectedRowKeys
+    })
+  };
+
+  onRefreshGroupInfo = (groupId) => {
+    const {dispatch} = this.props;
+    dispatch({
+      type: "staffGroup/getUserGroupById",
+      payload: {
+        groupId
+      }
     })
   };
 
@@ -333,6 +372,44 @@ class StaffUser extends PureComponent {
   };
 
   /**
+   *   菜单权限
+   * @param authorityId
+   */
+  onMenuAuthoritySelectChange = (authorityId) => {
+    const {dispatch, staffGroup: {staffGroupModel}} = this.props;
+    dispatch({
+      type: "staffGroup/saveStaffGroupData",
+      payload: {
+        values: {
+          ...staffGroupModel,
+          authorityId
+        }
+      }
+    }).then(() => {
+      this.onRefreshGroupInfo(staffGroupModel.id)
+    })
+  };
+
+  /**
+   *  策略选择
+   * @param accessStrategyId
+   */
+  onStrategySelectChange = (accessStrategyId) => {
+    const {dispatch, staffGroup: {staffGroupModel}} = this.props;
+    dispatch({
+      type: "staffGroup/saveStaffGroupData",
+      payload: {
+        values: {
+          ...staffGroupModel,
+          accessStrategyId
+        }
+      }
+    }).then(() => {
+      this.onRefreshGroupInfo(staffGroupModel.id)
+    })
+  };
+
+  /**
    *  操作按钮
    */
   getOperatorButtonProps = () => {
@@ -381,6 +458,73 @@ class StaffUser extends PureComponent {
       });
     }
     return {buttonList};
+  };
+
+  getSelectStrategy = (accessStrategyId) => {
+    const {staffGroup: {accessStrategyList}} = this.props;
+    if (!accessStrategyId) {
+      return null;
+    }
+    return (accessStrategyList || []).find(item => accessStrategyId === item.id);
+  };
+
+  getSelectAuthority = (authorityId) => {
+    const {staffGroup: {menuAuthorityGroupList}} = this.props;
+    if (!authorityId) {
+      return null;
+    }
+    return (menuAuthorityGroupList || []).find(item => authorityId === item.id);
+  };
+
+  /**
+   *  策略分配页面
+   * @returns {*}
+   */
+  renderStrategySettingContent() {
+    const {staffGroup: {staffGroupModel, accessStrategyList, menuAuthorityGroupList}, loading} = this.props;
+    const {treeSelectedRowKeys} = this.state;
+    const {groupName, groupCode, authorityId, accessStrategyId, description} = (staffGroupModel || {});
+    // 门禁策略
+    const strategyOptions = (accessStrategyList || []).map(item => <Select.Option key={item.id} value={item.id}>
+      {item.strategyName}
+    </Select.Option>);
+    // 菜单权限组
+    const menuAuthorityOptions = (menuAuthorityGroupList || []).map(item => <Select.Option key={item.id}
+                                                                                           value={item.id}>
+      {item.authorityName}
+    </Select.Option>);
+
+    // 如果authorityId不在accessStrategyList中则设置为空
+    const selectStrategy = this.getSelectStrategy(accessStrategyId);
+    const strategyPlaceholder = accessStrategyId && !selectStrategy ? "策略未启用或被删除，请策略分配" : "请选择策略";
+    const selectAuthority = this.getSelectAuthority(authorityId);
+    const authorityPlaceholder = authorityId && !selectAuthority ? "菜单权限组被删除，请重新选择" : "请选择菜单权限组";
+
+    return <Spin spinning={loading.effects['staffGroup/getUserGroupById']}>
+      <Descriptions layout="vertical" column={2} bordered>
+        <Descriptions.Item label="分组名称">{(groupName || "无")}</Descriptions.Item>
+        <Descriptions.Item label="分组编号">{(groupCode || "无")}</Descriptions.Item>
+        <Descriptions.Item label="描述" span={2}>{description || "无"}</Descriptions.Item>
+        <Descriptions.Item label="系统菜单权限组" span={2}>
+          <Select placeholder={authorityPlaceholder}
+                  disabled={(treeSelectedRowKeys || []).includes("root")}
+                  onChange={this.onMenuAuthoritySelectChange}
+                  style={{width: 250}}
+                  value={authorityId && selectAuthority ? authorityId : undefined}>
+            {menuAuthorityOptions}
+          </Select>
+        </Descriptions.Item>
+        <Descriptions.Item label="门禁策略" span={2}>
+          <Select placeholder={strategyPlaceholder}
+                  disabled={(treeSelectedRowKeys || []).includes("root")}
+                  onChange={this.onStrategySelectChange}
+                  style={{width: 250}}
+                  value={accessStrategyId && selectStrategy ? accessStrategyId : undefined}>
+            {strategyOptions}
+          </Select>
+        </Descriptions.Item>
+      </Descriptions>
+    </Spin>
   };
 
   render() {
@@ -466,7 +610,6 @@ class StaffUser extends PureComponent {
       onCopyNode: (node) => this.openCopyModel(node, 'copyGroup'),
       onMoveNode: (node) => this.openCopyModel(node, 'moveGroup'),
     };
-
     return (
       <PageHeaderWrapper>
         <Card bordered={false}>
@@ -488,7 +631,7 @@ class StaffUser extends PureComponent {
                   </div>
                 </TabPane>
                 <TabPane tab="策略配置" key="2">
-                  Content of Tab Pane 2
+                  {this.renderStrategySettingContent()}
                 </TabPane>
               </Tabs>
             </Col>

@@ -21,7 +21,7 @@ class DataTable extends PureComponent {
 
     const tableHeight = (height || window.innerHeight - 360);
     const isPagination = (pagination === true || onTablePageChange);
-    const paginationHeight = (isPagination ? 80 : 0);
+    const paginationHeight = (isPagination ? 80 : 35);
     // 表格属性
     const tableProps = {
       className: styles.table,

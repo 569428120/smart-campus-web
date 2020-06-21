@@ -1,15 +1,11 @@
 import appConfig from "@/config/appConfig";
-import * as studentGroupService from '@/pages/HumanManage/services/studentGroupService'
+import * as studentGroupService from '../services/studentGroupService'
 
 export default {
   namespace: 'studentGroup',
   state: {
-    text: 'studentGroup',
     studentGroupList: [],
-    groupToStudentList: [],
-    total: 0, // 数量
-    current: 1, // 当前页
-    pageSize: 5
+    studentGroupModel: {}
   },
   effects: {
 
@@ -48,21 +44,46 @@ export default {
     },
 
     /**
-     *   查询关联的数据
-     * @param groupId
-     * @param current
-     * @param pageSize
+     *   复制分组到分组
+     * @param sourceIds
+     * @param targetIds
      * @param call
      * @param put
-     */* getGroupToStudentList({payload: {groupId, current, pageSize}}, {call, put}) {
-      const {data: groupToStudentList, total, totalPage} = yield call(studentGroupService.getGroupToStudentList, groupId, current, pageSize);
+     */* copyGroupToGroup({payload: {sourceIds, targetIds}}, {call, put}) {
+      yield call(studentGroupService.copyGroupToGroup, sourceIds, targetIds);
+    },
+
+    /**
+     *  移动
+     * @param sourceIds
+     * @param targetId
+     * @param call
+     * @param put
+     */* moveGroupToGroup({payload: {sourceIds, targetId}}, {call, put}) {
+      yield call(studentGroupService.moveGroupToGroup, sourceIds, targetId);
+    },
+
+    /**
+     *  移动用户
+     * @param userIds
+     * @param targetId
+     * @param call
+     * @param put
+     */* moveUserToGroup({payload: {userIds, targetId}}, {call, put}) {
+      yield call(studentGroupService.moveUserToGroup, userIds, targetId);
+    },
+
+    /**
+     *  查询分组信息
+     * @param groupId
+     * @param call
+     * @param put
+     */* getStudentGroupById({payload: {groupId}}, {call, put}) {
+      const studentGroupModel = yield call(studentGroupService.getStudentGroupById, groupId);
       yield put({
         type: "setState",
         payload: {
-          total,
-          current,
-          pageSize,
-          groupToStudentList
+          studentGroupModel
         }
       })
     },

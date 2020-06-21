@@ -14,26 +14,26 @@ const routes = [
             component: 'HumanManage/GroupToUser',
           },
           {
-            path: '/personnel-manage/staff-manage/staff-user',
-            name: 'staff-user',
-            component: 'HumanManage/StaffUser',
-          },
-        ],
-      },
-      // 学生管理
-      {
-        path: '/personnel-manage/student-manage',
-        name: 'student-manage',
-        routes: [
-          {
-            path: '/personnel-manage/student-manage/student-group',
+            path: '/personnel-manage/staff-manage/student-group',
             name: 'student-group',
             component: 'HumanManage/StudentGroup',
           },
+        ],
+      },
+      // 特征录入
+      {
+        path: '/personnel-manage/personnel-feature',
+        name: 'personnel-feature',
+        routes: [
           {
-            path: '/personnel-manage/student-manage/student',
-            name: 'student',
-            component: 'HumanManage/Student',
+            path: '/personnel-manage/personnel-feature/card',
+            name: 'card',
+            component: 'HumanManage/CardManage',
+          },
+          {
+            path: '/personnel-manage/personnel-feature/face',
+            name: 'face',
+            component: 'HumanManage/FaceManage',
           },
         ],
       },

@@ -90,3 +90,17 @@ export async function moveUserToGroup(userIds, targetId) {
     }
   });
 }
+
+/**
+ *  根据id获取分组信息
+ * @param groupId
+ * @returns {Promise<void>}
+ */
+export async function getUserGroupById(groupId) {
+  return request(config.staffGroupApi.getUserGroupById, {
+    method: 'GET',
+    params: {
+      groupId
+    }
+  });
+}

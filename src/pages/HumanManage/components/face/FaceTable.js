@@ -1,8 +1,7 @@
 import React, {Fragment, PureComponent} from 'react';
-import {Badge} from "antd";
+import {List} from 'antd';
 import DataTable from '@/components/SmartCampus/Table/DataTable';
 import PropTypes from 'prop-types';
-import StudentContactTable from "./StudentContactTable";
 
 /**
  *  表格列
@@ -11,35 +10,39 @@ import StudentContactTable from "./StudentContactTable";
 const tableColumns = onOperator => {
   const columns = [
     {
-      title: '班级',
-      dataIndex: 'groupName',
-      width: '25%',
-    },
-    {
       title: '姓名',
       dataIndex: 'name',
+      width: '20%',
+    },
+    {
+      title: '编号',
+      dataIndex: 'userCode',
+      width: '15%',
+    },
+    {
+      title: '卡类型',
+      dataIndex: 'cardType',
       width: '10%',
     },
     {
-      title: '学号',
-      dataIndex: 'studentCode',
-      width: '12%',
+      title: '卡号',
+      dataIndex: 'cardNumber',
+      width: '20%',
     },
     {
-      title: '家庭住址',
-      dataIndex: 'address',
+      title: '描述',
+      dataIndex: 'description',
     },
   ];
   if (onOperator) {
     columns.push({
       title: '操作',
-      width: '12%',
-      render: (text, record) => {
-        const badge = (record.studentContactList || []).length <= 0 ? <Badge status="error"/> : null;
-        return <Fragment>
-          {badge}<a onClick={() => onOperator(record)}>家长设置</a>
+      width: '10%',
+      render: (text, record) => (
+        <Fragment>
+          <a onClick={() => onOperator(record)}>操作</a>
         </Fragment>
-      },
+      ),
     })
   }
   return columns;
@@ -48,24 +51,11 @@ const tableColumns = onOperator => {
 /**
  *  权限表格
  */
-class StudentTable extends PureComponent {
+class FaceTable extends PureComponent {
 
-  expandedRowRender = (record) => {
-    const {studentContactList} = (record || {});
-    const studentContactTableProps = {
-      height: 210,
-      dataSource: studentContactList,
-      loading: false,
-    };
-    return <Fragment>
-      <StudentContactTable {...studentContactTableProps}/>
-    </Fragment>;
-  };
 
   render() {
-
     const {
-      height,
       dataSource,
       total,
       current,
@@ -94,14 +84,11 @@ class StudentTable extends PureComponent {
 
     // 表格参数
     const dataTableProps = {
-      height,
-      pagination: true,
       rowKey: 'id',
       rowSelection,
       dataSource,
       loading,
       columns: tableColumns(onOperator),
-      expandedRowRender: this.expandedRowRender,
       total,
       current,
       pageSize,
@@ -114,13 +101,13 @@ class StudentTable extends PureComponent {
   }
 }
 
-StudentTable.propTypes = {
+FaceTable.propTypes = {
   dataSource: PropTypes.array,
   loading: PropTypes.bool,
   selectedRowKeys: PropTypes.array,
   onTableSelectChange: PropTypes.func,
   onOperator: PropTypes.func,
 };
-StudentTable.defaultProps = {};
+FaceTable.defaultProps = {};
 
-export default StudentTable;
+export default FaceTable;

@@ -5,7 +5,6 @@ import enums from "@/pages/HumanManage/config/enums";
 import {modalWidth} from '@/utils/utils';
 
 const {TextArea} = Input;
-const {TreeNode} = TreeSelect;
 
 const formItemLayout = {
   labelCol: {
@@ -18,20 +17,6 @@ const formItemLayout = {
   },
 };
 
-/**
- *  获取树节点
- * @param treeData
- * @returns {Array}
- */
-const getTreeNode = (treeData) => {
-  if ((treeData || []).length <= 0) {
-    return [];
-  }
-  return treeData.map(({id, type, groupName, children}) =>
-    <TreeNode disabled={!'group' === type} value={id} title={groupName} key={id}>
-      {getTreeNode(children)}
-    </TreeNode>)
-};
 
 @Form.create()
 class StudentModal extends PureComponent {
@@ -43,12 +28,9 @@ class StudentModal extends PureComponent {
   onSubmit = (onOk) => {
     const {form: {validateFields}, openType, dataSource} = this.props;
     const {id} = (dataSource || {});
-    const formatValues = (values) => {
-      values.id = id;
-    };
     validateFields((errors, values) => {
       if (errors === null) {
-        onOk && onOk(formatValues(values), openType);
+        onOk && onOk({...values, id}, openType);
       }
     });
   };
@@ -60,6 +42,7 @@ class StudentModal extends PureComponent {
       dataSource,
       okLoading,
       studentGroupList,
+      validatorStudentModel,
       onOk,
       onCancel,
       form: {
@@ -67,42 +50,20 @@ class StudentModal extends PureComponent {
       }
     } = this.props;
 
-    const {name, groupId, studentCode, address} = (dataSource || {});
-    const treeNodes = getTreeNode(studentGroupList);
-
-    const okButtonProps = {
-      disabled: openType === 'view',
-      loading: okLoading
-    };
+    const {id, name, groupId, studentCode, address} = (dataSource || {});
 
     return <Modal
       title={enums.OperatorType[openType]}
       destroyOnClose={true}
       visible={visible}
       onOk={() => this.onSubmit(onOk)}
-      width={modalWidth(window.innerWidth * 0.5)}
+      width={600}
       onCancel={onCancel}
-      okButtonProps={okButtonProps}
+      confirmLoading={okLoading}
       okText="确认"
       cancelText="取消"
     >
       <Form>
-        <Form.Item {...formItemLayout} label="所属分组">
-          {getFieldDecorator('groupId', {
-            initialValue: groupId,
-            rules: [
-              {
-                required: true,
-                message: '所属分组必填',
-              },
-            ],
-          })(<TreeSelect
-            disabled={openType === 'view'}
-            allowClear
-            treeDefaultExpandAll>
-            {treeNodes}
-          </TreeSelect>)}
-        </Form.Item>
         <Form.Item {...formItemLayout} label="姓名">
           {getFieldDecorator('name', {
             initialValue: name,
@@ -116,7 +77,7 @@ class StudentModal extends PureComponent {
                 message: '长度不能超过64',
               },
             ],
-          })(<Input disabled={openType === 'view'}/>)}
+          })(<Input placeholder={"请输入学生姓名，例如：张三"} disabled={openType === 'view'}/>)}
         </Form.Item>
 
         <Form.Item {...formItemLayout} label="学号">
@@ -131,8 +92,14 @@ class StudentModal extends PureComponent {
                 max: 64,
                 message: '长度不能超过64',
               },
+              {
+                validator: (rule, value, callback) => validatorStudentModel && validatorStudentModel(rule, {
+                  studentCode: value,
+                  id
+                }, callback),
+              },
             ],
-          })(<Input disabled={openType === 'view'}/>)}
+          })(<Input placeholder={"请输入学生学号，例如：XS0001"} disabled={openType === 'view'}/>)}
         </Form.Item>
 
         <Form.Item {...formItemLayout} label="家庭住址">
@@ -144,7 +111,7 @@ class StudentModal extends PureComponent {
                 message: '长度不能超过525',
               },
             ]
-          })(<TextArea disabled={openType === 'view'} rows={4}/>)}
+          })(<TextArea placeholder={"请输入学生家庭住址，例如：湖南省XXX市XX街道XXX"} disabled={openType === 'view'} rows={4}/>)}
         </Form.Item>
       </Form>
     </Modal>;
@@ -161,8 +128,8 @@ StudentModal.propTypes = {
   dataSource: PropTypes.object,
   // 确认按钮加载
   okLoading: PropTypes.bool,
-  // 分组
-  studentGroupList: PropTypes.array,
+  // 校验方法
+  validatorStudentModel: PropTypes.func,
   // 确认方法
   onOk: PropTypes.func,
   // 取消方法

@@ -6,6 +6,7 @@ export default {
   state: {
     list: [],
     currentUser: {
+      userid:"1",
       name: "test"
     },
   },

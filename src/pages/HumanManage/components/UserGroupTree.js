@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from "prop-types";
-import {Tree, Input, Select, Row, Col, Menu, Dropdown, Button, message, Modal, Popconfirm, Icon, Spin} from 'antd';
-import OperatorButton from "../../../components/SmartCampus/AuthorityToolbar/OperatorButton";
+import {Tree, Input, Select, Row, Col, Menu, Dropdown, Button, message, Modal, Popconfirm, Icon, Spin, Tag} from 'antd';
+import enums from "../config/enums";
 
 const {TreeNode} = Tree;
 const {Search} = Input;
@@ -24,7 +24,7 @@ const getParentKey = (key, tree) => {
 };
 
 const generateList = (data, dataList) => {
-  for (let i = 0; i < data.length; i++) {
+  for (let i = 0; i < (data || []).length; i++) {
     const node = data[i];
     dataList.push({...node});
     if (node.children) {
@@ -102,23 +102,41 @@ class UserGroupTree extends PureComponent {
     </Dropdown.Button>
   };
 
+  getTreeTitle = (groupName, searchValue, item) => {
+    const index = groupName.indexOf(searchValue);
+    const beforeStr = groupName.substr(0, index);
+    const afterStr = groupName.substr(index + searchValue.length);
+    const title =
+      index > -1 ? (
+        <span>
+              {beforeStr}
+          <span style={{color: '#f50'}}>{searchValue}</span>
+          {afterStr}
+            </span>
+      ) : (
+        <span>{(groupName || "")}</span>
+      );
+
+    const getTag = (item) => {
+      const {type, gradeLevel} = item;
+      if (!type) {
+        return null;
+      }
+      if (type === "grade" && gradeLevel) {
+        return <Tag color="#2db7f5">{enums.GradeLevel[gradeLevel]}</Tag>
+      }
+      if (type === "class") {
+        return <Tag color="#87d068">{enums.StudentGroupType[type]}</Tag>
+      }
+      return <Tag color="#108ee9">{enums.StudentGroupType[type]}</Tag>
+    };
+    return <span style={{lineHeight: "10px"}}>{title}{getTag(item)}</span>;
+  };
+
   renderTreeNode = ({data, height, onExpand, expandedKeys, selectedRowKeys, autoExpandParent, isEdit, searchValue, onSelectChange}) => {
     const loopTreeNode = (data) => {
       return data.map(item => {
-        const groupName = (item.groupName || "");
-        const index = groupName.indexOf(searchValue);
-        const beforeStr = groupName.substr(0, index);
-        const afterStr = groupName.substr(index + searchValue.length);
-        const title =
-          index > -1 ? (
-            <span>
-              {beforeStr}
-              <span style={{color: '#f50'}}>{searchValue}</span>
-              {afterStr}
-            </span>
-          ) : (
-            <span>{(item.groupName || "")}</span>
-          );
+        const title = this.getTreeTitle((item.groupName || ""), searchValue, item);
         if (item.children) {
           return (
             <TreeNode icon={<Icon type="folder-open"/>} key={item.key || item.id}
@@ -164,6 +182,7 @@ class UserGroupTree extends PureComponent {
     const {expandedKeys, autoExpandParent} = this.state;
     const {
       height,
+      title,
       userGroupList,
       selectedRowKeys,
       onSelectChange,
@@ -193,7 +212,7 @@ class UserGroupTree extends PureComponent {
         backgroundColor: '#D9D9D8',
         marginBottom: '2px'
       }}>
-        <Col span={24}>用户分组</Col>
+        <Col span={24}>{title || "用户分组"}</Col>
       </Row>
       <Row>
         <Search style={{marginBottom: 8}} allowClear placeholder="请输入" onSearch={this.onSearch}/>

@@ -16,7 +16,7 @@ const routes = [
           {
             path: '/access-control/access-authority/control',
             name: 'control',
-            component: 'AccessControl/AccessDistribution',
+            redirect: "/personnel-manage/staff-manage/staff-group",
           },
         ],
       },

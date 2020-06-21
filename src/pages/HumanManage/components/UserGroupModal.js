@@ -13,6 +13,7 @@ class UserGroupModal extends PureComponent {
       userGroupList,
       selectedRowKeys,
       onSelectChange,
+      getCheckboxProps,
     } = this.props;
 
     const rowSelection = {
@@ -20,11 +21,12 @@ class UserGroupModal extends PureComponent {
       columnTitle: '选择',
       columnWidth: 80,
       selectedRowKeys,
+      getCheckboxProps,
       onChange: onSelectChange,
     };
 
     const staffGroupTableProps = {
-      height: 300,
+      height: 350,
       rowSelection,
       dataSource: userGroupList
     };

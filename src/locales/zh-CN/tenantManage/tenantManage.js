@@ -9,12 +9,12 @@ export default {
   'menu.sys-manage.authority-manage.authority-group': '权限组管理',
 
   'menu.personnel-manage': '人员管理',
-  'menu.personnel-manage.staff-manage': '职工管理',
-  'menu.personnel-manage.staff-manage.staff-group': '组织架构',
-  'menu.personnel-manage.staff-manage.staff-user': '职员管理',
-  'menu.personnel-manage.student-manage': '学生管理',
-  'menu.personnel-manage.student-manage.student-group': '班级管理',
-  'menu.personnel-manage.student-manage.student': '学生信息',
+  'menu.personnel-manage.staff-manage': '组织架构',
+  'menu.personnel-manage.staff-manage.staff-group': '职工管理',
+  'menu.personnel-manage.staff-manage.student-group': '学生管理',
+  'menu.personnel-manage.personnel-feature': '人员特征',
+  'menu.personnel-manage.personnel-feature.card': '一卡通',
+  'menu.personnel-manage.personnel-feature.face': '人脸信息',
 
   'menu.access-control': '门禁管理',
   'menu.access-control.access-authority': '门禁权限',

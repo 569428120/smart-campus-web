@@ -12,6 +12,16 @@ class SearchForm extends PureComponent {
     expandForm: false, // 是否展开搜索框
   };
 
+  componentDidMount() {
+    const {onRef} = this.props;
+    onRef && onRef(this);
+  }
+
+  resetFields = () => {
+    const {form} = this.props;
+    form.resetFields();
+  };
+
   /**
    *  展开
    */
@@ -60,33 +70,17 @@ class SearchForm extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
-          <Col md={5} sm={24}>
+          <Col md={6} sm={24}>
             <FormItem label="姓名">
-              {getFieldDecorator('name')(<Input allowClear placeholder="请输入"/>)}
+              {getFieldDecorator('name')(<Input allowClear placeholder="请输入姓名"/>)}
             </FormItem>
           </Col>
-          <Col md={5} sm={24}>
+          <Col md={6} sm={24}>
             <FormItem label="学号">
-              {getFieldDecorator('userIdentity')(<Input allowClear placeholder="请输入"/>)}
+              {getFieldDecorator('studentCode')(<Input allowClear placeholder="请输入学号"/>)}
             </FormItem>
           </Col>
-          <Col md={4} sm={24}>
-            <FormItem label="班级">
-              {getFieldDecorator('groupCode')(<Select allowClear placeholder="请输入">
-                <Select.Option key={"1"} value={"1"}>{"测试组1测试组1测试组1"}</Select.Option>
-                <Select.Option key={"2"} value={"2"}>{"测试组2"}</Select.Option>
-              </Select>)}
-            </FormItem>
-          </Col>
-          <Col md={4} sm={24}>
-            <FormItem label="联系人">
-              {getFieldDecorator('userName')(<Select allowClear placeholder="请输入">
-                <Select.Option key={"1"} value={"1"}>{"已设置"}</Select.Option>
-                <Select.Option key={"2"} value={"2"}>{"未设置"}</Select.Option>
-              </Select>)}
-            </FormItem>
-          </Col>
-          <Col md={4} sm={24}>
+          <Col md={6} sm={24}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 查询

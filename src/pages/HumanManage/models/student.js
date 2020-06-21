@@ -1,5 +1,5 @@
 import appConfig from "@/config/appConfig";
-import * as studentService from '@/pages/HumanManage/services/studentService'
+import * as studentService from '../services/studentService'
 
 export default {
   namespace: 'student',
@@ -9,7 +9,6 @@ export default {
     current: 1,// 当前页
     pageSize: appConfig.PAGE_SIZE, //每页显示的大小
     total: 0,// 总数
-    studentToGuardianList: [],
   },
   effects: {
 
@@ -35,21 +34,6 @@ export default {
     },
 
     /**
-     *   获取联系人列表
-     * @param studentId
-     * @param call
-     * @param put
-     */* getStudentToGuardianList({payload: {studentId}}, {call, put}) {
-      const studentToGuardianList = yield call(studentService.getStudentToGuardianList, studentId);
-      yield put({
-        type: "setState",
-        payload: {
-          studentToGuardianList
-        }
-      })
-    },
-
-    /**
      *  保存
      * @param values
      * @param call
@@ -59,25 +43,23 @@ export default {
     },
 
     /**
-     *  保存
-     * @param values
-     * @param studentId
+     *  删除学生
+     * @param studentIds
      * @param call
      * @param put
-     */* saveStudentToGuardian({payload: {values}}, {call, put}) {
-      yield call(studentService.saveStudentToGuardian, values);
+     */* deleteStudentByIds({payload: {studentIds}}, {call, put}) {
+      yield call(studentService.deleteStudentByIds, studentIds);
     },
 
     /**
-     *  删除
+     *  保存
+     * @param contactList
      * @param studentId
-     * @param contactIds
      * @param call
      * @param put
-     */* deleteStudentToGuardians({payload: {studentId, contactIds}}, {call, put}) {
-      yield call(studentService.deleteStudentToGuardians, studentId, contactIds);
-    }
-
+     */* saveStudentContact({payload: {contactList, studentId}}, {call, put}) {
+      yield call(studentService.saveStudentContact, contactList, studentId);
+    },
   },
 
   reducers: {

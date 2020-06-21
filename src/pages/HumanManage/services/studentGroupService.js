@@ -24,7 +24,7 @@ export async function deleteStudentGroupByIds(groupIds) {
   return request(config.studentGroupApi.deleteStudentGroupByIds, {
     method: 'GET',
     params: {
-      menuIds: (groupIds || []).join(",")
+      groupIds: (groupIds || []).join(",")
     }
   });
 }
@@ -45,19 +45,64 @@ export async function getStudentGroupList(searchValue) {
 }
 
 /**
- *  查询
- * @param groupId
- * @param current
- * @param pageSize
+ *  复制分组
+ * @param sourceIds
+ * @param targetIds
  * @returns {Promise<void>}
  */
-export async function getGroupToStudentList(groupId, current, pageSize) {
-  return request(config.studentGroupApi.getGroupToStudentList, {
+export async function copyGroupToGroup(sourceIds, targetIds) {
+  return request(config.studentGroupApi.copyGroupToGroup, {
+    method: 'POST',
+    params: {
+      sourceIds: (sourceIds || []).join(","),
+      targetIds: (targetIds || []).join(","),
+    }
+  });
+}
+
+/**
+ *  移动分组
+ * @param sourceIds
+ * @param targetId
+ * @returns {Promise<void>}
+ */
+export async function moveGroupToGroup(sourceIds, targetId) {
+  return request(config.studentGroupApi.moveGroupToGroup, {
+    method: 'POST',
+    params: {
+      sourceIds: (sourceIds || []).join(","),
+      targetId,
+    }
+  });
+}
+
+/**
+ *  移动用户
+ * @param userIds
+ * @param targetId
+ * @returns {Promise<void>}
+ */
+export async function moveUserToGroup(userIds, targetId) {
+  return request(config.studentGroupApi.moveUserToGroup, {
+    method: 'POST',
+    params: {
+      userIds: (userIds || []).join(","),
+      targetId,
+    }
+  });
+}
+
+
+/**
+ *  根据id查询
+ * @param groupId
+ * @returns {Promise<void>}
+ */
+export async function getStudentGroupById(groupId) {
+  return request(config.studentGroupApi.getStudentGroupById, {
     method: 'GET',
     params: {
       groupId,
-      current,
-      pageSize
     }
   });
 }

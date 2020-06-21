@@ -28,7 +28,7 @@ class StudentGroupModal extends PureComponent {
     const {form: {validateFields}, openType, dataSource, pDataSource} = this.props;
     const {id} = (dataSource || {});
     const {id: pid, type} = (pDataSource || {});
-    const groupType = enums.StudentGroupTypeFunc(id, type);
+    const groupType = this.getGroupType();
     validateFields((errors, values) => {
       if (errors === null) {
         values.id = id;
@@ -37,6 +37,21 @@ class StudentGroupModal extends PureComponent {
         onOk && onOk(values, openType);
       }
     });
+  };
+
+  getGradeLevelSelectOptions = () => {
+    return Object.keys(enums.GradeLevel).map(key =>
+      <Select.Option key={key} value={key}>{enums.GradeLevel[key]}</Select.Option>)
+  };
+
+  getGroupType = () => {
+    const {openType, dataSource, pDataSource} = this.props;
+    const {id, type} = (pDataSource || {});
+    const {groupName, groupCode, description, type: cType} = dataSource;
+    if (openType === "edit" || openType === "view") {
+      return cType;
+    }
+    return enums.StudentGroupTypeFunc(id, type);
   };
 
   /**
@@ -48,38 +63,33 @@ class StudentGroupModal extends PureComponent {
       openType,
       dataSource,
       pDataSource,
-      validatorGradeLevel,
       form: {
         getFieldDecorator
       }
     } = this.props;
 
-    const {gradeLevel, gradeName, groupCode, description} = (dataSource || {});
+    const {gradeLevel, groupName, groupCode, description} = (dataSource || {});
 
-    const gradeLevelSelectOptions = Object.keys(enums.GradeLevel).map(key =>
-      <Select.Option key={key} value={key}>{enums.GradeLevel[key]}</Select.Option>);
+    const gradeLevelSelectOptions = this.getGradeLevelSelectOptions();
 
     return <Form>
       <Form.Item {...formItemLayout} label={"年级"}>
         {getFieldDecorator('gradeLevel', {
-          initialValue: gradeLevel,
+          initialValue: (gradeLevel || "") + "",
           rules: [
             {
               required: true,
               message: '年级必填',
-            },
-            {
-              validator: validatorGradeLevel
             }
           ],
-        })(<Select allowClear disabled={openType === 'view'} placeholder="请输入">
+        })(<Select disabled={openType === 'view'} placeholder="请输入">
           {gradeLevelSelectOptions}
         </Select>)}
       </Form.Item>
 
       <Form.Item {...formItemLayout} label={"年级名称"}>
-        {getFieldDecorator('gradeName', {
-          initialValue: gradeName,
+        {getFieldDecorator('groupName', {
+          initialValue: groupName,
           rules: [
             {
               required: true,
@@ -90,23 +100,7 @@ class StudentGroupModal extends PureComponent {
               message: '长度不能超过64',
             },
           ],
-        })(<Input disabled={openType === 'view'}/>)}
-      </Form.Item>
-
-      <Form.Item {...formItemLayout} label={"分组编码"}>
-        {getFieldDecorator('groupCode', {
-          initialValue: groupCode,
-          rules: [
-            {
-              required: true,
-              message: '分组编码必填',
-            },
-            {
-              max: 64,
-              message: '长度不能超过64',
-            },
-          ],
-        })(<Input disabled={openType === 'view'}/>)}
+        })(<Input placeholder="请输入年级名称，例如：2020届-理科" disabled={openType === 'view'}/>)}
       </Form.Item>
 
       <Form.Item {...formItemLayout} label="描述">
@@ -118,7 +112,7 @@ class StudentGroupModal extends PureComponent {
               message: '长度不能超过525',
             },
           ]
-        })(<TextArea disabled={openType === 'view'} rows={4}/>)}
+        })(<TextArea placeholder="请输入描述信息" disabled={openType === 'view'} rows={4}/>)}
       </Form.Item>
     </Form>
   };
@@ -137,29 +131,29 @@ class StudentGroupModal extends PureComponent {
       }
     } = this.props;
 
-    const {gradeLevel, gradeName, groupCode, description} = (dataSource || {});
+    const {gradeLevel, groupName, groupCode, description} = (dataSource || {});
+    const {gradeLevel: pGradeLevel} = (pDataSource || {});
 
-    const gradeLevelSelectOptions = Object.keys(enums.GradeLevel).map(key =>
-      <Select.Option key={key} value={key}>{enums.GradeLevel[key]}</Select.Option>);
+    const gradeLevelSelectOptions = this.getGradeLevelSelectOptions();
 
     return <Form>
       <Form.Item {...formItemLayout} label={"年级"}>
         {getFieldDecorator('gradeLevel', {
-          initialValue: gradeLevel,
+          initialValue: ((gradeLevel || pGradeLevel) || "") + "",
           rules: [
             {
               required: true,
               message: '年级必填',
             },
           ],
-        })(<Select allowClear disabled={true} placeholder="请输入">
+        })(<Select disabled={true} placeholder="请输入">
           {gradeLevelSelectOptions}
         </Select>)}
       </Form.Item>
 
       <Form.Item {...formItemLayout} label={"班级名称"}>
         {getFieldDecorator('groupName', {
-          initialValue: gradeName,
+          initialValue: groupName,
           rules: [
             {
               required: true,
@@ -170,23 +164,7 @@ class StudentGroupModal extends PureComponent {
               message: '长度不能超过64',
             },
           ],
-        })(<Input disabled={openType === 'view'}/>)}
-      </Form.Item>
-
-      <Form.Item {...formItemLayout} label={"分组编码"}>
-        {getFieldDecorator('groupCode', {
-          initialValue: groupCode,
-          rules: [
-            {
-              required: true,
-              message: '分组编码必填',
-            },
-            {
-              max: 64,
-              message: '长度不能超过64',
-            },
-          ],
-        })(<Input disabled={openType === 'view'}/>)}
+        })(<Input placeholder="请输入班级名称，例如：1001班" disabled={openType === 'view'}/>)}
       </Form.Item>
 
       <Form.Item {...formItemLayout} label="描述">
@@ -198,7 +176,7 @@ class StudentGroupModal extends PureComponent {
               message: '长度不能超过525',
             },
           ]
-        })(<TextArea disabled={openType === 'view'} rows={4}/>)}
+        })(<TextArea placeholder="请输入描述信息" disabled={openType === 'view'} rows={4}/>)}
       </Form.Item>
     </Form>
   };
@@ -217,29 +195,28 @@ class StudentGroupModal extends PureComponent {
       }
     } = this.props;
 
-    const {gradeLevel, gradeName, groupCode, description} = (dataSource || {});
+    const {gradeLevel, groupName, groupCode, description} = (dataSource || {});
+    const {gradeLevel: pGradeLevel} = (pDataSource || {});
 
-    const gradeLevelSelectOptions = Object.keys(enums.GradeLevel).map(key =>
-      <Select.Option key={key} value={key}>{enums.GradeLevel[key]}</Select.Option>);
+    const gradeLevelSelectOptions = this.getGradeLevelSelectOptions();
 
     return <Form>
       <Form.Item {...formItemLayout} label={"年级"}>
         {getFieldDecorator('gradeLevel', {
-          initialValue: gradeLevel,
+          initialValue: ((gradeLevel || pGradeLevel) || "") + "",
           rules: [
             {
               required: true,
               message: '年级必填',
             }
           ],
-        })(<Select allowClear disabled={true} placeholder="请输入">
+        })(<Select disabled={true} placeholder="请输入">
           {gradeLevelSelectOptions}
         </Select>)}
       </Form.Item>
-
       <Form.Item {...formItemLayout} label={"分组名称"}>
         {getFieldDecorator('groupName', {
-          initialValue: gradeName,
+          initialValue: groupName,
           rules: [
             {
               required: true,
@@ -250,23 +227,7 @@ class StudentGroupModal extends PureComponent {
               message: '长度不能超过64',
             },
           ],
-        })(<Input disabled={openType === 'view'}/>)}
-      </Form.Item>
-
-      <Form.Item {...formItemLayout} label={"分组编码"}>
-        {getFieldDecorator('groupCode', {
-          initialValue: groupCode,
-          rules: [
-            {
-              required: true,
-              message: '分组编码必填',
-            },
-            {
-              max: 64,
-              message: '长度不能超过64',
-            },
-          ],
-        })(<Input disabled={openType === 'view'}/>)}
+        })(<Input placeholder={"请输入分组，例如：走读生"} disabled={openType === 'view'}/>)}
       </Form.Item>
 
       <Form.Item {...formItemLayout} label="描述">
@@ -278,7 +239,7 @@ class StudentGroupModal extends PureComponent {
               message: '长度不能超过525',
             },
           ]
-        })(<TextArea disabled={openType === 'view'} rows={4}/>)}
+        })(<TextArea placeholder={"请输入描述信息"} disabled={openType === 'view'} rows={4}/>)}
       </Form.Item>
     </Form>
   };
@@ -295,9 +256,7 @@ class StudentGroupModal extends PureComponent {
         getFieldDecorator
       }
     } = this.props;
-    const {id, type} = (pDataSource || {});
 
-    const {groupName, groupCode, description} = dataSource;
     const typeToFrom = {
       // 新增年级的表单
       grade: this.renderGradeForm,
@@ -306,21 +265,25 @@ class StudentGroupModal extends PureComponent {
       // 新增分组的表单
       group: this.renderGroupForm
     };
+    const typeTitle = {
+      grade: "年级",
+      class: "班级",
+      group: "分组",
+    };
     // 没有父节点则为年级，父节点为年级则子节点为班级，其他为分组
-    const groupType = enums.StudentGroupTypeFunc(id, type);
-    const form = typeToFrom[groupType]();
-
+    const groupType = this.getGroupType();
+    const formContent = typeToFrom[groupType];
     return <Modal
-      title={enums.OperatorType[openType]}
+      title={`${enums.OperatorType[openType]}${typeTitle[groupType]}`}
       destroyOnClose={true}
       visible={visible}
       onOk={() => this.onSubmit(onOk)}
-      width={modalWidth(window.innerWidth * 0.5)}
+      width={600}
       onCancel={onCancel}
       okText="确认"
       cancelText="取消"
     >
-      {form}
+      {formContent && formContent()}
     </Modal>;
   }
 }

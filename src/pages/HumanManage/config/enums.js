@@ -34,6 +34,21 @@ export default {
     Teacher: "教师",
     Staff: "职员"
   },
+  // 用户类型
+  UserType: {
+    Student: {
+      key: "Student",
+      value: "学生"
+    },
+    Staff: {
+      key: "Staff",
+      value: "职员"
+    },
+    Teacher: {
+      key: "Teacher",
+      value: "教师",
+    }
+  },
   // 弹窗操作枚举
   OperatorType: {
     view: "查看",
@@ -48,7 +63,7 @@ export default {
     },
     grandparents: {
       key: "grandparents",
-      value: "爷爷奶奶"
+      value: "祖父母"
     },
     relatives: {
       key: "relatives",
@@ -57,6 +72,13 @@ export default {
     other: {
       key: "other",
       value: "其他"
+    }
+  },
+  // 卡类型
+  CardType: {
+    ICCard: {
+      key: "ICCard",
+      value: "IC卡"
     }
   }
 }

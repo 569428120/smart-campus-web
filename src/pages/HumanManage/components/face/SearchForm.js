@@ -1,22 +1,16 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {Button, Col, DatePicker, Form, Icon, Input, InputNumber, Row, Select} from 'antd';
 import styles from '@/pages/List/TableList.less';
-import enums from "../../config/enums";
 
 const FormItem = Form.Item;
 const {Option} = Select;
 
 @Form.create()
-class SearchForm extends PureComponent {
+class SearchForm extends React.PureComponent {
   state = {
     expandForm: false, // 是否展开搜索框
   };
-
-  componentDidMount() {
-    const {onRef} = this.props;
-    onRef && onRef(this);
-  }
 
   /**
    *  展开
@@ -26,11 +20,6 @@ class SearchForm extends PureComponent {
     this.setState({
       expandForm: !expandForm,
     });
-  };
-
-  resetFields = () => {
-    const {form} = this.props;
-    form.resetFields();
   };
 
   /**
@@ -60,38 +49,28 @@ class SearchForm extends PureComponent {
     });
   };
 
-
   /**
    *  简单的表单
    * @returns {*}
    */
-  renderAdvancedForm() {
+  renderSimpleForm() {
     const {
       form: {getFieldDecorator},
     } = this.props;
-    const userTypeOptions = Object.keys(enums.UserTypes).map(key => <Select.Option key={key}
-                                                                                   value={key}>{enums.UserTypes[key]}</Select.Option>);
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
-          <Col md={6} sm={24}>
+          <Col md={8} sm={24}>
             <FormItem label="姓名">
-              {getFieldDecorator('name')(<Input allowClear placeholder="请输入姓名"/>)}
+              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
-          <Col md={6} sm={24}>
-            <FormItem label="证件号码">
-              {getFieldDecorator('userIdentity')(<Input allowClear placeholder="请输入证件号码、工号"/>)}
+          <Col md={8} sm={24}>
+            <FormItem label="编号">
+              {getFieldDecorator('userCode')(<Input placeholder="请输入工号，学号等"/>)}
             </FormItem>
           </Col>
-          <Col md={5} sm={24}>
-            <FormItem label="用户类型">
-              {getFieldDecorator('userType')(<Select allowClear placeholder="请输入">
-                {userTypeOptions}
-              </Select>)}
-            </FormItem>
-          </Col>
-          <Col md={5} sm={24}>
+          <Col md={8} sm={24}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 查询
@@ -106,9 +85,10 @@ class SearchForm extends PureComponent {
     );
   }
 
+
   render() {
     const {expandForm} = this.state;
-    return this.renderAdvancedForm();
+    return this.renderSimpleForm();
   }
 }
 
