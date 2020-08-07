@@ -17,13 +17,14 @@ const tableColumns = () => {
       width: '10%',
     },
     {
-      title: '身份证',
+      title: '身份证(学号)',
       dataIndex: 'user_type',
       width: '15%',
+      render: (text, record) => (record.userIdentity || record.userJobCode)
     },
     {
-      title: '工号',
-      dataIndex: 'user_type',
+      title: '联系方式',
+      dataIndex: 'contact',
       width: '12%',
     }
   ];
@@ -34,20 +35,40 @@ const tableColumns = () => {
  */
 class UserTable extends PureComponent {
 
+  state = {
+    searchValue: "",
+  };
+
+  componentDidMount() {
+    const {onRef} = this.props;
+    onRef && onRef(this);
+  }
+
+  onSearchChange = (e) => {
+    const {value: searchValue} = e.target;
+    this.setState({
+      searchValue
+    })
+  };
+
   render() {
     const {
+      height,
+      selectType,
       dataSource,
       total,
       current,
       pageSize,
       loading,
       selectedRowKeys,
+      onSearch,
       onTableSelectChange,
       onTablePageChange,
-      height
+      onTablePageSizeChange
     } = this.props;
 
     const rowSelection = {
+      type: selectType,
       columnTitle: '选择',
       columnWidth: 80,
       selectedRowKeys,
@@ -65,11 +86,17 @@ class UserTable extends PureComponent {
       current,
       pageSize,
       onTablePageChange,
+      onTablePageSizeChange,
     };
 
     return <div style={{textAlign: 'center', padding: '10px'}}>
-      <Search style={{marginBottom: 8, width: '60%'}} placeholder="请输入"/>
-      <DataTable height={height - 88} {...dataTableProps} />
+      <Search style={{marginBottom: 8, width: '60%'}}
+              value={this.state.searchValue}
+              onChange={this.onSearchChange}
+              onSearch={onSearch}
+              placeholder="请输入"
+      />
+      <DataTable height={height - 58} {...dataTableProps} />
     </div>;
   }
 }

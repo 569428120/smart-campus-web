@@ -8,7 +8,8 @@ import SearchForm from "./components/card/SearchForm";
 import CardTable from "./components/card/CardTable";
 import CardModal from "./components/card/CardModal";
 import OperatorButton from "../../components/SmartCampus/AuthorityToolbar/OperatorButton";
-import enums from "./config/enums";
+import {validatorCardModel} from "./services/cardService";
+import appEnums from "../../config/enums";
 
 
 @connect(({loading, card}) => ({
@@ -39,6 +40,9 @@ class CardManage extends React.PureComponent {
    */
   onRefreshCardPage = (searchValue, current, pageSize) => {
     const {dispatch} = this.props;
+    if (!searchValue.userType) {
+      searchValue.userType = appEnums.UserTypes.Student.key
+    }
     dispatch({
       type: "card/getCardList",
       payload: {
@@ -48,7 +52,9 @@ class CardManage extends React.PureComponent {
       }
     });
     this.setState({
-      searchValue
+      searchValue,
+      selectedRowKeys: [],
+      selectedRows: [],
     })
   };
 
@@ -85,10 +91,6 @@ class CardManage extends React.PureComponent {
           cardIds: selectedRowKeys
         }
       }).then(() => {
-        this.setState({
-          selectedRowKeys: [],
-          selectedRows: [],
-        });
         this.onRefreshCardPage(searchValue, 1, pageSize);
       });
 
@@ -110,66 +112,29 @@ class CardManage extends React.PureComponent {
    */
   onCardModalOk = (values, openType) => {
     const {dispatch, card: {current, pageSize}} = this.props;
-    dispatch({
-      type: "card/saveCardData",
-      payload: {
-        values
-      }
-    }).then(() => {
-      this.onRefreshCardPage(openType === 'edit' ? current : 1, pageSize);
+    const {searchValue} = this.state;
+    if (["add", "edit"].includes(openType)) {
+      dispatch({
+        type: "card/saveCardData",
+        payload: {
+          values
+        }
+      }).then(() => {
+        this.onRefreshCardPage(searchValue, openType === 'edit' ? current : 1, pageSize);
+        this.closeCardModal();
+      });
+    } else {
+      this.closeCardModal();
+    }
+  };
+
+
+  closeCardModal = () => {
+    this.setState({
+      cardModalVisible: false,
+      cardModel: {},
+      openType: "",
     });
-  };
-
-  /**
-   *  用户类型
-   */
-  onCardModalUserTypeSelect = (userType) => {
-    const {dispatch} = this.props;
-    // 学生
-    if (enums.UserType.student.key === userType) {
-      dispatch({
-        type: "user/getStudentGroupList",
-        payload: {}
-      });
-      return;
-    }
-    if (enums.UserType.staff.key === userType) {
-      dispatch({
-        type: "user/getStaffGroupList",
-        payload: {}
-      });
-      return;
-    }
-    console.error(`不支持的用户类型${userType}`);
-  };
-
-  /**
-   *  查询组下面的用户
-   * @param userType
-   * @param groupId
-   */
-  onCardModalUserGroupSelect = (userType, groupId) => {
-    const {dispatch} = this.props;
-    // 学生
-    if (enums.UserType.student.key === userType) {
-      dispatch({
-        type: "user/getStudentList",
-        payload: {
-          groupId
-        }
-      });
-      return;
-    }
-    if (enums.UserType.staff.key === userType) {
-      dispatch({
-        type: "user/getStaffList",
-        payload: {
-          groupId
-        }
-      });
-      return;
-    }
-    console.error(`不支持的用户类型${userType}`);
   };
 
   /**
@@ -252,13 +217,11 @@ class CardManage extends React.PureComponent {
     const cardModalProps = {
       visible: this.state.cardModalVisible,
       openType: this.state.openType,
+      typeDefaultValue: (this.state.searchValue.userType || undefined),
       dataSource: this.state.cardModel,
-      userGroupList: [],
-      userList: [],
-      onUserTypeSelect: this.onCardModalUserTypeSelect,
-      onUserGroupSelect: this.onCardModalUserGroupSelect,
+      validatorCardModel: validatorCardModel,
       onOk: this.onCardModalOk,
-      onCancel: () => this.setState({cardModalVisible: false})
+      onCancel: this.closeCardModal,
     };
 
     return (

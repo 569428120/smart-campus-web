@@ -1,7 +1,7 @@
 import React, {Fragment, PureComponent} from 'react';
-import {List} from 'antd';
 import DataTable from '@/components/SmartCampus/Table/DataTable';
 import PropTypes from 'prop-types';
+import appEnums from "../../../../config/enums";
 
 /**
  *  表格列
@@ -10,24 +10,25 @@ import PropTypes from 'prop-types';
 const tableColumns = onOperator => {
   const columns = [
     {
-      title: '姓名',
-      dataIndex: 'name',
-      width: '20%',
-    },
-    {
-      title: '编号',
-      dataIndex: 'userCode',
+      title: '用户组',
+      dataIndex: 'groupName',
       width: '15%',
     },
     {
-      title: '卡类型',
-      dataIndex: 'cardType',
+      title: '用户类型',
+      dataIndex: 'userType',
+      width: '10%',
+      render: (text, record) => (appEnums.UserTypes[text] || {}).value
+    },
+    {
+      title: '姓名',
+      dataIndex: 'name',
       width: '10%',
     },
     {
-      title: '卡号',
-      dataIndex: 'cardNumber',
-      width: '20%',
+      title: '身份证(学号)',
+      dataIndex: 'userCode',
+      width: '12%',
     },
     {
       title: '描述',
@@ -40,7 +41,7 @@ const tableColumns = onOperator => {
       width: '10%',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => onOperator(record)}>操作</a>
+          <a onClick={() => onOperator(record)}>查看详情</a>
         </Fragment>
       ),
     })
@@ -56,6 +57,7 @@ class FaceTable extends PureComponent {
 
   render() {
     const {
+      height,
       dataSource,
       total,
       current,
@@ -84,6 +86,7 @@ class FaceTable extends PureComponent {
 
     // 表格参数
     const dataTableProps = {
+      height,
       rowKey: 'id',
       rowSelection,
       dataSource,

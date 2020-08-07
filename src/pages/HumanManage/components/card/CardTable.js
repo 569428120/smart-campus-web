@@ -2,6 +2,7 @@ import React, {Fragment, PureComponent} from 'react';
 import {List} from 'antd';
 import PropTypes from 'prop-types';
 import DataTable from "../../../../components/SmartCampus/Table/DataTable";
+import appEnums from '../../../../config/enums'
 
 /**
  *  表格列
@@ -12,7 +13,13 @@ const tableColumns = onOperator => {
     {
       title: '用户组',
       dataIndex: 'groupName',
-      width: '20%',
+      width: '15%',
+    },
+    {
+      title: '用户类型',
+      dataIndex: 'userType',
+      width: '10%',
+      render: (text, record) => (appEnums.UserTypes[text] || {}).value
     },
     {
       title: '姓名',
@@ -32,7 +39,7 @@ const tableColumns = onOperator => {
     {
       title: '卡号',
       dataIndex: 'cardNumber',
-      width: '20%',
+      width: '12%',
     },
     {
       title: '描述',

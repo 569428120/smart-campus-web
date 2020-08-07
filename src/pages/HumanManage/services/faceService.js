@@ -25,7 +25,7 @@ export async function deleteFaceByIds(faceIds) {
   return request(config.faceApi.deleteFaceByIds, {
     method: 'GET',
     params: {
-      regionIds: (faceIds || []).join(",")
+      faceIds: (faceIds || []).join(",")
     }
   });
 }
@@ -47,4 +47,21 @@ export async function getFaceList(searchValue, current, pageSize) {
       pageSize
     }
   });
+}
+
+
+/**
+ *  校验
+ * @param rule
+ * @param values
+ * @param callback
+ * @returns {Promise<void>}
+ */
+export async function validatorFaceModel(rule, values, callback) {
+  return request(config.faceApi.validatorFaceModel, {
+    method: 'POST',
+    body: {
+      ...values
+    }
+  }, true).then((msg) => callback(msg || undefined));
 }

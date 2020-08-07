@@ -68,6 +68,8 @@ export default {
     deleteCardByIds: `${api}/card/deletes/deletes-by-ids`,
     // 分页查询
     getCardList: `${api}/card/gets/page`,
+    //　校验
+    validatorCardModel: `${api}/card/validator`,
   },
   faceApi: {
     // 保存
@@ -76,5 +78,11 @@ export default {
     deleteFaceByIds: `${api}/face/deletes/deletes-by-ids`,
     // 分页查询
     getFaceList: `${api}/face/gets/page`,
+    // 校验
+    validatorFaceModel: `${api}/face/validator`,
+  },
+  imageApi: {
+    // 上传
+    uploadImage: `${api}/image/upload`,
   }
 }

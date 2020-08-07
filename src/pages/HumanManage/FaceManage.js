@@ -8,12 +8,13 @@ import SearchForm from "./components/face/SearchForm";
 import FaceTable from "./components/face/FaceTable";
 import FaceModal from "./components/face/FaceModal";
 import OperatorButton from "../../components/SmartCampus/AuthorityToolbar/OperatorButton";
-import enums from "./config/enums";
+import {validatorFaceModel} from "./services/faceService";
+import appEnums from "../../config/enums";
+import {message} from "antd/lib/index";
 
 
 @connect(({loading, featureUser, face}) => ({
   loading,
-  featureUser,
   face,
 }))
 class FaceManage extends React.PureComponent {
@@ -25,11 +26,14 @@ class FaceManage extends React.PureComponent {
     faceModalVisible: false,
     faceModel: {},
     openType: "",
+    fileList: [],
   };
 
   componentDidMount() {
     // 刷新数据
-    this.onRefreshFacePage({}, 1, appConfig.PAGE_SIZE);
+    this.onRefreshFacePage({
+      userType: appEnums.UserTypes.Student.key,
+    }, 1, appConfig.PAGE_SIZE);
   }
 
   /**
@@ -49,7 +53,9 @@ class FaceManage extends React.PureComponent {
       }
     });
     this.setState({
-      searchValue
+      searchValue,
+      selectedRowKeys: [],
+      selectedRows: [],
     })
   };
 
@@ -65,11 +71,29 @@ class FaceManage extends React.PureComponent {
         payload: {}
       });
     }
+    const fileList = (faceModel.imageList || []).map(item => {
+      return {
+        uid: item.id,
+        name: item.name,
+        status: 'done',
+        url: item.url,
+      }
+    });
 
     this.setState({
       faceModalVisible: true,
       faceModel,
       openType,
+      fileList,
+    })
+  };
+
+  closeFaceModal = () => {
+    this.setState({
+      faceModalVisible: false,
+      faceModel: {},
+      openType: "",
+      fileList: [],
     })
   };
 
@@ -111,67 +135,27 @@ class FaceManage extends React.PureComponent {
    */
   onFaceModalOk = (values, openType) => {
     const {dispatch, face: {current, pageSize}} = this.props;
-    dispatch({
-      type: "face/saveFaceData",
-      payload: {
-        values
+    const {searchValue, fileList} = this.state;
+    if (openType === "view") {
+      this.closeFaceModal();
+    } else {
+      if ((fileList || []).length <= 0) {
+        message.warn("特征照片不能为空");
+        return;
       }
-    }).then(() => {
-      this.onRefreshFacePage(openType === 'edit' ? current : 1, pageSize);
-    });
+      values.imageIds = fileList.map(item => item.uid).join(",");
+      dispatch({
+        type: "face/saveFaceData",
+        payload: {
+          values
+        }
+      }).then(() => {
+        this.onRefreshFacePage(searchValue, openType === 'edit' ? current : 1, pageSize);
+        this.closeFaceModal();
+      });
+    }
   };
 
-  /**
-   *  用户类型
-   */
-  onFaceModalUserTypeSelect = (userType) => {
-    const {dispatch} = this.props;
-    // 学生
-    if (enums.UserType.student.key === userType) {
-      dispatch({
-        type: "user/getStudentGroupList",
-        payload: {}
-      });
-      return;
-    }
-    if (enums.UserType.staff.key === userType) {
-      dispatch({
-        type: "user/getStaffGroupList",
-        payload: {}
-      });
-      return;
-    }
-    console.error(`不支持的用户类型${userType}`);
-  };
-
-  /**
-   *  查询组下面的用户
-   * @param userType
-   * @param groupId
-   */
-  onFaceModalUserGroupSelect = (userType, groupId) => {
-    const {dispatch} = this.props;
-    // 学生
-    if (enums.UserType.student.key === userType) {
-      dispatch({
-        type: "user/getStudentList",
-        payload: {
-          groupId
-        }
-      });
-      return;
-    }
-    if (enums.UserType.staff.key === userType) {
-      dispatch({
-        type: "user/getStaffList",
-        payload: {
-          groupId
-        }
-      });
-      return;
-    }
-    console.error(`不支持的用户类型${userType}`);
-  };
 
   /**
    *  操作按钮
@@ -198,17 +182,17 @@ class FaceManage extends React.PureComponent {
       });
     }
 
-    // 下拉菜单按钮
-    const dropdownList = [];
     // 大于0 就显示
     if ((selectedRowKeys || []).length > 0) {
-      dropdownList.push({
+      buttonList.push({
+        icon: '',
+        type: '',
         operatorKey: 'face-delete',
         text: '删除',
         onClick: this.onDeleteFace,
       });
     }
-    return {buttonList, dropdownList};
+    return {buttonList};
   };
 
   render() {
@@ -219,10 +203,6 @@ class FaceManage extends React.PureComponent {
         total,
         current,
         pageSize,
-      },
-      featureUser: {
-        userGroupList,
-        userList
       }
     } = this.props;
 
@@ -235,7 +215,8 @@ class FaceManage extends React.PureComponent {
     const operatorButtonProps = this.getOperatorButtonProps();
     // 表格参数
     const faceTableProps = {
-      dataSource: [{id: ''}],
+      height: window.innerHeight - 320,
+      dataSource: faceList,
       selectedRowKeys: this.state.selectedRowKeys,
       loading: loading.effects['face/getFaceList'],
       total,
@@ -244,18 +225,20 @@ class FaceManage extends React.PureComponent {
       onTableSelectChange: (rowKeys, rows) => this.setState({selectedRowKeys: rowKeys, selectedRows: rows,}),
       onTablePageChange: (current, pageSize) => this.onRefreshFacePage(this.state.searchValue, current, pageSize),
       onShowSizeChange: (current, pageSize) => this.onRefreshFacePage(this.state.searchValue, current, pageSize),
+      onOperator: (record) => this.openFaceModal(record, "view"),
     };
     // 详情弹窗
     const faceModalProps = {
       visible: this.state.faceModalVisible,
+      okLoading: loading.effects['face/saveFaceData'],
+      typeDefaultValue: (this.state.searchValue.userType || undefined),
       openType: this.state.openType,
       dataSource: this.state.faceModel,
-      userGroupList,
-      userList,
-      onUserTypeSelect: this.onFaceModalUserTypeSelect,
-      onUserGroupSelect: this.onFaceModalUserGroupSelect,
+      fileList: this.state.fileList,
+      validatorFaceModel: validatorFaceModel,
+      onFileListChange: (fileList) => this.setState({fileList}),
       onOk: this.onFaceModalOk,
-      onCancel: () => this.setState({faceModalVisible: false})
+      onCancel: this.closeFaceModal,
     };
 
     return (
@@ -271,7 +254,7 @@ class FaceManage extends React.PureComponent {
             <FaceTable {...faceTableProps} />
           </div>
         </Card>
-        <FaceModal {...faceModalProps}/>
+        <FaceModal {...faceModalProps} onRef={r => this.faceModal = r}/>
       </PageHeaderWrapper>
     );
   }

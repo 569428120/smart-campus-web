@@ -25,7 +25,7 @@ export async function deleteCardByIds(cardIds) {
   return request(config.cardApi.deleteCardByIds, {
     method: 'GET',
     params: {
-      regionIds: (cardIds || []).join(",")
+      cardIds: (cardIds || []).join(",")
     }
   });
 }
@@ -47,4 +47,20 @@ export async function getCardList(searchValue, current, pageSize) {
       pageSize
     }
   });
+}
+
+/**
+ *  校验
+ * @param rule
+ * @param values
+ * @param callback
+ * @returns {Promise<void>}
+ */
+export async function validatorCardModel(rule, values, callback) {
+  return request(config.cardApi.validatorCardModel, {
+    method: 'POST',
+    body: {
+      ...values
+    }
+  }, true).then((msg) => callback(msg || undefined));
 }

@@ -10,6 +10,10 @@ export default {
       key: "Staff",
       value: "职员"
     },
+    Student: {
+      key: "Student",
+      value: "学生"
+    },
     Parent: {
       key: "Parent",
       value: "家长"

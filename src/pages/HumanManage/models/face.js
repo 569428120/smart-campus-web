@@ -38,7 +38,7 @@ export default {
      * @param call
      * @param put
      */* deleteFaceByIds({payload: {faceIds}}, {call, put}) {
-      yield call(faceService.deleteFaceByIds);
+      yield call(faceService.deleteFaceByIds, faceIds);
     },
 
     /**

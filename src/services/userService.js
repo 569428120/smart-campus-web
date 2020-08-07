@@ -2,45 +2,39 @@ import request from "@/utils/request";
 import config from "../config/appConfig";
 
 /**
- *  学生分组
+ *  用户列表
+ * @param groupId
+ * @param userType
+ * @param searchValue
+ * @param current
+ * @param pageSize
  * @returns {Promise<void>}
  */
-export async function getStudentGroupList() {
-  return request(config.userApi.getStudentGroupList, {
+export async function getUserList(groupId, userType, searchValue, current, pageSize) {
+  return request(config.userApi.getUserList, {
     method: 'GET',
-    params: {}
+    params: {
+      ...{
+        name: searchValue
+      },
+      groupId,
+      userType,
+      current,
+      pageSize
+    }
   });
 }
 
 /**
- *  职员分组
+ *  获取用户分组
+ * @param userType
  * @returns {Promise<void>}
  */
-export async function getStaffGroupList() {
-  return request(config.userApi.getStaffGroupList, {
+export async function getUserGroupList(userType) {
+  return request(config.userApi.getUserGroupList, {
     method: 'GET',
-    params: {}
-  });
-}
-
-/**
- *  学生
- * @returns {Promise<void>}
- */
-export async function getStudentList(groupId) {
-  return request(config.userApi.getStudentList, {
-    method: 'GET',
-    params: {groupId}
-  });
-}
-
-/**
- *  职员
- * @returns {Promise<void>}
- */
-export async function getStaffList(groupId) {
-  return request(config.userApi.getStaffList, {
-    method: 'GET',
-    params: {groupId}
+    params: {
+      userType
+    }
   });
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Button, Col, DatePicker, Form, Icon, Input, InputNumber, Row, Select} from 'antd';
 import styles from '@/pages/List/TableList.less';
+import appEnums from "../../../../config/enums";
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -27,8 +28,11 @@ class SearchForm extends React.PureComponent {
    */
   handleFormReset = () => {
     const {form, onFormReset} = this.props;
-    form.resetFields();
-    onFormReset && onFormReset({});
+    form.resetFields(["name", "userCode"]);
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      onFormReset && onFormReset(fieldsValue);
+    });
   };
 
   /**
@@ -49,6 +53,12 @@ class SearchForm extends React.PureComponent {
     });
   };
 
+  onUserTypeChange = (userType) => {
+    const {form, onFormReset} = this.props;
+    form.resetFields(["name", "userCode"]);
+    onFormReset({userType});
+  };
+
   /**
    *  简单的表单
    * @returns {*}
@@ -57,20 +67,33 @@ class SearchForm extends React.PureComponent {
     const {
       form: {getFieldDecorator},
     } = this.props;
+
+    const typeOptions = Object.values(appEnums.UserTypes).map(({key, value}) => <Option key={key}
+                                                                                        value={key}>{value}</Option>);
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
-          <Col md={8} sm={24}>
+          <Col md={6} sm={24}>
+            <FormItem label="用户类型">
+              {getFieldDecorator('userType', {
+                initialValue: appEnums.UserTypes.Student.key,
+              })(
+                <Select onChange={this.onUserTypeChange}>
+                  {typeOptions}
+                </Select>)}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
             <FormItem label="姓名">
-              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
+              {getFieldDecorator('name')(<Input allowClear placeholder="请输入学生姓名"/>)}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
+          <Col md={6} sm={24}>
             <FormItem label="编号">
-              {getFieldDecorator('userCode')(<Input placeholder="请输入工号，学号等"/>)}
+              {getFieldDecorator('userCode')(<Input allowClear placeholder="请输入工号，学号等"/>)}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
+          <Col md={6} sm={24}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 查询

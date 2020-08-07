@@ -100,6 +100,7 @@ class PersonnelRecord extends React.PureComponent {
     };
     // 表格参数
     const personnelRecordTableProps = {
+      height: window.innerHeight - 280,
       dataSource: [{id: ''}],
       loading: loading.effects['personnelRecord/getPersonnelRecordList'],
       total,

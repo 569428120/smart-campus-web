@@ -261,9 +261,9 @@ const appRoutes = [
     component: './Portal/Workplace',
   },
   ...sysManageRoutes,
-  ...humanManageRoutes,
   ...accessControlRoutes,
-  ...infoEntryRoutes,
+  ...humanManageRoutes,
+  //...infoEntryRoutes,
   ...workOaRoutes,
   ...deviceManageRoutes,
 ];

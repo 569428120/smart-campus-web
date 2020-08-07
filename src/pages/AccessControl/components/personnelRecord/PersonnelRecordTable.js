@@ -1,6 +1,6 @@
 import React, {Fragment, PureComponent} from 'react';
-import DataTable from '@/components/SmartCampus/Table/DataTable';
 import PropTypes from 'prop-types';
+import DataTable from "../../../../components/SmartCampus/Table/DataTable";
 
 /**
  *  表格列
@@ -59,6 +59,7 @@ const tableColumns = onOperator => {
 class PersonnelRecordTable extends PureComponent {
   render() {
     const {
+      height,
       dataSource,
       loading,
       total,
@@ -71,6 +72,7 @@ class PersonnelRecordTable extends PureComponent {
 
     // 表格参数
     const dataTableProps = {
+      height,
       rowKey: 'id',
       dataSource,
       loading,
